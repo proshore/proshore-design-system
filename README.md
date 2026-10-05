@@ -6,6 +6,7 @@
 | --- | --- |
 | `packages/ui` | The package `@proshore/ui` (source, build, Claude skill, token export) |
 | `apps/gallery` | Component gallery and example screens (foundations, components, user management, kanban, card board, bug reporting, sign-in). Also the test bench: axe in light and dark, phone width, console errors. |
+| `apps/discovery-example` | Sherpa Discovery on this package: app shell, client switcher, assistant, evidence components. The reference for building a Sherpa app. Uses real example customers, see CONTRIBUTING. |
 | `docs/` | Decisions and background (see the note in `docs/README.md`) |
 
 ## Use it in a project
@@ -22,7 +23,8 @@ More in [`packages/ui/README.pack.md`](packages/ui/README.pack.md). In CI of a c
 ## Develop
 ```bash
 npm install
-npm run dev       # gallery
+npm run dev       # gallery (port 5180)
+npm run dev:discovery   # the Discovery example (port 5181)
 npm run check     # the quality gate, same as CI
 npm run pack      # builds release/proshore-ui-<version>.tgz
 ```

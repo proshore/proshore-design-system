@@ -1,0 +1,46 @@
+/* Landscape map. Neutral structure, colour only for meaning. Themed by the concept wrapper through --lm-* variables. */
+.lm { --lm-line: var(--sherpa-line); --lm-glyph-ink: var(--sherpa-surface); container-type: inline-size; }
+.lm__apps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--lm-gap, 20px); grid-template-columns: minmax(0, 1fr); counter-reset: none; }
+@container (min-width: 760px) { .lm__apps { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); } }
+.lm__app { position: relative; display: flex; flex-direction: column; gap: 10px; padding: var(--lm-pad, 20px); border: 1px solid var(--lm-line); border-radius: var(--lm-radius, 16px); background: var(--lm-bg, var(--sherpa-surface)); }
+.lm__app[data-coverage="failed"] { border-style: dashed; border-color: var(--chart-axis); background: repeating-linear-gradient(135deg, transparent 0 9px, color-mix(in srgb, var(--chart-axis) 12%, transparent) 9px 10px), var(--lm-bg, var(--sherpa-surface)); }
+.lm__app[data-coverage="partial"] { border-top: 3px solid var(--sherpa-coverage-partial); }
+.lm__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.lm__name { margin: 0; font-size: var(--lm-name-size, 1.25rem); font-weight: 650; letter-spacing: -.01em; font-family: var(--lm-name-font, inherit); }
+.lm__role { margin: 0; color: var(--gray-11); font-size: var(--font-size-2); }
+.lm__steps { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; }
+.lm__step { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--lm-step-radius, 12px); border: 1px solid var(--lm-line); background: var(--sherpa-canvas); color: inherit; text-decoration: none; position: relative; transition: border-color .15s, background-color .15s, transform .15s; }
+.lm__step:hover { border-color: var(--accent-9); background: var(--accent-a3); }
+.lm__step:focus-visible { outline: 2px solid var(--focus-8); outline-offset: 2px; }
+.lm__step[data-pinned] { border-color: var(--sherpa-accent-mark); box-shadow: 0 0 0 3px color-mix(in srgb, var(--sherpa-accent-mark) 18%, transparent); }
+.lm__num { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font: 600 12px/1 var(--code-font-family); color: var(--gray-11); border: 1px solid var(--lm-line); font-variant-numeric: tabular-nums; }
+.lm__stepbody { display: grid; gap: 2px; min-width: 0; }
+.lm__stepname { font-weight: 600; font-size: var(--font-size-3); }
+.lm__stepmeta { display: inline-flex; align-items: center; gap: 6px; font-size: var(--font-size-1); color: var(--gray-11); }
+.lm__glyph { flex: none; }
+.lm__glyph[data-state="observed"] { color: var(--sherpa-observed-fg); }
+.lm__glyph[data-state="inferred"] { color: var(--sherpa-inferred-fg); }
+.lm__glyph[data-state="confirmed"] { color: var(--sherpa-confirmed-fg); }
+.lm__glyph[data-state="unknown"] { color: var(--gray-10); }
+.lm__marks { display: inline-flex; align-items: center; gap: 4px; }
+.lm__dot { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.lm__n { font: 600 13px/1 var(--code-font-family); font-variant-numeric: tabular-nums; color: var(--gray-12); }
+.lm__n--none { font: 400 12px/1 var(--default-font-family); color: var(--gray-11); }
+.lm__marks { gap: 6px; }
+.lm__pin { position: absolute; top: -9px; right: 12px; padding: 2px 8px; border-radius: 999px; background: var(--sherpa-accent-mark); color: var(--sherpa-on-mark, #05005c); font: 700 12px/1.4 var(--default-font-family); letter-spacing: .02em; }
+.lm__gap { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--sherpa-surface); border: 1px dashed var(--chart-axis); font-size: var(--font-size-2); color: var(--gray-12); }
+.lm__foot { margin: auto 0 0; padding-top: 6px; font-size: var(--font-size-1); color: var(--gray-11); }
+.lm[data-variant="compact"] { --lm-pad: 14px; --lm-gap: 12px; --lm-radius: 10px; --lm-step-radius: 8px; --lm-name-size: 1rem; }
+.lm[data-variant="compact"] .lm__step { padding: 8px 10px; }
+.lm[data-variant="compact"] .lm__stepname { font-size: var(--font-size-2); }
+@media (prefers-reduced-motion: reduce) { .lm__step { transition: none; } }
+
+/* In the current design the territories are cards: rounded, soft shadow, brand accents. */
+.lm { --lm-radius: 16px; --lm-bg: var(--sherpa-surface); }
+.lm__app { box-shadow: var(--sherpa-card-shadow); }
+.lm-key { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: var(--font-size-1); color: var(--gray-11); }
+.lm-key li { display: inline-flex; align-items: center; gap: 8px; }
+.lm-key__pin { padding: 1px 8px; border-radius: 999px; background: var(--sherpa-accent-mark); color: var(--sherpa-on-mark, #05005c); font: 700 12px/1.5 var(--default-font-family); }
+.lm__step, .lm__step:hover, .lm__step * { text-decoration: none; }
+.lm__step { color: var(--gray-12); }
+.lm__step .lm__stepmeta { color: var(--gray-11); }

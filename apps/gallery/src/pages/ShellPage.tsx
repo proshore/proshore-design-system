@@ -47,7 +47,7 @@ export function ShellPage({ theme, onTheme }: { theme: ThemePreference; onTheme:
         <PageHeader eyebrow="App shell" title="The frame around every Sherpa app" description="Left bar with the apps, top bar with client and engagement, search with Ctrl or Cmd+K, the assistant, account menu. On a phone the left bar becomes a bottom bar." actions={<a href="#/foundations">Back to the gallery</a>} />
         <Section title="What the product supplies"><Panel>
           <Stack gap={2}>
-            <Text size="2">The list of apps, the current app, the clients and engagements, the page links, the commands for search, and the assistant's answers. The shell supplies layout, keyboard use, landmarks and the phone layout.</Text>
+            <Text size="2">See a complete product built on the shell in `apps/discovery-example` (run `npm run dev:discovery`). The product supplies the list of apps, the current app, the clients and engagements, the page links, the commands for search, and the assistant's answers. The shell supplies layout, keyboard use, landmarks and the phone layout.</Text>
           </Stack>
         </Panel></Section>
       </Page>

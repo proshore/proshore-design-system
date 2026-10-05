@@ -16,6 +16,15 @@
       "project": [
         "src/**/*.{ts,tsx}"
       ]
+    },
+    "apps/discovery-example": {
+      "entry": [
+        "e2e/*.spec.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx}",
+        "e2e/**/*.ts"
+      ]
     }
   },
   "ignoreDependencies": [
