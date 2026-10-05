@@ -1,0 +1,217 @@
+{
+ "_readme": "Reviewed usage sentences for the Claude design system mirror. First matching pattern (a regular expression on the token name without the leading dashes) wins. The export script fails if a token has no note. Edit a sentence here, never in the generated tokens.json. Review these against the real component use when tokens change.",
+ "notes": [
+  {
+   "match": "^pr-canvas$",
+   "usage": "Page background. Primary text on it is gray-12, secondary text gray-11."
+  },
+  {
+   "match": "^pr-surface$",
+   "usage": "Cards and panels. Primary text on it is gray-12."
+  },
+  {
+   "match": "^pr-surface-muted$",
+   "usage": "Quiet fills inside cards, for example table headers."
+  },
+  {
+   "match": "^pr-line$",
+   "usage": "Hairline borders and dividers."
+  },
+  {
+   "match": "^pr-accent-mark$",
+   "usage": "Accent for marks and highlights, for example the header accent line."
+  },
+  {
+   "match": "^pr-review-accent$",
+   "usage": "Accent bar on a card that needs review (the panel with tone review)."
+  },
+  {
+   "match": "^pr-accent-text$",
+   "usage": "Accent colour for links and accent text on a surface."
+  },
+  {
+   "match": "^pr-on-mark$",
+   "usage": "Text or icon colour on an accent-mark fill."
+  },
+  {
+   "match": "^pr-header-bg$",
+   "usage": "App header background."
+  },
+  {
+   "match": "^pr-band-bg$",
+   "usage": "Background of a full-width band section."
+  },
+  {
+   "match": "^pr-hero-[ab]$",
+   "usage": "Start and end colours of a hero area. Defined in the theme; check the component before relying on it."
+  },
+  {
+   "match": "^pr-observed-(fg|bg|border)$",
+   "usage": "Observed (from a scan or measurement) status chip: text, fill and border. Always shown with an icon and a word."
+  },
+  {
+   "match": "^pr-inferred-(fg|bg|border)$",
+   "usage": "Inferred (unconfirmed) status chip: text, fill and border; also used for warning notes. Always shown with an icon and a word."
+  },
+  {
+   "match": "^pr-confirmed-(fg|bg|border)$",
+   "usage": "Confirmed (reviewed) status chip: text, fill and border; also used for success notes. Always shown with an icon and a word."
+  },
+  {
+   "match": "^pr-unknown-(fg|border)$",
+   "usage": "Unknown status chip: text and border. Always shown with an icon and a word."
+  },
+  {
+   "match": "^pr-danger-(fg|bg|border)$",
+   "usage": "Danger notes and errors: text, fill and border. Always shown with an icon and a word."
+  },
+  {
+   "match": "^pr-coverage-(complete|partial|failed)$",
+   "usage": "Coverage status text colour. Always shown with an icon and a label, never colour alone."
+  },
+  {
+   "match": "^sev-.*-fg$",
+   "usage": "Text colour on the matching severity fill (the source comments record at least 4.5:1)."
+  },
+  {
+   "match": "^sev-(critical|high|medium|low|review)$",
+   "usage": "Severity scale fill, from most to least severe. Always shown with a label or count, never colour alone."
+  },
+  {
+   "match": "^pr-(white|neutral|saffron|marigold|clear-blue|lapis|terai)(-(lightest|lighter|light|dark|darker|darkest))?$",
+   "usage": "Brand primitive copied from the Proshore website palette (Relume). Components use the semantic tokens, not this one directly."
+  },
+  {
+   "match": "^focus-8$",
+   "usage": "Focus ring colour (2px outline, 2px offset)."
+  },
+  {
+   "match": "^gray-([12])$",
+   "usage": "Neutral scale step 1 or 2: app and subtle backgrounds."
+  },
+  {
+   "match": "^gray-([345])$",
+   "usage": "Neutral scale step 3 to 5: component backgrounds, hover and pressed states."
+  },
+  {
+   "match": "^gray-([678])$",
+   "usage": "Neutral scale step 6 to 8: borders and separators."
+  },
+  {
+   "match": "^gray-(9|10)$",
+   "usage": "Neutral scale step 9 or 10: solid fills and placeholder text."
+  },
+  {
+   "match": "^gray-11$",
+   "usage": "Secondary text."
+  },
+  {
+   "match": "^gray-12$",
+   "usage": "Primary text."
+  },
+  {
+   "match": "^gray-a([3-8])$",
+   "usage": "Neutral scale with transparency, for overlays and hairlines on any surface."
+  },
+  {
+   "match": "^gray-a(9|10|11|12)$",
+   "usage": "Neutral text steps with transparency; the same colours as the solid steps 9 to 12."
+  },
+  {
+   "match": "^accent-([1-8])$",
+   "usage": "Accent scale step 1 to 8: tinted backgrounds, borders and hover states of accent elements."
+  },
+  {
+   "match": "^accent-9$",
+   "usage": "Solid accent fill, for example the primary button."
+  },
+  {
+   "match": "^accent-10$",
+   "usage": "Hover state of the solid accent fill."
+  },
+  {
+   "match": "^accent-11$",
+   "usage": "Accent text and icons."
+  },
+  {
+   "match": "^accent-12$",
+   "usage": "High-contrast accent text."
+  },
+  {
+   "match": "^accent-a([3-8])$",
+   "usage": "Accent scale with transparency, for soft fills, hover states and rings."
+  },
+  {
+   "match": "^accent-a(9|10|11|12)$",
+   "usage": "Accent steps 9 to 12 with the transparency variant name; the same colours as the solid steps."
+  },
+  {
+   "match": "^accent-contrast$",
+   "usage": "Text on a solid accent fill."
+  },
+  {
+   "match": "^accent-(surface|indicator|track)$",
+   "usage": "Radix-compatible accent helper: surface tint, indicator and track colour. Defined in the theme for library compatibility."
+  },
+  {
+   "match": "^color-(background|panel|panel-solid|surface)$",
+   "usage": "Radix-compatible surface alias: page background, panel and card surfaces."
+  },
+  {
+   "match": "^color-overlay$",
+   "usage": "Scrim behind modal dialogs and drawers."
+  },
+  {
+   "match": "^space-[12]$",
+   "usage": "Tight gaps inside controls."
+  },
+  {
+   "match": "^space-[34]$",
+   "usage": "Gaps between related items; card padding."
+  },
+  {
+   "match": "^space-[5-9]$",
+   "usage": "Section and page spacing."
+  },
+  {
+   "match": "^radius-1$",
+   "usage": "Tags and small chips."
+  },
+  {
+   "match": "^radius-[2-6]$",
+   "usage": "Inputs, cards and panels (Relume small, medium and large are all 8px; steps kept for Radix compatibility)."
+  },
+  {
+   "match": "^radius-full$",
+   "usage": "Fully rounded shapes."
+  },
+  {
+   "match": "^pr-radius-pill$",
+   "usage": "Pills: buttons and navigation links."
+  },
+  {
+   "match": "^pr-radius-card$",
+   "usage": "Cards and panels."
+  },
+  {
+   "match": "^pr-card-shadow$",
+   "usage": "Card elevation: a soft shadow in light, a 1px inset hairline in dark."
+  },
+  {
+   "match": "^text-1$",
+   "usage": "Smallest permitted text (12px floor)."
+  },
+  {
+   "match": "^text-[2-3]$",
+   "usage": "UI and body text; step 3 (1rem) is body."
+  },
+  {
+   "match": "^text-[4-5]$",
+   "usage": "Lead text and card titles."
+  },
+  {
+   "match": "^text-[6-9]$",
+   "usage": "Headings, from h4 (step 6) up to h1 and display (step 9)."
+  }
+ ]
+}

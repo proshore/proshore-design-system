@@ -25,6 +25,8 @@ Local Chrome is used for e2e; CI uses Playwright's Chromium.
 ## Releasing
 Bump `version` in `packages/ui/package.json`, update `CHANGELOG.md`, merge, then tag `vX.Y.Z` on `main`. The release workflow packs and publishes `@proshore/ui` to GitHub Packages and attaches the tarball to the GitHub release.
 
+Optional after a release: refresh the Claude design system mirror with `npm run pack && npm run export:design-system`, then publish it by hand as described in `docs/claude-design-system.md`. Nothing publishes it automatically, and a stale mirror does not block a release.
+
 ## Using the package in a project
 See `packages/ui/README.pack.md` (shipped as the package README).
 
