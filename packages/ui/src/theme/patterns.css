@@ -330,3 +330,8 @@ button.stepper__btn:hover { background: var(--accent-a3); }
 .app > .pr-header .pr-avatar { background: var(--accent-a4); color: var(--accent-11); box-shadow: none; }
 .app > .pr-header .pr-userbtn[data-hovered], .app > .pr-header .pr-userbtn[data-pressed], .app > .pr-header .pr-userbtn[aria-expanded="true"] { background: var(--accent-a3); }
 .pr-userbtn[data-pressed], .pr-userbtn[aria-expanded="true"] { background: var(--accent-a3); }
+
+.pr-wordmark { color: var(--gray-12); }
+/* The wordmark follows the header: white on the dark header, navy (page text) on the light one. */
+.pr-header .pr-header__word svg { color: #fff; }
+.app > .pr-header .pr-header__word svg { color: var(--gray-12); }
