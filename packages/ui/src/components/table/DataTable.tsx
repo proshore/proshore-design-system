@@ -1,0 +1,252 @@
+import { Note } from "../Note";
+import {
+  ArrowDownIcon, ArrowUpIcon, CaretSortIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon,
+  DownloadIcon, InfoCircledIcon, RowsIcon, ViewVerticalIcon,
+} from "../../icons";
+import { Checkbox, Select } from "../../primitives/forms";
+import { Menu, MenuItem, MenuTrigger, Popover } from "react-aria-components";
+import { Button, IconButton } from "../../primitives/Button";
+import { Text } from "../../primitives/Text";
+import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
+import { FilterBar, useActiveFilters } from "./FilterBar";
+import { EmptyState, ErrorState, NoResults, TableSkeleton } from "./states";
+import { PAGE_SIZES, type ColumnDef, type PageSize, type SortDir } from "./types";
+import { isHideable, isSortable, useTableState } from "./useTableState";
+import { Highlight, downloadCsv, toCsv } from "./util";
+import "./table.css";
+
+export type DataTableProps<T> = {
+  columns: ColumnDef<T>[];
+  rows: T[];
+  getRowId: (row: T) => string;
+  /** Accessible name of the table and export file name stem. */
+  caption: string;
+  /** Plural noun for counts and labels: "invoices". */
+  noun?: string;
+  status?: "ready" | "loading" | "error";
+  errorMessage?: ReactNode;
+  onRetry?: () => void;
+  emptyState?: ReactNode;
+  /** Adds the coverage warning to the no-results state. Set it whenever a zero result could be mistaken for a clean result. */
+  noResultsHint?: boolean;
+  /** Banner above the table, e.g. a Note that the scan is partial. */
+  partialNotice?: ReactNode;
+  /** Called with the row and the full filtered and sorted list (all pages), so a detail panel can step through what is on screen. */
+  onRowOpen?: (row: T, visibleRows: T[]) => void;
+  rowLabel?: (row: T) => string;
+  selectable?: boolean;
+  bulkActions?: (selected: T[]) => ReactNode;
+  features?: { search?: boolean; filters?: boolean; density?: boolean; columns?: boolean; export?: boolean; pagination?: boolean };
+  toolbarRight?: ReactNode;
+  initialSort?: { id: string; dir: SortDir }[];
+  initialPageSize?: PageSize;
+  initialDensity?: "comfortable" | "compact";
+  initialHidden?: string[];
+  onExported?: (info: { count: number; filename: string }) => void;
+  maxHeight?: string;
+};
+
+const AlignCls = { start: "", end: " dt-end", center: " dt-center" } as const;
+
+/**
+ * Smooth row movement: when sorting, filtering or paging changes the rows, rows that stay slide to their new place (FLIP),
+ * new rows fade up with a light stagger. Disabled with reduced motion.
+ */
+function useRowMotion(bodyRef: React.RefObject<HTMLTableSectionElement | null>, orderKey: string) {
+  const prev = useRef<Map<string, number>>(new Map());
+  useLayoutEffect(() => {
+    const body = bodyRef.current; if (!body) return;
+    const base = body.getBoundingClientRect().top;
+    const rows = [...body.querySelectorAll<HTMLElement>("tr[data-rowid]")];
+    const now = new Map(rows.map((r) => [r.dataset.rowid as string, r.getBoundingClientRect().top - base]));
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce) rows.forEach((r, i) => {
+      const id = r.dataset.rowid as string; const before = prev.current.get(id); const after = now.get(id) as number;
+      if (before !== undefined) { const dy = before - after; if (Math.abs(dy) > 1) r.animate([{ transform: `translateY(${dy}px)` }, { transform: "none" }], { duration: 320, easing: "cubic-bezier(.2,.8,.2,1)" }); }
+      else r.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], { duration: 300, delay: Math.min(i, 10) * 18, easing: "cubic-bezier(.2,.8,.2,1)", fill: "backwards" });
+    });
+    prev.current = now;
+  }, [bodyRef, orderKey]);
+}
+
+export function DataTable<T>(props: DataTableProps<T>) {
+  const { columns, rows, getRowId, caption, noun = "items", status = "ready", onRowOpen, selectable = false, features = {} } = props;
+  const f = { search: true, filters: true, density: true, columns: true, export: true, pagination: true, ...features };
+  const s = useTableState<T>(rows, columns, { getRowId, initialSort: props.initialSort, initialPageSize: props.initialPageSize, initialDensity: props.initialDensity, initialHidden: props.initialHidden });
+  const rootRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLTableSectionElement>(null);
+  const focusSearch = () => setTimeout(() => rootRef.current?.querySelector<HTMLInputElement>("[role=search] input")?.focus(), 0);
+  const active = useActiveFilters(s, columns).map((f) => ({ ...f, remove: () => { f.remove(); focusSearch(); } }));
+  const [tableW, setTableW] = useState(99999);
+  useLayoutEffect(() => { const el = rootRef.current; if (!el) return; const ro = new ResizeObserver(([e]) => setTableW(e.contentRect.width)); ro.observe(el); return () => ro.disconnect(); }, []);
+  const chosen = s.visibleColumns;
+  const vis = chosen.filter((c) => !c.hideBelow || tableW >= c.hideBelow);
+  const hasFacets = columns.some((c) => c.filter);
+  const showBar = f.search || (f.filters && hasFacets) || f.density || f.columns || f.export || props.toolbarRight;
+  const sortCols = s.sort.map((k) => ({ ...k, header: columns.find((c) => c.id === k.id)?.header ?? k.id }));
+  const sortText = sortCols.length ? `Sorted by ${sortCols.map((k) => `${k.header} ${k.dir === "asc" ? "ascending" : "descending"}`).join(", then ")}.` : "Default order.";
+
+  const doExport = () => {
+    const filename = `${caption.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}.csv`;
+    downloadCsv(filename, toCsv(s.sorted, vis));
+    props.onExported?.({ count: s.sorted.length, filename });
+  };
+
+  const right = (
+    <>
+      {f.density && (
+        <Button size="2" variant="outline" color="gray" aria-pressed={s.density === "compact"} onClick={() => s.setDensity(s.density === "compact" ? "comfortable" : "compact")}>
+          <RowsIcon aria-hidden /> Compact rows
+        </Button>
+      )}
+      {f.columns && (
+        <MenuTrigger>
+          <Button size="2" variant="outline" color="gray" aria-label="Show or hide columns"><ViewVerticalIcon aria-hidden /> Columns</Button>
+          <Popover className="pr-popover" placement="bottom end">
+            <Menu className="pr-menu" aria-label="Show or hide columns" selectionMode="multiple" selectedKeys={new Set(chosen.map((c) => c.id))}
+              onSelectionChange={() => undefined}>
+              {columns.map((c) => (
+                <MenuItem key={c.id} id={c.id} className="pr-menu__item" textValue={c.header} isDisabled={!isHideable(c)} onAction={() => s.toggleHidden(c.id)}>
+                  <span className="pr-menu__check" aria-hidden>{chosen.includes(c) && <CheckIcon />}</span>{c.header}
+                </MenuItem>
+              ))}
+            </Menu>
+          </Popover>
+        </MenuTrigger>
+      )}
+      {f.export && <Button size="2" variant="outline" color="gray" onClick={doExport} disabled={status !== "ready" || s.sorted.length === 0}><DownloadIcon aria-hidden /> Export CSV</Button>}
+      {props.toolbarRight}
+    </>
+  );
+
+  const stickyIdx = vis.findIndex((c) => c.sticky);
+  const colStyle = (c: ColumnDef<T>, i: number): CSSProperties => ({
+    width: c.width, minWidth: c.minWidth ?? c.width,
+    ...(i === stickyIdx ? { left: selectable ? "var(--dt-sel-w)" : 0 } : {}),
+  });
+  const colSpan = vis.length + (selectable ? 1 : 0);
+
+  const onRowClick = (e: MouseEvent, row: T) => {
+    if (!onRowOpen || (e.target as HTMLElement).closest("button,a,input,label,[role=checkbox]")) return;
+    onRowOpen(row, s.sorted);
+  };
+
+  const body = useMemo(() => {
+    if (status === "loading") return <TableSkeleton columns={Math.max(3, vis.length)} label={`Loading ${noun}`} />;
+    if (status === "error") return <ErrorState message={props.errorMessage} onRetry={props.onRetry} />;
+    if (props.rows.length === 0) return props.emptyState ?? <EmptyState title={`No ${noun} yet`} description="Nothing has been recorded for this selection." />;
+    if (s.filtered.length === 0) return <NoResults filters={active} search={s.search} onReset={() => { s.resetFilters(); focusSearch(); }} hint={props.noResultsHint} noun={noun} />;
+    return null;
+  }, [status, props.rows.length, props.emptyState, props.errorMessage, props.onRetry, props.noResultsHint, s.filtered.length, active, s.search, s.resetFilters, vis.length, noun]);
+
+  const first = s.page * s.pageSize;
+  useRowMotion(bodyRef, s.pageRows.map((r) => getRowId(r)).join("|"));
+  const rangeText = s.filtered.length ? `${first + 1}-${first + s.pageRows.length} of ${s.filtered.length}` : "0 of 0";
+  const PagerBtn = ({ label, disabled, onClick, children }: { label: string; disabled: boolean; onClick: () => void; children: ReactNode }) => (
+    <IconButton size="2" variant="outline" color="gray" aria-label={label} aria-disabled={disabled || undefined} data-disabled={disabled || undefined} onClick={() => { if (!disabled) onClick(); }}>{children}</IconButton>
+  );
+
+  return (
+    <div className="dt" ref={rootRef} data-density={s.density}>
+      {props.partialNotice}
+      {showBar && (
+        <FilterBar state={s} columns={columns} noun={noun} showSearch={f.search} showFilters={f.filters} right={right} />
+      )}
+      {!showBar && <Text as="p" size="2" role="status" aria-live="polite" className="dt-visually-hidden">{s.filtered.length} of {s.total} {noun}</Text>}
+
+      {selectable && s.selected.size > 0 && (
+        <div className="dt-bulk" role="region" aria-label="Bulk actions">
+          <Text size="2" weight="bold" role="status">{s.selected.size} selected</Text>
+          <div className="dt-bulk__actions">{props.bulkActions?.(s.selectedRows)}<Button size="1" variant="ghost" onClick={s.clearSelection}>Clear selection</Button></div>
+        </div>
+      )}
+
+      <div className="dt-frame">
+        {body ?? (
+          <div className="dt-scroll" tabIndex={0} role="region" aria-label={`${caption}, scrollable`} style={{ maxHeight: props.maxHeight }}>
+            <table className="dt-table" style={{ "--dt-sel-w": "44px" } as CSSProperties}>
+              <caption className="dt-visually-hidden">{caption}. {sortText}</caption>
+              <thead>
+                <tr>
+                  {selectable && (
+                    <th scope="col" className="dt-th dt-sel dt-stickyc" style={{ left: 0 }}>
+                      <span className="dt-check"><Checkbox aria-label={`Select all ${noun} on this page`} isSelected={s.allOnPage} isIndeterminate={!s.allOnPage && s.someOnPage} onChange={s.togglePage} /></span>
+                    </th>
+                  )}
+                  {vis.map((c, i) => {
+                    const idx = s.sort.findIndex((k) => k.id === c.id);
+                    const dir = idx >= 0 ? s.sort[idx].dir : undefined;
+                    const sortable = isSortable(c);
+                    return (
+                      <th key={c.id} scope="col" className={`dt-th${AlignCls[c.align ?? "start"]}${i === stickyIdx ? " dt-stickyc" : ""}`} style={colStyle(c, i)}
+                        aria-sort={sortable ? (dir ? (dir === "asc" ? "ascending" : "descending") : "none") : undefined}>
+                        {sortable ? (
+                          <button type="button" className="dt-sortbtn" onClick={(e) => s.toggleSort(c.id, e.shiftKey)} title="Click to sort. Shift-click to add as secondary sort.">
+                            <span>{c.header}</span>
+                            {dir === "asc" ? <ArrowUpIcon aria-hidden /> : dir === "desc" ? <ArrowDownIcon aria-hidden /> : <CaretSortIcon aria-hidden className="dt-sortbtn__idle" />}
+                            {s.sort.length > 1 && idx >= 0 && <span className="dt-sortbtn__n" aria-label={`sort priority ${idx + 1}`}>{idx + 1}</span>}
+                          </button>
+                        ) : <span className="dt-th__text">{c.header}</span>}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody ref={bodyRef}>
+                {s.pageRows.map((row) => {
+                  const id = getRowId(row);
+                  const sel = s.selected.has(id);
+                  return (
+                    <tr key={id} data-rowid={id} className="dt-row" data-selected={sel || undefined} data-openable={onRowOpen ? "" : undefined} onClick={(e) => onRowClick(e, row)}>
+                      {selectable && (
+                        <td className="dt-td dt-sel dt-stickyc" style={{ left: 0 }}>
+                          <span className="dt-check"><Checkbox aria-label={`Select ${props.rowLabel?.(row) ?? id}`} isSelected={sel} onChange={() => s.toggleRow(id)} /></span>
+                        </td>
+                      )}
+                      {vis.map((c, i) => {
+                        const ctx = { query: s.search, highlight: (t: string) => <Highlight text={t} query={s.search} /> };
+                        const raw = c.accessor?.(row);
+                        const content = c.cell ? c.cell(row, ctx) : raw instanceof Date ? raw.toLocaleDateString() : raw === null || raw === undefined || raw === "" ? <span className="dt-muted">Not recorded</span> : ctx.highlight(String(raw));
+                        const asBtn = onRowOpen && i === 0;
+                        return (
+                          <td key={c.id} className={`dt-td${AlignCls[c.align ?? "start"]}${i === stickyIdx ? " dt-stickyc" : ""}`} style={colStyle(c, i)}>
+                            {asBtn ? <button type="button" className="dt-rowbtn" aria-label={props.rowLabel ? `Open ${props.rowLabel(row)}` : undefined} onClick={() => onRowOpen(row, s.sorted)}>{content}</button> : content}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+      <Text as="p" size="1" role="status" aria-live="polite" className="dt-visually-hidden">{sortText}</Text>
+
+      {f.pagination && status === "ready" && s.filtered.length > 0 && (
+        <div className="dt-footer">
+          <div className="dt-footer__size">
+            <Text size="2" color="gray" aria-hidden>Rows per page</Text>
+            <Select label="Rows per page" hideLabel size="2" value={String(s.pageSize)} onChange={(v) => s.setPageSize(Number(v) as PageSize)} options={PAGE_SIZES.map((n) => ({ value: String(n), label: String(n) }))} />
+          </div>
+          <nav className="dt-pager" aria-label={`${caption} pagination`}>
+            <Text size="2" aria-live="polite" className="dt-pager__range">{rangeText}</Text>
+            {s.pageCount > 5 && <PagerBtn label="First page" disabled={s.page === 0} onClick={() => s.setPage(0)}><DoubleArrowLeftIcon aria-hidden /></PagerBtn>}
+            <PagerBtn label="Previous page" disabled={s.page === 0} onClick={() => s.setPage(s.page - 1)}><ChevronLeftIcon aria-hidden /></PagerBtn>
+            <Text size="2" color="gray" className="dt-pager__page">Page {s.page + 1} of {s.pageCount}</Text>
+            <PagerBtn label="Next page" disabled={s.page >= s.pageCount - 1} onClick={() => s.setPage(s.page + 1)}><ChevronRightIcon aria-hidden /></PagerBtn>
+            {s.pageCount > 5 && <PagerBtn label="Last page" disabled={s.page >= s.pageCount - 1} onClick={() => s.setPage(s.pageCount - 1)}><DoubleArrowRightIcon aria-hidden /></PagerBtn>}
+          </nav>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Convenience banner for "the list is incomplete". */
+export function PartialBanner({ children }: { children: ReactNode }) {
+  return (
+    <div className="dt-partial"><Note tone="warning">{children}</Note></div>
+  );
+}

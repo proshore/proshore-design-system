@@ -1,0 +1,286 @@
+/*
+ * Sherpa Discovery tokens, derived from the Proshore website's Relume design
+ * system (Variables: Primitives, Color Schemes, Typography, UI Styles, Spacing
+ * & Sizing, supplied as screenshots 29 Sep 2026). Still marked PROVISIONAL until
+ * the design team confirms the mapping to the app, but the values are Proshore's.
+ *
+ * Layers:
+ *   1. --pr-*      Relume primitives, copied exactly. Never used by components.
+ *   2. .sherpa-theme[data-theme="light"] / .dark   Relume "Color Schemes" mapped to Radix Themes
+ *      scale variables (--accent-*, --gray-*) so Radix components inherit the brand.
+ *      Steps that Relume does not define are interpolated and marked (interp).
+ *   3. --sherpa-*  semantic tokens (evidence, coverage, surfaces). Components use these.
+ * Status colour always travels with an icon and label.
+ */
+:root {
+  --pr-white: #ffffff;
+  --pr-neutral-lightest: #f2f2f2; --pr-neutral-lighter: #d8d8d9; --pr-neutral-light: #b2b2b4;
+  --pr-neutral: #808083; --pr-neutral-dark: #4d4d52; --pr-neutral-darker: #1a1a20; --pr-neutral-darkest: #010108;
+  --pr-saffron-lightest: #fff0eb; --pr-saffron-lighter: #feddd2; --pr-saffron-light: #fc9574; --pr-saffron: #fa602d;
+  --pr-saffron-dark: #d63905; --pr-saffron-darker: #691c02; --pr-saffron-darkest: #501502;
+  --pr-marigold-lightest: #fff0dc; --pr-marigold-lighter: #fedaa4; --pr-marigold-light: #fec572; --pr-marigold: #fdb142;
+  --pr-marigold-dark: #d47f02; --pr-marigold-darker: #744501; --pr-marigold-darkest: #3d2401;
+  --pr-clear-blue-lightest: #eceefb; --pr-clear-blue-lighter: #ced5f6; --pr-clear-blue-light: #a5b1ee; --pr-clear-blue: #3954db;
+  --pr-clear-blue-dark: #1c329b; --pr-clear-blue-darker: #111e5f; --pr-clear-blue-darkest: #0d1749;
+  --pr-lapis-lightest: #dbe1ff; --pr-lapis-lighter: #a8a3ff; --pr-lapis-light: #5147ff; --pr-lapis: #0900b2;
+  --pr-lapis-dark: #060080; --pr-lapis-darker: #05005c; --pr-lapis-darkest: #03003d;
+  --pr-terai-lightest: #def8e9; --pr-terai-lighter: #b4efcd; --pr-terai-light: #60dc96; --pr-terai: #26ae61;
+  --pr-terai-dark: #1d864b; --pr-terai-darker: #145c33; --pr-terai-darkest: #0b321c;
+}
+
+/* ---------- Light: Relume "Base mode" ---------- */
+:root, :root[data-theme="light"], .sherpa-theme[data-theme="light"] {
+  --accent-1: #fafaff; --accent-2: #f4f5fd; --accent-3: var(--pr-clear-blue-lightest); --accent-4: #e0e4fb;
+  --accent-5: var(--pr-lapis-lightest); --accent-6: var(--pr-clear-blue-lighter); --accent-7: #b9b6ff; --accent-8: var(--pr-lapis-lighter);
+  --accent-9: var(--pr-lapis-light); --accent-10: #3f34f0; --accent-11: var(--pr-lapis); --accent-12: var(--pr-lapis-darker);
+  --accent-a3: rgba(81,71,255,.08); --accent-a4: rgba(81,71,255,.12); --accent-a5: rgba(81,71,255,.18);
+  --accent-a6: rgba(81,71,255,.26); --accent-a7: rgba(81,71,255,.36); --accent-a8: rgba(81,71,255,.5);
+  --accent-a9: var(--accent-9); --accent-a10: var(--accent-10); --accent-a11: var(--accent-11); --accent-a12: var(--accent-12);
+  --accent-contrast: var(--pr-white); --accent-surface: rgba(236,238,251,.6); --accent-indicator: var(--accent-9); --accent-track: var(--accent-9);
+  --gray-1: #fcfcfd; --gray-2: var(--pr-neutral-lightest); --gray-3: #ebebed; --gray-4: #e4e4e6; --gray-5: #dcdcde;
+  --gray-6: var(--pr-neutral-lighter); --gray-7: #c6c6c8; --gray-8: var(--pr-neutral-light); --gray-9: var(--pr-neutral);
+  --gray-10: #737376; --gray-11: #55547f; --gray-12: var(--pr-lapis-darker);
+  --gray-a3: rgba(1,1,8,.05); --gray-a4: rgba(1,1,8,.08); --gray-a5: rgba(1,1,8,.1); --gray-a6: rgba(1,1,8,.15);
+  --gray-a7: rgba(1,1,8,.2); --gray-a8: rgba(1,1,8,.3); --gray-a9: var(--gray-9); --gray-a10: var(--gray-10); --gray-a11: var(--gray-11); --gray-a12: var(--gray-12);
+  --color-background: var(--pr-clear-blue-lightest); --color-panel-solid: var(--pr-white); --color-panel: var(--pr-white);
+  --color-surface: var(--pr-white); --color-overlay: rgba(1,1,8,.5);
+  --focus-8: var(--pr-lapis-light);
+
+  --sherpa-canvas: var(--pr-clear-blue-lightest); --sherpa-surface: var(--pr-white); --sherpa-surface-muted: var(--pr-neutral-lightest);
+  --sherpa-line: var(--pr-clear-blue-lighter); --sherpa-review-accent: var(--sherpa-accent-mark); --sherpa-accent-mark: var(--accent-11); --sherpa-accent-text: var(--accent-11); --sherpa-on-mark: #ffffff; --sherpa-hero-a: var(--pr-clear-blue-lighter); --sherpa-hero-b: var(--pr-clear-blue-lightest);
+  --sherpa-observed-fg: var(--pr-clear-blue-darker); --sherpa-observed-bg: var(--pr-clear-blue-lightest); --sherpa-observed-border: var(--pr-clear-blue-light);
+  --sherpa-inferred-fg: var(--pr-marigold-darker); --sherpa-inferred-bg: var(--pr-marigold-lightest); --sherpa-inferred-border: var(--pr-marigold-dark);
+  --sherpa-confirmed-fg: var(--pr-terai-darker); --sherpa-confirmed-bg: var(--pr-terai-lightest); --sherpa-confirmed-border: var(--pr-terai-dark);
+  --sherpa-unknown-fg: var(--pr-neutral-dark); --sherpa-unknown-bg: transparent; --sherpa-unknown-border: var(--pr-neutral);
+  --sherpa-danger-fg: #9e1027; --sherpa-danger-bg: #fdecef; --sherpa-danger-border: #d3243b;
+  --sherpa-coverage-complete: var(--pr-terai-darker); --sherpa-coverage-partial: var(--pr-marigold-darker); --sherpa-coverage-failed: #9e1027;
+}
+
+/* ---------- Dark: Relume "Alternate" / "Deep Blue" logic (interpretation) ---------- */
+:root[data-theme="dark"], .sherpa-theme[data-theme="dark"] {
+  --accent-1: #08064f; --accent-2: #0c0a66; --accent-3: #12107d; --accent-4: #191791; --accent-5: #211fa6; --accent-6: #2f2cbf;
+  --accent-7: #4340d9; --accent-8: var(--pr-lapis-light); --accent-9: var(--pr-white); --accent-10: #e6e8fb;
+  --accent-11: var(--pr-lapis-lighter); --accent-12: var(--pr-lapis-lightest);
+  --accent-a3: rgba(168,163,255,.14); --accent-a4: rgba(168,163,255,.2); --accent-a5: rgba(168,163,255,.26);
+  --accent-a6: rgba(168,163,255,.34); --accent-a7: rgba(168,163,255,.44); --accent-a8: rgba(168,163,255,.6);
+  --accent-a9: var(--accent-9); --accent-a10: var(--accent-10); --accent-a11: var(--accent-11); --accent-a12: var(--accent-12);
+  --accent-contrast: var(--pr-lapis-darker); --accent-surface: rgba(17,30,95,.6); --accent-indicator: var(--accent-9); --accent-track: var(--accent-9);
+  --gray-1: var(--pr-clear-blue-darkest); --gray-2: var(--pr-clear-blue-darker); --gray-3: #16246e; --gray-4: #1b2b7c; --gray-5: #21338a;
+  --gray-6: #34448f; --gray-7: #45559f; --gray-8: #5c6bb4; --gray-9: #8790c8; --gray-10: #99a1d3; --gray-11: #b8bee3; --gray-12: var(--pr-white);
+  --gray-a3: rgba(255,255,255,.08); --gray-a4: rgba(255,255,255,.1); --gray-a5: rgba(255,255,255,.15); --gray-a6: rgba(255,255,255,.2);
+  --gray-a7: rgba(255,255,255,.3); --gray-a8: rgba(255,255,255,.4); --gray-a9: var(--gray-9); --gray-a10: var(--gray-10); --gray-a11: var(--gray-11); --gray-a12: var(--gray-12);
+  --color-background: var(--pr-clear-blue-darkest); --color-panel-solid: var(--pr-clear-blue-darker); --color-panel: var(--pr-clear-blue-darker);
+  --color-surface: var(--pr-clear-blue-darker); --color-overlay: rgba(1,1,8,.6);
+  --focus-8: var(--pr-lapis-lighter);
+
+  --sherpa-canvas: var(--pr-clear-blue-darkest); --sherpa-surface: var(--pr-clear-blue-darker); --sherpa-surface-muted: var(--pr-lapis-darker);
+  --sherpa-line: rgba(255,255,255,.15); --sherpa-review-accent: var(--sherpa-accent-mark); --sherpa-accent-mark: var(--accent-11); --sherpa-accent-text: var(--accent-11); --sherpa-on-mark: #000000; --sherpa-hero-a: #16267a; --sherpa-hero-b: var(--pr-clear-blue-darkest);
+  --sherpa-observed-fg: var(--pr-clear-blue-light); --sherpa-observed-bg: var(--pr-lapis-darker); --sherpa-observed-border: var(--pr-clear-blue);
+  --sherpa-inferred-fg: var(--pr-marigold-light); --sherpa-inferred-bg: var(--pr-marigold-darkest); --sherpa-inferred-border: var(--pr-marigold-dark);
+  --sherpa-confirmed-fg: var(--pr-terai-light); --sherpa-confirmed-bg: var(--pr-terai-darkest); --sherpa-confirmed-border: var(--pr-terai-dark);
+  --sherpa-unknown-fg: var(--pr-neutral-light); --sherpa-unknown-bg: transparent; --sherpa-unknown-border: var(--pr-neutral);
+  --sherpa-danger-fg: #ff9aa8; --sherpa-danger-bg: #3d0a14; --sherpa-danger-border: #d3243b;
+  --sherpa-coverage-complete: var(--pr-terai-light); --sherpa-coverage-partial: var(--pr-marigold-light); --sherpa-coverage-failed: #ff9aa8;
+}
+
+/* ---------- Typography, shape, spacing (both modes) ---------- */
+:root, .sherpa-theme {
+  --default-font-family: "Geist Variable", "Geist", system-ui, sans-serif;
+  --heading-font-family: "Geist Variable", "Geist", system-ui, sans-serif;
+  --code-font-family: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+  /* Relume text sizes: tiny .75, small .875, regular 1, medium 1.125, large 1.25 rem = Radix steps 1-5.
+     Heading 5 (1.5rem) .. Heading 2 (3rem) = steps 6-9. */
+  --font-size-1: max(12px, .75rem); --font-size-2: .875rem; --font-size-3: 1rem; --font-size-4: 1.125rem; --font-size-5: 1.25rem;
+  --font-size-6: 1.5rem; --font-size-7: 2rem; --font-size-8: 2.5rem; --font-size-9: 3rem;
+  /* Relume UI Styles: radius small/medium/large = 8px, full = 9999px, border 1px. */
+  --radius-1: 4px; --radius-2: 8px; --radius-3: 8px; --radius-4: 8px; --radius-5: 8px; --radius-6: 8px;
+  --sherpa-radius-card: 8px;
+  --sherpa-gap: var(--space-4);
+  /* Relume Spacing & Sizing */
+  --sherpa-container-large: 1280px; --sherpa-page-padding: 64px; --sherpa-shell-nav-width: 220px; --sherpa-panel-width: 420px;
+  --sherpa-demo-border: 1px dashed var(--gray-8);
+}
+@media (max-width: 720px) { .sherpa-theme { --sherpa-page-padding: 20px; } }
+
+body { margin: 0; }
+:focus-visible { outline: 2px solid var(--focus-8); outline-offset: 2px; }
+
+/* Layout helpers used by the preview page */
+
+.sherpa-grid-2 { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+
+.sherpa-demo-tag { border: var(--sherpa-demo-border); border-radius: var(--radius-2); padding: 0 var(--space-2); }
+
+/* ---------- Brand behaviours (from proshore.eu) ---------- */
+/* Pill buttons, as on the website. Cards keep the 8px radius, tags 4px. */
+.sherpa-eyebrow { font-family: var(--code-font-family); font-size: var(--font-size-1); letter-spacing: .05em; text-transform: uppercase; color: var(--gray-11); }
+.sherpa-eyebrow--chip { display: inline-block; background: var(--gray-12); color: var(--color-background); border-radius: 4px; padding: 4px 10px; }
+
+.sherpa-display { font-size: clamp(1.75rem, 3.2vw, 2.75rem); line-height: 1.15; letter-spacing: -0.02em; font-weight: 300; margin: 0; color: var(--gray-12); }
+.sherpa-display strong { font-weight: 700; }
+.sherpa-mark { position: relative; white-space: nowrap; }
+.sherpa-mark svg { position: absolute; left: 0; bottom: -0.32em; width: 100%; height: .4em; color: var(--sherpa-accent-mark); overflow: visible; }
+
+/* ---------- App frame ---------- */
+.app { display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: auto 1fr; min-height: 100vh; background: var(--sherpa-canvas); }
+
+.app__main { box-sizing: border-box; min-width: 0; padding: var(--space-6) var(--sherpa-page-gutter, var(--space-6)); max-width: 1180px; width: 100%; margin: 0 auto; }
+.navlink { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--pr-radius-pill); color: var(--gray-11); text-decoration: none; font-weight: 500; font-size: var(--font-size-2); }
+.navlink:hover { background: var(--accent-a3); color: var(--gray-12); }
+.navlink[aria-current="page"] { background: var(--accent-a4); color: var(--accent-11); }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--gray-12); color: var(--color-background); padding: 8px 14px; border-radius: 999px; z-index: 50; }
+.skip:focus { left: 8px; }
+.journey { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-3); list-style: none; padding: 0; margin: 0; counter-reset: step; }
+
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+  
+  
+  
+  .app__main { box-sizing: border-box; min-width: 0; padding: var(--space-4); --sherpa-page-gutter: var(--space-4); }
+  
+  
+}
+
+/* ---------- Setup wizard ---------- */
+
+/* ---------- Layout system (components/layout.tsx) ---------- */
+.l-panel[data-tight] { --card-padding: var(--space-4); }
+.l-page { display: flex; flex-direction: column; gap: var(--space-6); width: 100%; }
+.l-page[data-narrow] { max-width: 760px; }
+.l-pageheader { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-5); flex-wrap: wrap; }
+.l-pageheader__text { display: flex; flex-direction: column; gap: var(--space-2); max-width: 760px; min-width: 0; }
+
+.l-pageheader__actions { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
+.l-section { display: flex; flex-direction: column; gap: var(--space-4); }
+.l-section__head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-4); flex-wrap: wrap; }
+.l-grid { display: grid; gap: var(--l-gap, var(--space-5)); grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--l-min, 260px)), 1fr)); }
+.l-aside { display: grid; gap: var(--space-5); grid-template-columns: minmax(0, 1fr) var(--l-aside, 300px); align-items: start; }
+.l-aside[data-first] { grid-template-columns: var(--l-aside, 300px) minmax(0, 1fr); }
+.l-aside[data-first] .l-aside__side { order: -1; }
+.l-aside__side { position: sticky; top: calc(57px + var(--space-5)); }
+.l-aside__main { min-width: 0; }
+@media (max-width: 960px) { .l-aside, .l-aside[data-first] { grid-template-columns: minmax(0, 1fr); } .l-aside__side { position: static; order: 2; } }
+.l-stack { display: flex; flex-direction: column; gap: var(--l-gap, var(--space-4)); min-width: 0; }
+.l-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--l-gap, var(--space-2)); }
+.l-panel__head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-4); }
+.l-panel__head > div:first-child { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.l-panel__body { min-width: 0; }
+.l-panel__foot { margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--sherpa-line); }
+.l-panel[data-tone="review"] { box-shadow: inset 4px 0 0 var(--sherpa-review-accent); }
+.l-kv { margin: 0; display: grid; }
+.l-kv__row { display: grid; grid-template-columns: var(--l-label, 150px) minmax(0, 1fr); gap: var(--space-4); padding: var(--space-2) 0; border-top: 1px solid var(--sherpa-line); align-items: start; }
+.l-kv__row:first-child { border-top: 0; }
+.l-kv dt { color: var(--gray-11); font-size: var(--font-size-2); }
+.l-kv dd { margin: 0; font-size: var(--font-size-2); min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 560px) { .l-kv__row { grid-template-columns: 1fr; gap: var(--space-1); } }
+.l-stat { line-height: 1; letter-spacing: -0.02em; }
+.app__main { max-width: 1240px; }
+
+/* ---------- Global scope (library independent) ----------
+   Tokens live on :root and html[data-theme], NOT on a component-library wrapper, so anything that portals
+   to <body> (menus, popovers, modals, toasts) inherits them. Decision 44, bake-off finding 29 Sep 2026. */
+:root {
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 40px; --space-8: 48px; --space-9: 64px;
+  --radius-full: 9999px; --pr-radius-pill: 9999px;
+  color-scheme: light;
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+body { background: var(--color-background); color: var(--gray-12); font-family: var(--default-font-family); font-size: var(--font-size-3); }
+
+/* Desktop shell placement: header spans both columns, nav left, content right. Explicit so DOM order cannot scramble it. */
+.app > .pr-header { grid-column: 1 / -1; grid-row: 1; }
+
+.app > .app__main { grid-column: 2; grid-row: 2; }
+@media (max-width: 900px) {
+   .app > .app__main { grid-column: 1; }
+  
+  .app > .app__main { grid-row: 3; }
+}
+
+/* =====================================================================
+   Visual system v2 (29 Sep 2026): navy heroes, soft cards, editorial type.
+   Direction chosen by Jeroen: Concept C (hero, colour, sections) with Concept A's table.
+   ===================================================================== */
+:root, :root[data-theme="light"], .sherpa-theme[data-theme="light"] {
+  --sherpa-canvas: #f4f5fc; --color-background: #f4f5fc; --sherpa-line: #e3e5f3;
+  --sherpa-card-shadow: 0 20px 40px -24px rgba(5,0,92,.28), 0 1px 0 rgba(5,0,92,.05);
+  --sherpa-header-bg: #111e5f; --sherpa-band-bg: var(--pr-clear-blue-lighter);
+}
+:root[data-theme="dark"], .sherpa-theme[data-theme="dark"] {
+  --sherpa-canvas: #0b1340; --color-background: #0b1340; --sherpa-line: rgba(255,255,255,.12);
+  --sherpa-card-shadow: 0 20px 40px -24px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.07);
+  --sherpa-header-bg: #111e5f; --sherpa-band-bg: #1a2a86;
+}
+/* Inverse surfaces (header, hero): tokens flip so everything inside reads on navy without per-component overrides. */
+[data-surface="inverse"] {
+  --gray-11: #c8ccf0; --gray-12: #ffffff; --gray-a11: #c8ccf0; --gray-a12: #ffffff; --accent-11: #a8a3ff; --accent-a11: #ffffff; --accent-12: #ffffff;
+  --sherpa-line: rgba(255,255,255,.2); --sherpa-surface-muted: rgba(255,255,255,.1); --sherpa-surface: rgba(255,255,255,.08);
+  --accent-9: #ffffff; --accent-10: #e6e8fb; --accent-contrast: #05005c; --accent-a8: rgba(255,255,255,.45); --accent-a3: rgba(255,255,255,.12); --accent-a4: rgba(255,255,255,.18); --accent-a5: rgba(255,255,255,.24);
+  --sherpa-accent-text: var(--accent-11); --focus-8: #a8a3ff; color: #fff;
+}
+.app { display: block; background: var(--sherpa-canvas); min-height: 100vh; }
+.app__main { max-width: none; padding: 0; margin: 0; width: 100%; }
+.pr-header { background: var(--sherpa-header-bg); border-bottom: 0; color: #fff; }
+.pr-header[data-layer="proshore"] { box-shadow: inset 0 3px 0 var(--sherpa-accent-mark); }
+.pr-chip { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.2); }
+.pr-chip__eng { color: #c8ccf0; }
+.pr-nav { display: flex; gap: 2px; margin-left: var(--space-4); }
+.pr-nav a, .pr-nav button { color: rgba(255,255,255,.78); text-decoration: none; padding: 8px 14px; border-radius: var(--pr-radius-pill); font: inherit; font-weight: 500; font-size: var(--font-size-2); background: none; border: 0; cursor: pointer; white-space: nowrap; }
+.pr-nav a:hover, .pr-nav button:hover { background: rgba(255,255,255,.1); color: #fff; }
+.pr-nav a[aria-current="page"] { background: rgba(255,255,255,.16); color: #fff; }
+.pr-nav .count { font-family: var(--code-font-family); font-size: 12px; opacity: .8; margin-left: 6px; }
+.pr-header__product { border-left-color: rgba(255,255,255,.25); color: #c8ccf0; }
+/* Hero */
+.pr-hero { background: radial-gradient(1100px 460px at 88% -20%, #3a34c9 0%, transparent 60%), linear-gradient(180deg, #111e5f 0%, #0d1749 100%); color: #fff; }
+.pr-hero__in { max-width: 1240px; margin: 0 auto; padding: 56px var(--page-x, 40px) 88px; }
+.pr-hero[data-size="lg"] .pr-hero__in { padding: 72px var(--page-x, 40px) 150px; }
+.pr-hero .sherpa-eyebrow { color: #c8ccf0; }
+.pr-hero__title { margin: 12px 0 8px; font-size: clamp(2rem, 3.2vw, 2.75rem); line-height: 1.08; letter-spacing: -0.03em; font-weight: 600; color: #fff; max-width: 900px; }
+.pr-hero__desc { margin: 0; font-size: var(--font-size-4); line-height: 1.5; color: #c8ccf0; max-width: 680px; }
+.pr-hero .sherpa-display { color: #fff; font-size: clamp(2rem, 4.4vw, 3.6rem); line-height: 1.05; margin: 18px 0 22px; max-width: 940px; }
+.pr-hero .l-pageheader { align-items: flex-end; }
+.l-page { display: block; }
+.l-body { max-width: 1240px; margin: 0 auto; padding: 56px var(--page-x, 40px) 96px; display: flex; flex-direction: column; gap: 72px; }
+.l-body[data-pull] { margin-top: calc(-1 * var(--l-pull, 0px)); padding-top: 0; position: relative; z-index: 2; }
+.l-section__text { display: flex; flex-direction: column; gap: 6px; }
+.l-section__title { margin: 0; font-size: clamp(1.5rem, 2.4vw, 1.875rem); line-height: 1.15; letter-spacing: -0.025em; font-weight: 600; }
+.l-section__desc { margin: 4px 0 0; color: var(--gray-11); max-width: 640px; font-size: var(--font-size-3); }
+.l-section { gap: var(--space-5); }
+/* Cards: soft shadow instead of borders */
+.l-panel[data-tone="review"] { box-shadow: var(--sherpa-card-shadow), inset 4px 0 0 var(--sherpa-review-accent); }
+.l-stat { font-size: 2.875rem; letter-spacing: -0.035em; line-height: 1; font-weight: 700; }
+:root { --page-x: 40px; }
+@media (max-width: 900px) {
+  :root { --page-x: 20px; }
+  .pr-hero__in, .pr-hero[data-size="lg"] .pr-hero__in { padding-top: 40px; }
+  .pr-hero[data-size="lg"] .pr-hero__in { padding-bottom: 110px; }
+  .l-body { gap: 56px; }
+  .pr-nav { order: 10; width: 100%; margin-left: 0; overflow-x: auto; }
+}
+
+/* Severity scale: one sequence from most to least severe, used by the severity bar and table dots.
+   Each fill has a matching text colour (checked >= 4.5:1). Never the only signal: labels and counts are always shown. */
+:root, :root[data-theme="light"], .sherpa-theme[data-theme="light"] {
+  --sev-critical: #b3261e; --sev-critical-fg: #ffffff; --sev-high: #c4622d; --sev-high-fg: #05005c;
+  --sev-medium: #b8912a; --sev-medium-fg: #05005c; --sev-low: #4a63b8; --sev-low-fg: #ffffff; --sev-review: #8a8fb5; --sev-review-fg: #05005c;
+}
+:root[data-theme="dark"], .sherpa-theme[data-theme="dark"] {
+  --sev-critical: #f0767a; --sev-critical-fg: #05005c; --sev-high: #e79a63; --sev-high-fg: #05005c;
+  --sev-medium: #d8bb5e; --sev-medium-fg: #05005c; --sev-low: #93a4ec; --sev-low-fg: #05005c; --sev-review: #a3a8cc; --sev-review-fg: #05005c;
+}
+
+/* ---- Dark theme: Material Design dark baseline (29 Sep 2026; replaces the earlier true black) ----
+   Standard dark grey rather than pure black: canvas #121212, surfaces step up in lightness with elevation (#1e1e1e cards,
+   #272727 raised), hairlines at 12% white, primary text about 87% white (#ececec) and secondary about 70%, never pure white
+   on dark. Brand colour stays in accents, links and status tints. */
+:root[data-theme="dark"], .sherpa-theme[data-theme="dark"] {
+  --gray-1: #121212; --gray-2: #181818; --gray-3: #1e1e1e; --gray-4: #242424; --gray-5: #2a2a2a; --gray-6: #343434;
+  --gray-7: #444444; --gray-8: #5c5c5c; --gray-9: #8a8a8a; --gray-10: #9c9c9c; --gray-11: #b5b5b5; --gray-12: #ececec;
+  --color-background: #121212; --color-panel-solid: #1e1e1e; --color-panel: #1e1e1e; --color-surface: #1e1e1e; --color-overlay: rgba(0,0,0,.6);
+  --accent-surface: rgba(255,255,255,.06);
+  --sherpa-canvas: #121212; --sherpa-surface: #1e1e1e; --sherpa-surface-muted: #272727; --sherpa-line: rgba(255,255,255,.12);
+  --sherpa-header-bg: #1e1e1e; --sherpa-band-bg: #262626; --sherpa-hero-a: #1e1e1e; --sherpa-hero-b: #121212;
+  --sherpa-observed-bg: #16202e;
+  --sherpa-card-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}

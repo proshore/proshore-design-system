@@ -1,0 +1,9 @@
+Copyright (c) 2026 Proshore. All rights reserved.
+
+This software and its documentation are proprietary to Proshore and are made
+available for Proshore internal use only. You may not copy, distribute,
+sublicense or disclose it outside Proshore, or use it for a third party,
+without written permission from Proshore.
+
+Third-party packages listed in package-lock.json keep their own licences.
+The Geist fonts are licensed under the SIL Open Font License 1.1.

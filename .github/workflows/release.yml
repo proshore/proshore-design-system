@@ -1,0 +1,36 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+  packages: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      CI: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: "@proshore"
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Tag must match the package version
+        run: |
+          v=$(node -p "require('./packages/ui/package.json').version")
+          [ "v$v" = "${GITHUB_REF_NAME}" ] || { echo "Tag ${GITHUB_REF_NAME} does not match package version $v"; exit 1; }
+      - run: npm run check
+      - run: npm run pack
+      - name: Publish to GitHub Packages
+        run: npm publish release/proshore-ui-*.tgz
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: GitHub release with the tarball
+        run: gh release create "${GITHUB_REF_NAME}" release/proshore-ui-*.tgz --title "${GITHUB_REF_NAME}" --notes-file CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,24 @@
+{
+  "workspaces": {
+    "apps/gallery": {
+      "entry": [
+        "e2e/*.spec.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx}",
+        "e2e/**/*.ts"
+      ]
+    },
+    "packages/ui": {
+      "entry": [
+        "src/entry.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx}"
+      ]
+    }
+  },
+  "ignoreDependencies": [
+    "vite"
+  ]
+}

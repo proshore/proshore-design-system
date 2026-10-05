@@ -1,0 +1,22 @@
+{
+  "name": "proshore-design-system",
+  "private": true,
+  "version": "0.2.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w gallery",
+    "build": "npm run build -w gallery",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "tokens": "npm run tokens -w @proshore/ui",
+    "unused": "knip",
+    "test:e2e": "npm run test:e2e -w gallery",
+    "pack": "npm run pack -w @proshore/ui",
+    "check": "npm run typecheck && npm run build && npm run unused && npm run test:e2e"
+  },
+  "devDependencies": {
+    "knip": "^6.38.0"
+  }
+}

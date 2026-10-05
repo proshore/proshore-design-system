@@ -1,0 +1,10 @@
+/* Minimal reset (replaces what Radix Themes used to provide). */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+button, input, select, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
+button { cursor: pointer; }
+img, svg { vertical-align: middle; }
+a { color: inherit; }
+.sherpa-theme[data-root] { min-height: 100vh; background: var(--color-background); color: var(--gray-12); }
+.sherpa-theme:not([data-root]) { color: var(--gray-12); }
