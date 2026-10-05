@@ -1,9 +1,10 @@
 import { CalendarIcon, CheckIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, Cross2Icon, ExclamationTriangleIcon, MagnifyingGlassIcon } from "../icons";
 import { parseDate } from "@internationalized/date";
 import { useState, type ReactNode } from "react";
+import { useMessages } from "../i18n/I18nProvider";
 import {
   Button as RACButton, CalendarCell, CalendarGrid, CalendarGridBody, CalendarGridHeader, CalendarHeaderCell, Checkbox as RACCheckbox, ComboBox, DateInput, DateRangePicker as RACDateRangePicker,
-  DateSegment, Dialog, FieldError, Group, Heading, I18nProvider, Input, Label, ListBox, ListBoxItem, Popover, Radio, RadioGroup as RACRadioGroup, RangeCalendar, SearchField as RACSearchField,
+  DateSegment, Dialog, FieldError, Group, Heading, Input, Label, ListBox, ListBoxItem, Popover, Radio, RadioGroup as RACRadioGroup, RangeCalendar, SearchField as RACSearchField,
   Select as RACSelect, SelectValue, Switch as RACSwitch, Tag, TagGroup, TagList, Text, TextArea as RACTextArea, TextField as RACTextField,
 } from "react-aria-components";
 
@@ -50,12 +51,13 @@ export function TextArea({ label, hideLabel, description, error, value, defaultV
 
 /** Search with a built-in clear button; Esc clears. Wrap it in `role="search"` when it filters a list. */
 export function SearchField({ label, hideLabel = true, value, onChange, onClear, placeholder, className, id }: { label: string; hideLabel?: boolean; value?: string; onChange?: (v: string) => void; onClear?: () => void; placeholder?: string; className?: string; id?: string }) {
+  const { t } = useMessages();
   return (
     <RACSearchField className={`pr-field pr-search${className ? " " + className : ""}`} value={value} onChange={onChange} onClear={onClear} id={id}>
       <Label className={hideLabel ? "pr-label pr-sr" : "pr-label"}>{label}</Label>
       <span className="pr-inputwrap"><span className="pr-inputwrap__icon" aria-hidden><MagnifyingGlassIcon /></span>
         <Input className="pr-input" data-icon="" placeholder={placeholder} />
-        <RACButton className="pr-search__clear" aria-label="Clear search"><Cross2Icon aria-hidden /></RACButton></span>
+        <RACButton className="pr-search__clear" aria-label={t("forms.clearSearch")}><Cross2Icon aria-hidden /></RACButton></span>
     </RACSearchField>
   );
 }
@@ -90,9 +92,11 @@ export function RadioGroup({ label, hideLabel, description, value, onChange, opt
 
 export type Option = { value: string; label: string };
 
-export function Select({ label, hideLabel, description, error, options, value, onChange, placeholder = "Select", isDisabled, isRequired, className, size = "2" }: FieldProps & {
+export function Select({ label, hideLabel, description, error, options, value, onChange, placeholder: placeholderProp, isDisabled, isRequired, className, size = "2" }: FieldProps & {
   options: Option[]; value?: string | null; onChange?: (v: string) => void; placeholder?: string; size?: "1" | "2";
 }) {
+  const { t } = useMessages();
+  const placeholder = placeholderProp ?? t("forms.select");
   return (
     <RACSelect validationBehavior="aria" className={`pr-field${className ? " " + className : ""}`} selectedKey={value ?? null} onSelectionChange={(k) => k !== null && onChange?.(String(k))} placeholder={placeholder} isDisabled={isDisabled} isRequired={isRequired} isInvalid={!!error}>
       <Label className={hideLabel ? "pr-label pr-sr" : "pr-label"}>{label}</Label>
@@ -106,9 +110,11 @@ export function Select({ label, hideLabel, description, error, options, value, o
 const SelectedMark = ({ id, value }: { id: string; value?: string | null }) => (id === value ? <CheckIcon /> : null);
 
 /** Multi-select with type-ahead and removable tags. React Aria has no multiple mode, so it is a ComboBox plus a TagGroup. */
-export function MultiSelect({ label, hideLabel, description, options, value, onChange, placeholder = "Type to filter", className }: {
+export function MultiSelect({ label, hideLabel, description, options, value, onChange, placeholder: placeholderProp, className }: {
   label: string; hideLabel?: boolean; description?: ReactNode; options: Option[]; value: string[]; onChange: (v: string[]) => void; placeholder?: string; className?: string;
 }) {
+  const { t } = useMessages();
+  const placeholder = placeholderProp ?? t("forms.typeToFilter");
   const [input, setInput] = useState("");
   const items = options.filter((o) => !value.includes(o.value) && o.label.toLowerCase().includes(input.trim().toLowerCase()));
   return (
@@ -116,17 +122,17 @@ export function MultiSelect({ label, hideLabel, description, options, value, onC
       <ComboBox className="pr-field" inputValue={input} onInputChange={setInput} selectedKey={null} allowsEmptyCollection menuTrigger="focus"
         onSelectionChange={(k) => { if (k !== null) { onChange([...value, String(k)]); setInput(""); } }}>
         <Label className={hideLabel ? "pr-label pr-sr" : "pr-label"}>{label}</Label>
-        <span className="pr-inputwrap"><Input className="pr-input" placeholder={placeholder} /><RACButton className="pr-combo__btn" aria-label={`Show ${label} options`}><ChevronDownIcon aria-hidden /></RACButton></span>
+        <span className="pr-inputwrap"><Input className="pr-input" placeholder={placeholder} /><RACButton className="pr-combo__btn" aria-label={t("forms.showOptions", { label })}><ChevronDownIcon aria-hidden /></RACButton></span>
         {description && <Text slot="description" className="pr-hint">{description}</Text>}
         <Popover className="pr-popover pr-select-pop">
-          <ListBox className="pr-menu" items={items} renderEmptyState={() => <div className="pr-menu__empty">{options.length === value.length ? "All selected" : "No matches"}</div>}>
+          <ListBox className="pr-menu" items={items} renderEmptyState={() => <div className="pr-menu__empty">{options.length === value.length ? t("forms.allSelected") : t("forms.noMatches")}</div>}>
             {(o) => <ListBoxItem id={o.value} textValue={o.label} className="pr-menu__item">{o.label}</ListBoxItem>}
           </ListBox>
         </Popover>
       </ComboBox>
       {value.length > 0 && (
-        <TagGroup aria-label={`Selected: ${label}`} onRemove={(keys) => onChange(value.filter((v) => !keys.has(v)))}>
-          <TagList className="pr-tags">{value.map((v) => (<Tag key={v} id={v} textValue={options.find((o) => o.value === v)?.label} className="pr-tag">{options.find((o) => o.value === v)?.label ?? v}<RACButton slot="remove" className="pr-tag__x" aria-label={`Remove ${options.find((o) => o.value === v)?.label ?? v}`}><Cross2Icon aria-hidden /></RACButton></Tag>))}</TagList>
+        <TagGroup aria-label={t("forms.selectedTags", { label })} onRemove={(keys) => onChange(value.filter((v) => !keys.has(v)))}>
+          <TagList className="pr-tags">{value.map((v) => (<Tag key={v} id={v} textValue={options.find((o) => o.value === v)?.label} className="pr-tag">{options.find((o) => o.value === v)?.label ?? v}<RACButton slot="remove" className="pr-tag__x" aria-label={t("forms.remove", { name: options.find((o) => o.value === v)?.label ?? v })}><Cross2Icon aria-hidden /></RACButton></Tag>))}</TagList>
         </TagGroup>
       )}
     </div>
@@ -136,6 +142,7 @@ export function MultiSelect({ label, hideLabel, description, options, value, onC
 /** Date range as two segmented date fields plus a calendar. Values are ISO dates (yyyy-mm-dd). Wrap the app in LocaleProvider for Dutch. */
 export type DateRange = { start: string; end: string } | null;
 export function DateRangePicker({ label, hideLabel, description, value, onChange, className }: { label: string; hideLabel?: boolean; description?: ReactNode; value: DateRange; onChange: (v: DateRange) => void; className?: string }) {
+  const { t } = useMessages();
   return (
     <RACDateRangePicker className={`pr-field${className ? " " + className : ""}`} value={value ? { start: parseDate(value.start), end: parseDate(value.end) } : null}
       onChange={(r) => onChange(r ? { start: r.start.toString(), end: r.end.toString() } : null)}>
@@ -144,7 +151,7 @@ export function DateRangePicker({ label, hideLabel, description, value, onChange
         <DateInput slot="start" className="pr-dateinput">{(s) => <DateSegment segment={s} className="pr-seg" />}</DateInput>
         <span aria-hidden className="pr-dates__sep">–</span>
         <DateInput slot="end" className="pr-dateinput">{(s) => <DateSegment segment={s} className="pr-seg" />}</DateInput>
-        <RACButton className="pr-dates__btn" aria-label="Open calendar"><CalendarIcon aria-hidden /></RACButton>
+        <RACButton className="pr-dates__btn" aria-label={t("forms.openCalendar")}><CalendarIcon aria-hidden /></RACButton>
       </Group>
       {description && <Text slot="description" className="pr-hint">{description}</Text>}
       <Popover className="pr-popover">
@@ -159,5 +166,3 @@ export function DateRangePicker({ label, hideLabel, description, value, onChange
   );
 }
 
-/** Sets locale for dates, numbers and screen-reader strings inside it, for example "nl-NL" or "en-GB". */
-export const LocaleProvider = I18nProvider;

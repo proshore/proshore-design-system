@@ -3,6 +3,7 @@ import { Button } from "react-aria-components";
 import { ProshoreIcon, ProshoreWordmark } from "./Brand";
 import { Ridgeline } from "./Motifs";
 import { Note } from "./Note";
+import { useMessages } from "../i18n/I18nProvider";
 import "./signin.css";
 
 /** Google's four-colour "G". Brand mark: do not recolour or redraw (Google Identity branding guidelines). */
@@ -21,11 +22,12 @@ export function GoogleMark({ size = 20 }: { size?: number }) {
  * The "Sign in with Google" button. Follows Google's button guidelines (neutral light and dark variants, the G mark, the label
  * "Sign in with Google"), so its colours are intentionally not Proshore tokens. `busy` shows the redirecting state and blocks repeat clicks.
  */
-export function GoogleSignInButton({ onPress, busy = false, label = "Sign in with Google" }: { onPress?: () => void; busy?: boolean; label?: string }) {
+export function GoogleSignInButton({ onPress, busy = false, label }: { onPress?: () => void; busy?: boolean; label?: string }) {
+  const { t } = useMessages();
   return (
     <Button className="pr-gbtn" onPress={onPress} isDisabled={busy} aria-busy={busy || undefined}>
       <GoogleMark />
-      <span>{busy ? "Redirecting to Google…" : label}</span>
+      <span>{busy ? t("signIn.redirecting") : label ?? t("signIn.button")}</span>
     </Button>
   );
 }
@@ -44,17 +46,18 @@ export function SignInScreen({ product, productMark, onSignIn, busy = false, dom
   /** Short message shown above the button, for example that the user was signed out. */ notice?: ReactNode;
   /** Small print slot: help link, privacy. */ footer?: ReactNode;
 }) {
+  const { t, tn } = useMessages();
   return (
     <main className="pr-signin" id="main" tabIndex={-1}>
       <Ridgeline className="pr-signin__ridge" />
       <section className="pr-signin__card" aria-labelledby="signin-title">
         <div className="pr-signin__brand"><ProshoreIcon height={48} /></div>
         {productMark && <div className="pr-signin__mark">{productMark}</div>}
-        <h1 id="signin-title" className="pr-signin__title">Sign in to {product}</h1>
-        <p className="pr-signin__lead">Use your Proshore Google Workspace account.</p>
+        <h1 id="signin-title" className="pr-signin__title">{tn("signIn.title", { product })}</h1>
+        <p className="pr-signin__lead">{t("signIn.lead")}</p>
         {notice && <Note tone="info" live>{notice}</Note>}
         <GoogleSignInButton onPress={onSignIn} busy={busy} />
-        <p className="pr-signin__fine">Only <strong>@{domain}</strong> accounts can sign in here. Signing in shows who you are; what you can open depends on the access you were given.</p>
+        <p className="pr-signin__fine">{t("signIn.finePrefix")}<strong>@{domain}</strong>{t("signIn.fineSuffix")}</p>
         {footer && <div className="pr-signin__footer">{footer}</div>}
         <div className="pr-signin__word"><ProshoreWordmark height={14} /></div>
       </section>

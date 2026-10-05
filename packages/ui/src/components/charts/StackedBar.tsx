@@ -1,4 +1,5 @@
 import { Text } from "../../primitives/Text";
+import { useMessages } from "../../i18n/I18nProvider";
 import { Fill, nf, type Coverage, type Pattern } from "./shared";
 
 export interface StackSegment { label: string; value: number; color: string; pattern?: Pattern }
@@ -16,12 +17,13 @@ export interface StackedBarProps {
 }
 
 export function StackedBar({ segments, unit, coverage = "complete", subject }: StackedBarProps) {
+  const { t } = useMessages();
   const parts = segments.filter((s) => s.value > 0);
   const sum = parts.reduce((a, s) => a + s.value, 0);
-  const pre = coverage === "partial" ? "at least " : "";
-  const text = coverage === "none" ? `${subject}: no data, so the split is unknown.`
-    : `${subject}: ${pre}${nf(sum)} ${unit}. ` + segments.map((s) => `${s.label} ${nf(s.value)} (${sum ? Math.round((s.value / sum) * 100) : 0}%)`).join(", ") + (coverage === "partial" ? ". Coverage is partial." : ".");
-  if (coverage === "none") return <div><div className="ch-none ch-stack__none" role="img" aria-label={text}>No data</div><Text as="p" size="1" color="gray" mt="2">{text}</Text></div>;
+  const pre = coverage === "partial" ? t("charts.stackedAtLeast") : "";
+  const text = coverage === "none" ? t("charts.stackedNoData", { subject })
+    : t("charts.stackedHead", { subject, prefix: pre, sum: nf(sum), unit }) + segments.map((s) => t("charts.stackedSegment", { label: s.label, value: nf(s.value), percent: sum ? Math.round((s.value / sum) * 100) : 0 })).join(", ") + (coverage === "partial" ? t("charts.stackedEndPartial") : t("charts.stackedEnd"));
+  if (coverage === "none") return <div><div className="ch-none ch-stack__none" role="img" aria-label={text}>{t("charts.noData")}</div><Text as="p" size="1" color="gray" mt="2">{text}</Text></div>;
   return (
     <div>
       <div role="img" aria-label={text}>

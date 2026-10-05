@@ -1,4 +1,5 @@
 import { Cross2Icon } from "../icons";
+import { useMessages } from "../i18n/I18nProvider";
 import { Button, Text, UNSTABLE_Toast as Toast, UNSTABLE_ToastContent as ToastContent, UNSTABLE_ToastQueue as ToastQueue, UNSTABLE_ToastRegion as ToastRegion } from "react-aria-components";
 
 type ToastContentData = { message: string; tone: "info" | "success" | "warning" | "danger" };
@@ -17,12 +18,13 @@ export const toast = {
 
 /** Render once at the app root. */
 export function ToastHost() {
+  const { t } = useMessages();
   return (
-    <ToastRegion queue={queue} className="pr-toasts" aria-label="Notifications">
-      {({ toast: t }) => (
-        <Toast toast={t} className="pr-toast" data-tone={t.content.tone}>
-          <ToastContent><Text slot="title" className="pr-toast__text">{t.content.message}</Text></ToastContent>
-          <Button slot="close" className="pr-toast__x" aria-label="Dismiss notification"><Cross2Icon aria-hidden /></Button>
+    <ToastRegion queue={queue} className="pr-toasts" aria-label={t("toast.region")}>
+      {({ toast: item }) => (
+        <Toast toast={item} className="pr-toast" data-tone={item.content.tone}>
+          <ToastContent><Text slot="title" className="pr-toast__text">{item.content.message}</Text></ToastContent>
+          <Button slot="close" className="pr-toast__x" aria-label={t("toast.dismiss")}><Cross2Icon aria-hidden /></Button>
         </Toast>
       )}
     </ToastRegion>

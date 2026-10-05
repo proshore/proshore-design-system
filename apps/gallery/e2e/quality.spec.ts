@@ -121,3 +121,91 @@ test("status pages render each kind with one h1", async ({ page }) => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(2); // the page title and the status page
   }
 });
+
+// Language: the built-in text of the design system in Dutch (the gallery's own page copy stays English).
+async function openIn(page: Page, route: string, lang: "en" | "nl", theme: (typeof themes)[number] = "light") {
+  await page.addInitScript((l) => { localStorage.setItem("proshore-lang", l); }, lang);
+  await open(page, route, theme);
+}
+
+for (const route of routes) {
+  test(`accessibility in Dutch: ${route}`, async ({ page }) => {
+    await openIn(page, route, "nl");
+    expect(await page.evaluate(() => document.documentElement.lang)).toBe("nl");
+    expect(await violations(page)).toEqual([]);
+  });
+}
+
+test("language switch in the account menu changes built-in text and is remembered", async ({ page }) => {
+  await page.addInitScript(() => { localStorage.setItem("proshore-theme", "light"); });
+  await page.goto("/?i18n#/foundations");
+  await page.locator("h1").first().waitFor();
+  await page.getByRole("button", { name: /account menu/i }).click();
+  await page.getByRole("menuitemradio", { name: "Nederlands" }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "nl");
+  await page.getByRole("button", { name: /accountmenu van/i }).click();
+  await expect(page.getByRole("menuitem", { name: "Uitloggen" })).toBeVisible();
+  expect(await violations(page)).toEqual([]);
+  await page.reload();
+  await page.getByRole("button", { name: /accountmenu van/i }).click();
+  await page.getByRole("menuitemradio", { name: "English" }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.getByRole("button", { name: /^account menu for/i })).toBeVisible();
+});
+
+test("Dutch: pagination, dialog buttons and status page", async ({ page }) => {
+  await openIn(page, "/dialogs", "nl");
+  const nav = page.getByRole("navigation", { name: "Paginering" });
+  await expect(nav.getByText("Pagina 1 van 8")).toBeVisible();
+  await expect(nav.getByText("1-10 van 80")).toBeVisible();
+  await expect(nav.getByRole("button", { name: "Vorige pagina" })).toHaveAttribute("aria-disabled", "true");
+  await nav.getByRole("button", { name: "Volgende pagina" }).click();
+  await expect(nav.getByText("Pagina 2 van 8")).toBeVisible();
+  await page.getByRole("button", { name: "Confirm (cannot be undone)" }).click();
+  const dialog = page.getByRole("alertdialog");
+  await expect(dialog.getByRole("button", { name: "Annuleren" })).toBeVisible();
+  expect(await violations(page)).toEqual([]);
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("heading", { level: 1, name: "Je hebt geen toegang tot deze pagina" })).toBeVisible();
+  await page.getByRole("button", { name: "Not found (404)" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Deze pagina bestaat niet" })).toBeVisible();
+  await expect(page.getByText("Referentie:")).toBeVisible();
+  await expect(page.getByText("Sleep bestanden hierheen, of")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Kies bestanden" })).toBeVisible();
+});
+
+test("Dutch: sign-in screen and sign out", async ({ page }) => {
+  await openIn(page, "/sign-in", "nl");
+  await expect(page.getByRole("heading", { name: "Inloggen bij Design system" })).toBeVisible();
+  await expect(page.getByText("Gebruik je Proshore Google Workspace-account.")).toBeVisible();
+  await page.getByRole("button", { name: "Inloggen met Google" }).click();
+  await expect(page.getByRole("heading", { name: "Foundations" })).toBeVisible();
+  await page.getByRole("button", { name: /accountmenu van/i }).click();
+  await page.getByRole("menuitem", { name: "Account wisselen" }).click();
+  await expect(page.getByRole("region", { name: "Meldingen" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Melding sluiten" })).toBeVisible();
+});
+
+test("Dutch: data table toolbar, filters and pager", async ({ page }) => {
+  await openIn(page, "/tables", "nl");
+  await expect(page.getByRole("button", { name: "Exporteer CSV" }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Compacte rijen" }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Kolommen tonen of verbergen" }).first()).toBeVisible();
+  await expect(page.getByText("Rijen per pagina").first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Volgende pagina" }).first()).toBeVisible();
+});
+
+test("Dutch: charts have a Dutch table view and summary", async ({ page }) => {
+  await openIn(page, "/charts", "nl");
+  await page.getByRole("button", { name: "Bekijk als tabel" }).first().click();
+  await expect(page.getByRole("columnheader", { name: "Categorie" })).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "Dekking" }).first()).toBeVisible();
+  await expect(page.getByText("Bron: Requests, demo data").first()).toBeVisible();
+});
+
+test("English stays the default and the Dutch strings do not leak into it", async ({ page }) => {
+  await open(page, "/dialogs", "light");
+  await expect(page.getByRole("navigation", { name: "Example pagination" }).getByText("1-10 of 80")).toBeVisible();
+  await expect(page.getByText("Reference:")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.lang)).toBe("en");
+});

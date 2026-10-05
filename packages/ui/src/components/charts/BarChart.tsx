@@ -2,6 +2,8 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 import { GridColumns, GridRows } from "@visx/grid";
 import { Group } from "@visx/group";
 import { scaleLinear } from "@visx/scale";
+import { useMessages } from "../../i18n/I18nProvider";
+import { englishT, type Translate } from "../../i18n/translate";
 import { SeriesPatterns, atLeast, fit, niceScale, nf, roundedEnd, useWidth, usePatternIds, wrapLabel, type Coverage, type Series, type TableData } from "./shared";
 
 export interface BarDatum { label: string; values: Record<string, number>; coverage?: Coverage }
@@ -22,23 +24,24 @@ export interface BarChartProps {
 
 const total = (d: BarDatum, series: Series[]) => series.reduce((a, s) => a + (d.values[s.key] ?? 0), 0);
 
-export function barTable(series: Series[], data: BarDatum[], stacked = false): TableData {
+/** Table view of the same data. Pass `t` from `useMessages()` to get it in the current language (English by default). */
+export function barTable(series: Series[], data: BarDatum[], stacked = false, t: Translate = englishT): TableData {
   return {
-    head: ["Category", ...series.map((s) => s.label), ...(stacked ? ["Total"] : []), "Coverage"],
+    head: [t("charts.category"), ...series.map((s) => s.label), ...(stacked ? [t("charts.total")] : []), t("charts.coverage")],
     rows: data.map((d) => {
       const cov = d.coverage ?? "complete";
-      if (cov === "none") return [d.label, ...series.map(() => "No data"), ...(stacked ? ["No data"] : []), "None"];
-      return [d.label, ...series.map((s) => atLeast(cov, d.values[s.key] ?? 0)), ...(stacked ? [atLeast(cov, total(d, series))] : []), cov === "partial" ? "Partial (at least)" : "Complete"];
+      if (cov === "none") return [d.label, ...series.map(() => t("charts.noData")), ...(stacked ? [t("charts.noData")] : []), t("charts.none")];
+      return [d.label, ...series.map((s) => atLeast(cov, d.values[s.key] ?? 0)), ...(stacked ? [atLeast(cov, total(d, series))] : []), cov === "partial" ? t("charts.partialAtLeast") : t("charts.complete")];
     }),
   };
 }
 
-function summary(series: Series[], data: BarDatum[], unit: string, stacked: boolean) {
+function summary(series: Series[], data: BarDatum[], unit: string, stacked: boolean, t: Translate) {
   return `${unit}. ` + data.map((d) => {
     const cov = d.coverage ?? "complete";
-    if (cov === "none") return `${d.label}: no data, not zero.`;
+    if (cov === "none") return t("charts.barNoData", { label: d.label });
     const parts = series.map((s) => `${s.label} ${atLeast(cov, d.values[s.key] ?? 0)}`).join(", ");
-    return `${d.label}: ${parts}${stacked ? `, total ${atLeast(cov, total(d, series))}` : ""}${cov === "partial" ? " (partial coverage)" : ""}.`;
+    return `${d.label}: ${parts}${stacked ? t("charts.barTotal", { value: atLeast(cov, total(d, series)) }) : ""}${cov === "partial" ? t("charts.barPartial") : ""}.`;
   }).join(" ");
 }
 
@@ -46,11 +49,12 @@ const GAP = 2;             // px between stacked segments
 const tick = { fill: "var(--gray-11)", fontSize: "var(--font-size-1)", fontFamily: "inherit" } as const;
 
 export function BarChart({ series, data, unit, orientation = "horizontal", stacked = false, height = 220 }: BarChartProps) {
+  const { t } = useMessages();
   const [ref, W] = useWidth(640);
   const idOf = usePatternIds();
   const maxV = Math.max(0, ...data.filter((d) => d.coverage !== "none").map((d) => (stacked ? total(d, series) : Math.max(0, ...series.map((s) => d.values[s.key] ?? 0)))));
   const { max, ticks } = niceScale(maxV);
-  const label = summary(series, data, unit, stacked);
+  const label = summary(series, data, unit, stacked, t);
   const val = (d: BarDatum, k: number) => d.values[series[k].key] ?? 0;
 
   const wrap = (h: number, children: React.ReactNode) => (
@@ -83,7 +87,7 @@ export function BarChart({ series, data, unit, orientation = "horizontal", stack
             const text = (x: number, yy: number, t: string) => <text x={x} y={yy} textAnchor="middle" className="ch-val-svg">{t}</text>;
             let bars: React.ReactNode;
             if (cov === "none") {
-              bars = <g><rect x={cx - Math.min(band - 16, 96) / 2} y={ph - 56} width={Math.min(band - 16, 96)} height={56} rx={4} className="ch-none-svg" /><text x={cx} y={ph - 28} textAnchor="middle" dominantBaseline="middle" className="ch-none-text">No data</text></g>;
+              bars = <g><rect x={cx - Math.min(band - 16, 96) / 2} y={ph - 56} width={Math.min(band - 16, 96)} height={56} rx={4} className="ch-none-svg" /><text x={cx} y={ph - 28} textAnchor="middle" dominantBaseline="middle" className="ch-none-text">{t("charts.noData")}</text></g>;
             } else if (stacked) {
               let acc = 0; const t = total(d, series); const segs = series.map((s, si) => ({ s, v: val(d, si) })).filter((x) => x.v > 0);
               bars = <g>{segs.map(({ s, v }, si) => {
@@ -124,7 +128,7 @@ export function BarChart({ series, data, unit, orientation = "horizontal", stack
           const valText = (px: number, py: number, t: string) => <text x={px + 8} y={py} dominantBaseline="middle" className="ch-val-svg ch-val-svg--strong">{t}</text>;
           const pill = (id: string, w: number, y0: number, hh: number) => <clipPath id={id}><rect x={0} y={y0} width={w} height={hh} rx={Math.min(hh / 2, w / 2)} /></clipPath>;
           let mark: React.ReactNode;
-          if (cov === "none") mark = <g><rect x={1} y={top} width={Math.max(40, iw + rw - 8)} height={h} rx={h / 2} className="ch-none-svg" /><text x={(iw + rw - 8) / 2} y={top + h / 2} textAnchor="middle" dominantBaseline="middle" className="ch-none-text">{iw + rw < 380 ? "No data, not measured" : "No data: not measured, so unknown rather than zero"}</text></g>;
+          if (cov === "none") mark = <g><rect x={1} y={top} width={Math.max(40, iw + rw - 8)} height={h} rx={h / 2} className="ch-none-svg" /><text x={(iw + rw - 8) / 2} y={top + h / 2} textAnchor="middle" dominantBaseline="middle" className="ch-none-text">{iw + rw < 380 ? t("charts.barNoDataShort") : t("charts.barNoDataLong")}</text></g>;
           else if (stacked) {
             const t = total(d, series); let acc = 0; const segs = series.map((s, si) => ({ s, v: val(d, si) })).filter((z) => z.v > 0);
             const clip = idOf(`clip${i}`); const w = Math.max(3, x(t));

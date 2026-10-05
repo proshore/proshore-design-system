@@ -18,7 +18,7 @@ const apps: ShellApp[] = [
 const user: HeaderUser = { id: "u1", name: "Sam Example", email: "sam.example@proshore.nl", role: "Consultant", org: "Proshore", staff: true };
 
 /** The whole app frame as a product would use it. Full page, like the sign-in screen. */
-export function ShellPage({ theme, onTheme }: { theme: ThemePreference; onTheme: (t: ThemePreference) => void }) {
+export function ShellPage({ theme, onTheme, language }: { theme: ThemePreference; onTheme: (t: ThemePreference) => void; language?: { value: string; options: { id: string; label: string }[]; onChange: (id: string) => void } }) {
   const [ws, setWs] = useState<Workspace>({ clientId: "northwind", engagementId: "ordering" });
   const [cmd, setCmd] = useState(false);
   const [ask, setAsk] = useState(false);
@@ -35,7 +35,7 @@ export function ShellPage({ theme, onTheme }: { theme: ThemePreference; onTheme:
       nav={<ShellNav label="Engagement" items={[{ href: "#/shell", label: "Overview", current: true }, { href: "#/shell", label: "Findings", count: 12 }, { href: "#/shell", label: "Decision" }]} />}
       onSearch={() => setCmd(true)}
       actions={<Button aria-label="Ask Sherpa" onClick={() => setAsk(true)}><SherpaGuide size={20} /> <span className="pr-ask__label">Ask Sherpa</span></Button>}
-      user={<UserMenu user={user} theme={theme} onTheme={onTheme} />}
+      user={<UserMenu user={user} theme={theme} onTheme={onTheme} language={language} />}
       overlays={<>
         <CommandPalette open={cmd} onOpenChange={setCmd} commands={commands} />
         <AssistantPanel open={ask} onOpenChange={setAsk} title="Ask about this engagement" context="the overview" badge={<DemoTag>Demo answers</DemoTag>}

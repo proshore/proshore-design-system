@@ -2,6 +2,12 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
+## Unreleased
+- **Translatable built-in text (English and Dutch).** New message catalogue `src/i18n/messages.ts` (181 strings in `en` and `nl`: pagination, table toolbar, filters and states, sign-in, status pages, dialog buttons, dropzone, slide-over, header and account menu, app shell, assistant, command palette, toast, forms, chart wording). New `I18nProvider` (`locale`, partial `messages` overrides) and `useMessages()`; exported with the `messages` catalogue and the types `Messages`, `PartialMessages`, `Locale`, `MessageKey`, `Translate`. `LocaleProvider` is now the same component, so one provider sets the language of strings and the locale of dates and numbers. Without a provider everything is English and unchanged. No new dependency.
+- `UserMenu` gets an optional `language` prop (a language section in the account menu; the gallery shows it when opened with `?i18n` or after a language was chosen, so its default screens and visual baselines are unchanged). `barTable` and `trendTable` take an optional translator as last argument. Props that already set text (`label`, `placeholder`, `confirmLabel`, `emptyText` ...) still win; their English defaults now come from the catalogue.
+- Known: the `SEVERITY_SERIES` labels and the number format in charts (`en`) are not translated yet; `NO_RESULTS_HINT` stays the English text (the component shows the translated hint).
+- Tests: `npm run test:i18n` (same keys, no empty values, same placeholders, formatter), Dutch end-to-end and axe tests in the gallery, language switch in the gallery account menu. E2E ports can be moved with `E2E_PORT` to run next to another checkout.
+
 ## 0.4.0
 - **Breaking-ish (aliases kept):** design tokens renamed from `--sherpa-*` to `--pr-*` (40 tokens, for example `--sherpa-surface` is now `--pr-surface`). The old names still work through `theme/compat.css` and are removed in 0.5.0. Migrate with a search and replace of `--sherpa-` by `--pr-`. `SherpaTheme` is now `ProshoreTheme`; `SherpaTheme` stays as a deprecated alias. The CSS class names `.sherpa-theme`, `.sherpa-eyebrow` and `.sherpa-display` are unchanged for now (they will be renamed with a deprecation period).
 - The mountain motif is off on `PageHeader` by default (`motif` turns it on) and stays on `PageHero`; use it on key pages such as a dashboard, not on every page.

@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { useEffect, useId, useRef, useState } from "react";
+import { useMessages } from "../../i18n/I18nProvider";
 
 export type Coverage = "complete" | "partial" | "none";
 export type Pattern = "solid" | "dots" | "grid" | "empty";
@@ -90,9 +91,10 @@ export interface LegendItem { label: string; color: string; pattern?: Pattern; s
  * Legend: shape/pattern plus label, never colour alone.
  * Use for 2+ series (even when also direct-labelled). Do not use for one series: the title names it.
  */
-export function Legend({ items, label = "Legend" }: { items: LegendItem[]; label?: string }) {
+export function Legend({ items, label }: { items: LegendItem[]; label?: string }) {
+  const { t } = useMessages();
   return (
-    <ul className="ch-legend" aria-label={label}>
+    <ul className="ch-legend" aria-label={label ?? t("charts.legend")}>
       {items.map((it) => (
         <li key={it.label}>
           {it.kind === "line" ? (

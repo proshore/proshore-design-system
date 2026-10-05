@@ -14,8 +14,9 @@
     "unused": "knip",
     "test:e2e": "npm run test:e2e -w gallery && npm run test:e2e -w discovery-example",
     "pack": "npm run pack -w @proshore/ui",
-    "check": "npm run typecheck && npm run test:auth && npm run build && npm run unused && npm run test:e2e",
+    "check": "npm run typecheck && npm run test:auth && npm run test:i18n && npm run build && npm run unused && npm run test:e2e",
     "dev:discovery": "npm run dev -w discovery-example",
+    "test:i18n": "npm test -w @proshore/ui",
     "test:auth": "npm test -w @proshore/auth",
     "test:visual": "npm run test:visual -w gallery && npm run test:visual -w discovery-example",
     "test:visual:update": "npm run test:visual:update -w gallery && npm run test:visual:update -w discovery-example"

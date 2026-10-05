@@ -14,6 +14,7 @@ import { EmptyState, ErrorState, NoResults, TableSkeleton } from "./states";
 import { PAGE_SIZES, type ColumnDef, type PageSize, type SortDir } from "./types";
 import { isHideable, isSortable, useTableState } from "./useTableState";
 import { Highlight, downloadCsv, toCsv } from "./util";
+import { useMessages } from "../../i18n/I18nProvider";
 import "./table.css";
 
 export type DataTableProps<T> = {
@@ -71,7 +72,9 @@ function useRowMotion(bodyRef: React.RefObject<HTMLTableSectionElement | null>, 
 }
 
 export function DataTable<T>(props: DataTableProps<T>) {
-  const { columns, rows, getRowId, caption, noun = "items", status = "ready", onRowOpen, selectable = false, features = {} } = props;
+  const { t, tn } = useMessages();
+  const { columns, rows, getRowId, caption, status = "ready", onRowOpen, selectable = false, features = {} } = props;
+  const noun = props.noun ?? t("table.defaultNoun");
   const f = { search: true, filters: true, density: true, columns: true, export: true, pagination: true, ...features };
   const s = useTableState<T>(rows, columns, { getRowId, initialSort: props.initialSort, initialPageSize: props.initialPageSize, initialDensity: props.initialDensity, initialHidden: props.initialHidden });
   const rootRef = useRef<HTMLDivElement>(null);
@@ -85,7 +88,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
   const hasFacets = columns.some((c) => c.filter);
   const showBar = f.search || (f.filters && hasFacets) || f.density || f.columns || f.export || props.toolbarRight;
   const sortCols = s.sort.map((k) => ({ ...k, header: columns.find((c) => c.id === k.id)?.header ?? k.id }));
-  const sortText = sortCols.length ? `Sorted by ${sortCols.map((k) => `${k.header} ${k.dir === "asc" ? "ascending" : "descending"}`).join(", then ")}.` : "Default order.";
+  const sortText = sortCols.length ? t("table.sortedBy", { sorts: sortCols.map((k) => t("table.sortPart", { header: k.header, direction: k.dir === "asc" ? t("table.ascending") : t("table.descending") })).join(t("table.sortThen")) }) : t("table.defaultOrder");
 
   const doExport = () => {
     const filename = `${caption.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}.csv`;
@@ -97,14 +100,14 @@ export function DataTable<T>(props: DataTableProps<T>) {
     <>
       {f.density && (
         <Button size="2" variant="outline" color="gray" aria-pressed={s.density === "compact"} onClick={() => s.setDensity(s.density === "compact" ? "comfortable" : "compact")}>
-          <RowsIcon aria-hidden /> Compact rows
+          <RowsIcon aria-hidden /> {t("table.compactRows")}
         </Button>
       )}
       {f.columns && (
         <MenuTrigger>
-          <Button size="2" variant="outline" color="gray" aria-label="Show or hide columns"><ViewVerticalIcon aria-hidden /> Columns</Button>
+          <Button size="2" variant="outline" color="gray" aria-label={t("table.columnsMenu")}><ViewVerticalIcon aria-hidden /> {t("table.columns")}</Button>
           <Popover className="pr-popover" placement="bottom end">
-            <Menu className="pr-menu" aria-label="Show or hide columns" selectionMode="multiple" selectedKeys={new Set(chosen.map((c) => c.id))}
+            <Menu className="pr-menu" aria-label={t("table.columnsMenu")} selectionMode="multiple" selectedKeys={new Set(chosen.map((c) => c.id))}
               onSelectionChange={() => undefined}>
               {columns.map((c) => (
                 <MenuItem key={c.id} id={c.id} className="pr-menu__item" textValue={c.header} isDisabled={!isHideable(c)} onAction={() => s.toggleHidden(c.id)}>
@@ -115,7 +118,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
           </Popover>
         </MenuTrigger>
       )}
-      {f.export && <Button size="2" variant="outline" color="gray" onClick={doExport} disabled={status !== "ready" || s.sorted.length === 0}><DownloadIcon aria-hidden /> Export CSV</Button>}
+      {f.export && <Button size="2" variant="outline" color="gray" onClick={doExport} disabled={status !== "ready" || s.sorted.length === 0}><DownloadIcon aria-hidden /> {t("table.exportCsv")}</Button>}
       {props.toolbarRight}
     </>
   );
@@ -133,16 +136,16 @@ export function DataTable<T>(props: DataTableProps<T>) {
   };
 
   const body = useMemo(() => {
-    if (status === "loading") return <TableSkeleton columns={Math.max(3, vis.length)} label={`Loading ${noun}`} />;
+    if (status === "loading") return <TableSkeleton columns={Math.max(3, vis.length)} label={t("table.loading", { noun })} />;
     if (status === "error") return <ErrorState message={props.errorMessage} onRetry={props.onRetry} />;
-    if (props.rows.length === 0) return props.emptyState ?? <EmptyState title={`No ${noun} yet`} description="Nothing has been recorded for this selection." />;
+    if (props.rows.length === 0) return props.emptyState ?? <EmptyState title={t("table.emptyTitle", { noun })} description={t("table.emptyText")} />;
     if (s.filtered.length === 0) return <NoResults filters={active} search={s.search} onReset={() => { s.resetFilters(); focusSearch(); }} hint={props.noResultsHint} noun={noun} />;
     return null;
-  }, [status, props.rows.length, props.emptyState, props.errorMessage, props.onRetry, props.noResultsHint, s.filtered.length, active, s.search, s.resetFilters, vis.length, noun]);
+  }, [status, props.rows.length, props.emptyState, props.errorMessage, props.onRetry, props.noResultsHint, s.filtered.length, active, s.search, s.resetFilters, vis.length, noun, t]);
 
   const first = s.page * s.pageSize;
   useRowMotion(bodyRef, s.pageRows.map((r) => getRowId(r)).join("|"));
-  const rangeText = s.filtered.length ? `${first + 1}-${first + s.pageRows.length} of ${s.filtered.length}` : "0 of 0";
+  const rangeText = s.filtered.length ? t("table.range", { from: first + 1, to: first + s.pageRows.length, total: s.filtered.length }) : t("table.rangeNone");
 
   return (
     <div className="dt" ref={rootRef} data-density={s.density}>
@@ -150,25 +153,25 @@ export function DataTable<T>(props: DataTableProps<T>) {
       {showBar && (
         <FilterBar state={s} columns={columns} noun={noun} showSearch={f.search} showFilters={f.filters} right={right} />
       )}
-      {!showBar && <Text as="p" size="2" role="status" aria-live="polite" className="dt-visually-hidden">{s.filtered.length} of {s.total} {noun}</Text>}
+      {!showBar && <Text as="p" size="2" role="status" aria-live="polite" className="dt-visually-hidden">{tn("table.count", { count: s.filtered.length, total: s.total, noun })}</Text>}
 
       {selectable && s.selected.size > 0 && (
-        <div className="dt-bulk" role="region" aria-label="Bulk actions">
-          <Text size="2" weight="bold" role="status">{s.selected.size} selected</Text>
-          <div className="dt-bulk__actions">{props.bulkActions?.(s.selectedRows)}<Button size="1" variant="ghost" onClick={s.clearSelection}>Clear selection</Button></div>
+        <div className="dt-bulk" role="region" aria-label={t("table.bulkActions")}>
+          <Text size="2" weight="bold" role="status">{tn("table.selected", { count: s.selected.size })}</Text>
+          <div className="dt-bulk__actions">{props.bulkActions?.(s.selectedRows)}<Button size="1" variant="ghost" onClick={s.clearSelection}>{t("table.clearSelection")}</Button></div>
         </div>
       )}
 
       <div className="dt-frame">
         {body ?? (
-          <div className="dt-scroll" tabIndex={0} role="region" aria-label={`${caption}, scrollable`} style={{ maxHeight: props.maxHeight }}>
+          <div className="dt-scroll" tabIndex={0} role="region" aria-label={t("common.scrollable", { caption })} style={{ maxHeight: props.maxHeight }}>
             <table className="dt-table" style={{ "--dt-sel-w": "44px" } as CSSProperties}>
               <caption className="dt-visually-hidden">{caption}. {sortText}</caption>
               <thead>
                 <tr>
                   {selectable && (
                     <th scope="col" className="dt-th dt-sel dt-stickyc" style={{ left: 0 }}>
-                      <span className="dt-check"><Checkbox aria-label={`Select all ${noun} on this page`} isSelected={s.allOnPage} isIndeterminate={!s.allOnPage && s.someOnPage} onChange={s.togglePage} /></span>
+                      <span className="dt-check"><Checkbox aria-label={t("table.selectAll", { noun })} isSelected={s.allOnPage} isIndeterminate={!s.allOnPage && s.someOnPage} onChange={s.togglePage} /></span>
                     </th>
                   )}
                   {vis.map((c, i) => {
@@ -179,10 +182,10 @@ export function DataTable<T>(props: DataTableProps<T>) {
                       <th key={c.id} scope="col" className={`dt-th${AlignCls[c.align ?? "start"]}${i === stickyIdx ? " dt-stickyc" : ""}`} style={colStyle(c, i)}
                         aria-sort={sortable ? (dir ? (dir === "asc" ? "ascending" : "descending") : "none") : undefined}>
                         {sortable ? (
-                          <button type="button" className="dt-sortbtn" onClick={(e) => s.toggleSort(c.id, e.shiftKey)} title="Click to sort. Shift-click to add as secondary sort.">
+                          <button type="button" className="dt-sortbtn" onClick={(e) => s.toggleSort(c.id, e.shiftKey)} title={t("table.sortHint")}>
                             <span>{c.header}</span>
                             {dir === "asc" ? <ArrowUpIcon aria-hidden /> : dir === "desc" ? <ArrowDownIcon aria-hidden /> : <CaretSortIcon aria-hidden className="dt-sortbtn__idle" />}
-                            {s.sort.length > 1 && idx >= 0 && <span className="dt-sortbtn__n" aria-label={`sort priority ${idx + 1}`}>{idx + 1}</span>}
+                            {s.sort.length > 1 && idx >= 0 && <span className="dt-sortbtn__n" aria-label={t("table.sortPriority", { n: idx + 1 })}>{idx + 1}</span>}
                           </button>
                         ) : <span className="dt-th__text">{c.header}</span>}
                       </th>
@@ -198,17 +201,17 @@ export function DataTable<T>(props: DataTableProps<T>) {
                     <tr key={id} data-rowid={id} className="dt-row" data-selected={sel || undefined} data-openable={onRowOpen ? "" : undefined} onClick={(e) => onRowClick(e, row)}>
                       {selectable && (
                         <td className="dt-td dt-sel dt-stickyc" style={{ left: 0 }}>
-                          <span className="dt-check"><Checkbox aria-label={`Select ${props.rowLabel?.(row) ?? id}`} isSelected={sel} onChange={() => s.toggleRow(id)} /></span>
+                          <span className="dt-check"><Checkbox aria-label={t("table.selectRow", { label: props.rowLabel?.(row) ?? id })} isSelected={sel} onChange={() => s.toggleRow(id)} /></span>
                         </td>
                       )}
                       {vis.map((c, i) => {
                         const ctx = { query: s.search, highlight: (t: string) => <Highlight text={t} query={s.search} /> };
                         const raw = c.accessor?.(row);
-                        const content = c.cell ? c.cell(row, ctx) : raw instanceof Date ? raw.toLocaleDateString() : raw === null || raw === undefined || raw === "" ? <span className="dt-muted">Not recorded</span> : ctx.highlight(String(raw));
+                        const content = c.cell ? c.cell(row, ctx) : raw instanceof Date ? raw.toLocaleDateString() : raw === null || raw === undefined || raw === "" ? <span className="dt-muted">{t("table.notRecorded")}</span> : ctx.highlight(String(raw));
                         const asBtn = onRowOpen && i === 0;
                         return (
                           <td key={c.id} className={`dt-td${AlignCls[c.align ?? "start"]}${i === stickyIdx ? " dt-stickyc" : ""}`} style={colStyle(c, i)}>
-                            {asBtn ? <button type="button" className="dt-rowbtn" aria-label={props.rowLabel ? `Open ${props.rowLabel(row)}` : undefined} onClick={() => onRowOpen(row, s.sorted)}>{content}</button> : content}
+                            {asBtn ? <button type="button" className="dt-rowbtn" aria-label={props.rowLabel ? t("table.openRow", { label: props.rowLabel(row) }) : undefined} onClick={() => onRowOpen(row, s.sorted)}>{content}</button> : content}
                           </td>
                         );
                       })}
@@ -225,10 +228,10 @@ export function DataTable<T>(props: DataTableProps<T>) {
       {f.pagination && status === "ready" && s.filtered.length > 0 && (
         <div className="dt-footer">
           <div className="dt-footer__size">
-            <Text size="2" color="gray" aria-hidden>Rows per page</Text>
-            <Select label="Rows per page" hideLabel size="2" value={String(s.pageSize)} onChange={(v) => s.setPageSize(Number(v) as PageSize)} options={PAGE_SIZES.map((n) => ({ value: String(n), label: String(n) }))} />
+            <Text size="2" color="gray" aria-hidden>{t("table.rowsPerPage")}</Text>
+            <Select label={t("table.rowsPerPage")} hideLabel size="2" value={String(s.pageSize)} onChange={(v) => s.setPageSize(Number(v) as PageSize)} options={PAGE_SIZES.map((n) => ({ value: String(n), label: String(n) }))} />
           </div>
-          <Pagination page={s.page} pageCount={s.pageCount} onPageChange={s.setPage} range={rangeText} label={`${caption} pagination`} />
+          <Pagination page={s.page} pageCount={s.pageCount} onPageChange={s.setPage} range={rangeText} label={t("table.paginationLabel", { caption })} />
         </div>
       )}
     </div>

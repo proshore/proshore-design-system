@@ -15,6 +15,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.ts",
     "tokens": "node scripts/export-tokens.mjs",
     "pack": "node scripts/pack.mjs"
   },

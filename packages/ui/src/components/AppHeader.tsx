@@ -4,6 +4,7 @@ import { Button, Header, Menu, MenuItem, MenuSection, MenuTrigger, Popover, Sepa
 import { Avatar } from "./Avatar";
 import { ProshoreIcon, ProshoreWordmark } from "./Brand";
 import { ClientMark } from "./ClientMark";
+import { useMessages } from "../i18n/I18nProvider";
 
 export type Client = { id: string; name: string; logo?: string; engagements: { id: string; name: string }[] };
 export type Workspace = { clientId: string; engagementId: string };
@@ -20,6 +21,7 @@ export type HeaderUser = { id: string; name: string; email: string; role: string
 export function AppHeader({ product, homeHref = "#/", launcher, client, nav, proshoreOnly = false, actions, user }: {
   product: string; homeHref?: string; /** App launcher: replaces the plain product label. */ launcher?: ReactNode; client?: ReactNode; nav?: ReactNode; proshoreOnly?: boolean; actions?: ReactNode; user: ReactNode;
 }) {
+  const { t } = useMessages();
   const ref = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -37,14 +39,14 @@ export function AppHeader({ product, homeHref = "#/", launcher, client, nav, pro
   }, []);
   return (
     <header ref={ref} className="pr-header" data-scrolled={scrolled || undefined} data-layer={proshoreOnly ? "proshore" : "client"}>
-      <a href={homeHref} className="pr-header__brand" aria-label={`${product}, home`}>
+      <a href={homeHref} className="pr-header__brand" aria-label={t("header.home", { product })}>
         <ProshoreIcon height={28} /><span className="pr-header__word"><ProshoreWordmark height={14} /></span>
         {!launcher && <span className="sherpa-eyebrow pr-header__product">{product}</span>}
       </a>
       {launcher && (<><span className="pr-header__sep" aria-hidden>/</span>{launcher}</>)}
       {client && (<><span className="pr-header__sep" aria-hidden>/</span>{client}</>)}
       {nav && <div className="pr-header__nav">{nav}</div>}
-      {proshoreOnly && <span className="pr-layer">Proshore only</span>}
+      {proshoreOnly && <span className="pr-layer">{t("header.proshoreOnly")}</span>}
       <span className="pr-header__grow" />
       <div className="pr-header__actions">{actions}</div>
       {user}
@@ -54,17 +56,18 @@ export function AppHeader({ product, homeHref = "#/", launcher, client, nav, pro
 
 /** Client chip and switcher: client logo and name, with the engagement name; menu groups engagements per client. */
 export function WorkspaceSwitcher({ clients, value, onChange }: { clients: Client[]; value: Workspace; onChange: (w: Workspace) => void }) {
+  const { t } = useMessages();
   const client = clients.find((c) => c.id === value.clientId) ?? clients[0];
   const engagement = client.engagements.find((e) => e.id === value.engagementId) ?? client.engagements[0];
   return (
     <MenuTrigger>
-      <Button className="pr-chip" aria-label={`Workspace: ${client.name}, ${engagement.name}. Change`}>
+      <Button className="pr-chip" aria-label={t("header.workspace", { client: client.name, engagement: engagement.name })}>
         <ClientMark name={client.name} src={client.logo} size={28} />
         <span className="pr-chip__text"><span className="pr-chip__client">{client.name}</span><span className="pr-chip__eng">{engagement.name}</span></span>
         <ChevronDownIcon aria-hidden />
       </Button>
       <Popover className="pr-popover" placement="bottom start">
-        <Menu className="pr-menu" aria-label="Switch client or engagement" onAction={(k) => { const [c, e] = String(k).split("/"); onChange({ clientId: c, engagementId: e }); }}>
+        <Menu className="pr-menu" aria-label={t("header.switchWorkspace")} onAction={(k) => { const [c, e] = String(k).split("/"); onChange({ clientId: c, engagementId: e }); }}>
           {clients.map((c, i) => (
             <MenuSection key={c.id}>
               {i > 0 && <Separator className="pr-menu__sep" />}
@@ -72,7 +75,7 @@ export function WorkspaceSwitcher({ clients, value, onChange }: { clients: Clien
               {c.engagements.map((e) => {
                 const on = c.id === value.clientId && e.id === value.engagementId;
                 return (<MenuItem key={`${c.id}/${e.id}`} id={`${c.id}/${e.id}`} className="pr-menu__item" textValue={`${c.name} ${e.name}`}>
-                  <span className="pr-menu__check" aria-hidden>{on && <CheckIcon />}</span><span>{e.name}</span>{on && <span className="sr-only"> (current)</span>}
+                  <span className="pr-menu__check" aria-hidden>{on && <CheckIcon />}</span><span>{e.name}</span>{on && <span className="sr-only"> {t("header.current")}</span>}
                 </MenuItem>);
               })}
             </MenuSection>
@@ -89,18 +92,21 @@ const themeIcon = { system: <DesktopIcon aria-hidden />, light: <SunIcon aria-hi
  * UserMenu: avatar button. Menu shows who you are (name, email, role, organisation), appearance, and, for
  * demos only, a "view as" switch. Staff get the Proshore mark on the avatar.
  */
-export function UserMenu({ user, theme, onTheme, personas, onPersona, onSwitchAccount, onSignOut }: {
+export function UserMenu({ user, theme, onTheme, language, personas, onPersona, onSwitchAccount, onSignOut }: {
   user: HeaderUser; theme: ThemePreference; onTheme: (t: ThemePreference) => void; personas?: HeaderUser[]; onPersona?: (id: string) => void;
+  /** Language switch. Shown only when provided; the app owns the state and passes the chosen locale to I18nProvider. */
+  language?: { value: string; options: { id: string; label: string }[]; onChange: (id: string) => void };
   /** Opens the account chooser again (for example Google's). Shown only when provided. */ onSwitchAccount?: () => void;
   /** Ends the session. Shown only when provided. */ onSignOut?: () => void;
 }) {
+  const { t } = useMessages();
   return (
     <MenuTrigger>
-      <Button className="pr-userbtn" aria-label={`Account menu for ${user.name}`}>
+      <Button className="pr-userbtn" aria-label={t("header.accountMenu", { name: user.name })}>
         <Avatar name={user.name} src={user.avatar} proshore={user.staff} size={34} decorative />
       </Button>
       <Popover className="pr-popover" placement="bottom end">
-        <Menu className="pr-menu" aria-label="Account">
+        <Menu className="pr-menu" aria-label={t("header.account")}>
           <MenuSection>
             <Header className="pr-menu__identity">
               <Avatar name={user.name} src={user.avatar} proshore={user.staff} size={44} decorative />
@@ -108,18 +114,29 @@ export function UserMenu({ user, theme, onTheme, personas, onPersona, onSwitchAc
             </Header>
           </MenuSection>
           <Separator className="pr-menu__sep" />
-          <MenuSection selectionMode="single" selectedKeys={[theme]} onSelectionChange={(k) => { const v = [...(k as Set<string>)][0]; if (v) onTheme(v as ThemePreference); }} aria-label="Appearance">
-            <Header className="pr-menu__head">Appearance</Header>
-            {(["system", "light", "dark"] as const).map((t) => (
-              <MenuItem key={t} id={t} className="pr-menu__item" textValue={t}>
-                <span className="pr-menu__check" aria-hidden>{theme === t && <CheckIcon />}</span>{themeIcon[t]}<span style={{ textTransform: "capitalize" }}>{t}</span>
+          <MenuSection selectionMode="single" selectedKeys={[theme]} onSelectionChange={(k) => { const v = [...(k as Set<string>)][0]; if (v) onTheme(v as ThemePreference); }} aria-label={t("header.appearance")}>
+            <Header className="pr-menu__head">{t("header.appearance")}</Header>
+            {(["system", "light", "dark"] as const).map((th) => (
+              <MenuItem key={th} id={th} className="pr-menu__item" textValue={t(`header.${th}`)}>
+                <span className="pr-menu__check" aria-hidden>{theme === th && <CheckIcon />}</span>{themeIcon[th]}<span style={{ textTransform: "capitalize" }}>{t(`header.${th}`)}</span>
               </MenuItem>
             ))}
           </MenuSection>
+          {language && (<>
+            <Separator className="pr-menu__sep" />
+            <MenuSection selectionMode="single" selectedKeys={[language.value]} onSelectionChange={(k) => { const v = [...(k as Set<string>)][0]; if (v) language.onChange(String(v)); }} aria-label={t("header.language")}>
+              <Header className="pr-menu__head">{t("header.language")}</Header>
+              {language.options.map((o) => (
+                <MenuItem key={o.id} id={o.id} className="pr-menu__item" textValue={o.label}>
+                  <span className="pr-menu__check" aria-hidden>{language.value === o.id && <CheckIcon />}</span><span lang={o.id}>{o.label}</span>
+                </MenuItem>
+              ))}
+            </MenuSection>
+          </>)}
           {personas && onPersona && (<>
             <Separator className="pr-menu__sep" />
-            <MenuSection selectionMode="single" selectedKeys={[user.id]} onSelectionChange={(k) => { const v = [...(k as Set<string>)][0]; if (v) onPersona(String(v)); }} aria-label="View as (demo)">
-              <Header className="pr-menu__head">Demo: view as</Header>
+            <MenuSection selectionMode="single" selectedKeys={[user.id]} onSelectionChange={(k) => { const v = [...(k as Set<string>)][0]; if (v) onPersona(String(v)); }} aria-label={t("header.viewAs")}>
+              <Header className="pr-menu__head">{t("header.viewAsHead")}</Header>
               {personas.map((p) => (
                 <MenuItem key={p.id} id={p.id} className="pr-menu__item" textValue={`${p.name} ${p.role}`}>
                   <span className="pr-menu__check" aria-hidden>{p.id === user.id && <CheckIcon />}</span>
@@ -130,9 +147,9 @@ export function UserMenu({ user, theme, onTheme, personas, onPersona, onSwitchAc
           </>)}
           {(onSwitchAccount || onSignOut) && (<>
             <Separator className="pr-menu__sep" />
-            <MenuSection aria-label="Session">
-              {onSwitchAccount && <MenuItem id="switch-account" className="pr-menu__item" textValue="Switch account" onAction={onSwitchAccount}><span className="pr-menu__check" aria-hidden /><span>Switch account</span></MenuItem>}
-              {onSignOut && <MenuItem id="sign-out" className="pr-menu__item" textValue="Sign out" onAction={onSignOut}><span className="pr-menu__check" aria-hidden /><span>Sign out</span></MenuItem>}
+            <MenuSection aria-label={t("header.session")}>
+              {onSwitchAccount && <MenuItem id="switch-account" className="pr-menu__item" textValue={t("header.switchAccount")} onAction={onSwitchAccount}><span className="pr-menu__check" aria-hidden /><span>{t("header.switchAccount")}</span></MenuItem>}
+              {onSignOut && <MenuItem id="sign-out" className="pr-menu__item" textValue={t("header.signOut")} onAction={onSignOut}><span className="pr-menu__check" aria-hidden /><span>{t("header.signOut")}</span></MenuItem>}
             </MenuSection>
           </>)}
         </Menu>
@@ -143,12 +160,13 @@ export function UserMenu({ user, theme, onTheme, personas, onPersona, onSwitchAc
 
 /** Proshore-only navigation (setup, design library). Only render it for Proshore staff; real access control is server-side. */
 export function ProshoreMenu({ items }: { items: { href: string; label: string }[] }) {
+  const { t } = useMessages();
   return (
     <MenuTrigger>
-      <Button className="pr-navbtn" aria-label="Proshore tools"><span className="pr-navbtn__dot" aria-hidden />Proshore <ChevronDownIcon aria-hidden /></Button>
+      <Button className="pr-navbtn" aria-label={t("header.proshoreTools")}><span className="pr-navbtn__dot" aria-hidden />Proshore <ChevronDownIcon aria-hidden /></Button>
       <Popover className="pr-popover" placement="bottom start">
-        <Menu className="pr-menu" aria-label="Proshore tools">
-          <MenuSection><Header className="pr-menu__head">Proshore only</Header>
+        <Menu className="pr-menu" aria-label={t("header.proshoreTools")}>
+          <MenuSection><Header className="pr-menu__head">{t("header.proshoreOnly")}</Header>
             {items.map((i) => (<MenuItem key={i.href} id={i.href} href={i.href} className="pr-menu__item" textValue={i.label}><span>{i.label}</span></MenuItem>))}
           </MenuSection>
         </Menu>

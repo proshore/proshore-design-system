@@ -11,7 +11,8 @@
     },
     "packages/ui": {
       "entry": [
-        "src/entry.ts"
+        "src/entry.ts",
+        "test/*.test.ts"
       ],
       "project": [
         "src/**/*.{ts,tsx}"

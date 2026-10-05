@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useMessages } from "../i18n/I18nProvider";
 
 /**
  * SimpleTable: a short, static, semantic table (no sorting, search or paging). For anything users need to explore,
@@ -7,8 +8,9 @@ import type { ReactNode } from "react";
 export function SimpleTable<T>({ caption, columns, rows, getRowId }: {
   caption: string; columns: { id: string; header: string; cell: (row: T) => ReactNode }[]; rows: T[]; getRowId: (row: T) => string;
 }) {
+  const { t } = useMessages();
   return (
-    <div className="pr-simpletable" role="region" aria-label={`${caption}, scrollable`} tabIndex={0}>
+    <div className="pr-simpletable" role="region" aria-label={t("common.scrollable", { caption })} tabIndex={0}>
       <table>
         <caption className="pr-sr">{caption}</caption>
         <thead><tr>{columns.map((c) => <th key={c.id} scope="col">{c.header}</th>)}</tr></thead>

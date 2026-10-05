@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 import { IconButton, Tooltip } from "../primitives/Button";
 import { Eyebrow } from "./Bits";
+import { useMessages } from "../i18n/I18nProvider";
 
 /**
  * SlideOver (React Aria Modal): detail of ONE item without leaving the list (a record, a decision, an assistant).
@@ -15,6 +16,7 @@ export function SlideOver({ open, onOpenChange, eyebrow, title, chips, children,
   open: boolean; onOpenChange: (o: boolean) => void; eyebrow: ReactNode; title: ReactNode; chips?: ReactNode; children: ReactNode; footer?: ReactNode;
   nav?: { index: number; total: number; onPrev: () => void; onNext: () => void }; size?: "md" | "lg";
 }) {
+  const { t, tn } = useMessages();
   const [wide, setWide] = useState(false);
   const width = wide || size === "lg" ? 720 : 520;
   return (
@@ -27,13 +29,13 @@ export function SlideOver({ open, onOpenChange, eyebrow, title, chips, children,
               <div className="so__nav">
                 {nav && (
                   <>
-                    <Tooltip content="Previous item"><IconButton variant="ghost" color="gray" aria-label="Previous item" disabled={nav.index <= 0} onClick={nav.onPrev}><ChevronLeftIcon /></IconButton></Tooltip>
-                    <span className="sherpa-eyebrow" aria-live="polite">{nav.index + 1} of {nav.total}</span>
-                    <Tooltip content="Next item"><IconButton variant="ghost" color="gray" aria-label="Next item" disabled={nav.index >= nav.total - 1} onClick={nav.onNext}><ChevronRightIcon /></IconButton></Tooltip>
+                    <Tooltip content={t("slideOver.previous")}><IconButton variant="ghost" color="gray" aria-label={t("slideOver.previous")} disabled={nav.index <= 0} onClick={nav.onPrev}><ChevronLeftIcon /></IconButton></Tooltip>
+                    <span className="sherpa-eyebrow" aria-live="polite">{tn("slideOver.position", { index: nav.index + 1, total: nav.total })}</span>
+                    <Tooltip content={t("slideOver.next")}><IconButton variant="ghost" color="gray" aria-label={t("slideOver.next")} disabled={nav.index >= nav.total - 1} onClick={nav.onNext}><ChevronRightIcon /></IconButton></Tooltip>
                   </>
                 )}
-                <Tooltip content={wide ? "Narrower" : "Wider"}><IconButton variant="ghost" color="gray" aria-label={wide ? "Make panel narrower" : "Make panel wider"} aria-pressed={wide} onClick={() => setWide((w) => !w)}><EnterFullScreenIcon /></IconButton></Tooltip>
-                <IconButton variant="ghost" color="gray" aria-label="Close panel" onClick={() => onOpenChange(false)}><Cross2Icon /></IconButton>
+                <Tooltip content={wide ? t("slideOver.narrower") : t("slideOver.wider")}><IconButton variant="ghost" color="gray" aria-label={wide ? t("slideOver.makeNarrower") : t("slideOver.makeWider")} aria-pressed={wide} onClick={() => setWide((w) => !w)}><EnterFullScreenIcon /></IconButton></Tooltip>
+                <IconButton variant="ghost" color="gray" aria-label={t("slideOver.close")} onClick={() => onOpenChange(false)}><Cross2Icon /></IconButton>
               </div>
             </div>
             <Heading slot="title" className="so__title">{title}</Heading>
