@@ -19,10 +19,14 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run check
+      - name: Visual regression (compares with the committed Linux baselines)
+        run: npm run test:visual
       - run: npm run pack
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: apps/gallery/test-results
+          path: |
+            apps/gallery/test-results
+            apps/discovery-example/test-results
           if-no-files-found: ignore
