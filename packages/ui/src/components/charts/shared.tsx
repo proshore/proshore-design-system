@@ -26,12 +26,17 @@ export interface TableData { head: string[]; rows: (string | number)[][]; captio
 export const nf = (n: number) => n.toLocaleString("en");
 export const atLeast = (cov: Coverage | undefined, text: string | number) => (cov === "partial" ? `≥${text}` : `${text}`);
 
-/** Smallest 1/2/5 x 10^k step so that 4 steps cover max. Returns axis max = 4 steps. */
+/** Axis for 0..max with at most 5 steps of 1, 2, 2.5, 5 or 10 x 10^k. Picks the tightest fit, so the data fills the chart (52 gives 0..60, not 0..80). */
 export function niceScale(max: number): { max: number; ticks: number[] } {
   if (max <= 0) return { max: 4, ticks: [0, 1, 2, 3, 4] };
-  const raw = max / 4; const p = Math.pow(10, Math.floor(Math.log10(raw)));
-  const step = [1, 2, 5, 10].map((m) => m * p).find((s) => s >= raw) as number;
-  return { max: step * 4, ticks: [0, 1, 2, 3, 4].map((i) => i * step) };
+  const p = Math.pow(10, Math.floor(Math.log10(max / 5)));
+  let best = { step: 0, n: 0, top: Infinity };
+  for (const m of [1, 2, 2.5, 5, 10]) {
+    const step = m * p; const n = Math.max(2, Math.ceil(max / step - 1e-9));
+    if (n > 5) continue;
+    if (n * step < best.top - 1e-9) best = { step, n, top: n * step };
+  }
+  return { max: best.top, ticks: Array.from({ length: best.n + 1 }, (_, i) => +(i * best.step).toFixed(6)) };
 }
 
 export function markerPath(shape: MarkerShape, cx: number, cy: number, r: number): string {

@@ -96,7 +96,7 @@ export function Select({ label, hideLabel, description, error, options, value, o
   return (
     <RACSelect validationBehavior="aria" className={`pr-field${className ? " " + className : ""}`} selectedKey={value ?? null} onSelectionChange={(k) => k !== null && onChange?.(String(k))} placeholder={placeholder} isDisabled={isDisabled} isRequired={isRequired} isInvalid={!!error}>
       <Label className={hideLabel ? "pr-label pr-sr" : "pr-label"}>{label}</Label>
-      <RACButton className="pr-input pr-select" data-size={size}><SelectValue className="pr-select__value" /><ChevronDownIcon aria-hidden /></RACButton>
+      <RACButton className="pr-input pr-select" data-size={size}><SelectValue className="pr-select__value">{({ selectedText, isPlaceholder }) => (isPlaceholder ? placeholder : selectedText)}</SelectValue><ChevronDownIcon aria-hidden /></RACButton>
       {description && <Text slot="description" className="pr-hint">{description}</Text>}
       <FieldError className="pr-error"><ExclamationTriangleIcon aria-hidden /> {error}</FieldError>
       <Popover className="pr-popover pr-select-pop"><ListBox className="pr-menu">{options.map((o) => (<ListBoxItem key={o.value} id={o.value} textValue={o.label} className="pr-menu__item"><span className="pr-menu__check" aria-hidden><SelectedMark id={o.value} value={value} /></span>{o.label}</ListBoxItem>))}</ListBox></Popover>
