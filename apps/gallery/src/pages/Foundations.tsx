@@ -27,7 +27,7 @@ export function Foundations() {
   const [compare, setCompare] = useState(false);
   return (
     <Page>
-      <PageHeader eyebrow="Design system" title="Foundations" description="Tokens, not values. Components read semantic tokens, so a brand change happens in one file. Every value shown is read from the live CSS in the current theme."
+      <PageHeader motif eyebrow="Design system" title="Foundations" description="Tokens, not values. Components read semantic tokens, so a brand change happens in one file. Every value shown is read from the live CSS in the current theme."
         actions={<Checkbox isSelected={compare} onChange={setCompare}>Compare light and dark</Checkbox>} />
 
       <Demo id="brand" compare={compare} title="Brand palette" use="Proshore's brand colours, seven steps each (Relume variables from proshore.nl). Use the semantic tokens below in components, not these directly."

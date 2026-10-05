@@ -30,20 +30,21 @@ export function Page({ children, narrow = false, pull = 0 }: { children: ReactNo
 }
 
 /** Navy hero band. `size="lg"` for landing screens (display type, room for overlapping cards). */
-export function PageHero({ eyebrow, children, size = "lg" }: { eyebrow?: ReactNode; children: ReactNode; size?: "md" | "lg" }) {
+export function PageHero({ eyebrow, children, size = "lg", motif = true }: { eyebrow?: ReactNode; children: ReactNode; size?: "md" | "lg"; /** The mountain ridgeline. On by default for the hero, which is for key pages such as a dashboard. */ motif?: boolean }) {
   return (
     <div className="pr-hero" data-size={size}>
-      <Ridgeline className="pr-hero__ridge" /><div className="pr-hero__in">{eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}{children}</div>
+      {motif && <Ridgeline className="pr-hero__ridge" />}<div className="pr-hero__in">{eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}{children}</div>
     </div>
   );
 }
 
-export function PageHeader({ eyebrow, title, description, actions, meta, breadcrumbs }: {
-  eyebrow?: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; meta?: ReactNode; breadcrumbs?: { label: string; href?: string }[];
+/** Page title block. The mountain motif is off by default: turn it on (`motif`) only for key pages such as the dashboard or the home page. */
+export function PageHeader({ eyebrow, title, description, actions, meta, breadcrumbs, motif = false }: {
+  eyebrow?: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; meta?: ReactNode; breadcrumbs?: { label: string; href?: string }[]; motif?: boolean;
 }) {
   return (
     <header className="pr-hero" data-size="md">
-      <Ridgeline className="pr-hero__ridge" />
+      {motif && <Ridgeline className="pr-hero__ridge" />}
       <div className="pr-hero__in">
         <div className="l-pageheader">
           <div className="l-pageheader__text">
