@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/overlays", "/brand", "/examples", "/sign-in"];
+const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/overlays", "/brand", "/examples", "/shell", "/sign-in"];
 const themes = ["light", "dark"] as const;
 const WCAG = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa", "best-practice"];
 
@@ -83,4 +83,15 @@ test("bug report: empty title shows the error next to the field", async ({ page 
   await page.getByRole("tab", { name: /bug reporting/i }).click();
   await page.getByRole("button", { name: /send report/i }).click();
   await expect(page.getByText("Give the bug a short title.")).toBeVisible();
+});
+
+test("app shell: palette and assistant open, labelled, accessible", async ({ page }) => {
+  await open(page, "/shell", "light");
+  await page.keyboard.press("Control+k");
+  await expect(page.getByRole("combobox", { name: /jump to/i })).toBeVisible();
+  expect(await violations(page)).toEqual([]);
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Ask Sherpa" }).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  expect(await violations(page)).toEqual([]);
 });

@@ -16,6 +16,7 @@ export const pages = [
   { path: "/charts", label: "Charts" },
   { path: "/overlays", label: "Overlays and menus" },
   { path: "/brand", label: "Brand and icons" },
+  { path: "/shell", label: "App shell" },
   { path: "/examples", label: "Examples" },
   { path: "/sign-in", label: "Sign in" },
 ] as const;

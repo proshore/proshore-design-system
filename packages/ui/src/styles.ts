@@ -6,3 +6,4 @@ import "./theme/tokens.css";
 import "./theme/patterns.css";
 import "./theme/primitives.css";
 import "./components/charts/charts.css"; // imported here too: a re-export-only module (charts/index) can be dropped from a library build together with its CSS
+import "./shell/shell.css";

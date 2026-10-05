@@ -25,7 +25,11 @@ export function AppHeader({ product, homeHref = "#/", launcher, client, nav, pro
   useEffect(() => {
     const el = ref.current; if (!el) return;
     // The header floats over the hero: publish its height so the hero can reserve the space beneath it.
-    const measure = () => document.documentElement.style.setProperty("--pr-header-h", `${Math.round(el.getBoundingClientRect().height) + 10}px`);
+    const measure = () => {
+      // Only a floating header (inside `.app`, pulled over the page) needs space reserved under it. A plain sticky header already takes its own room.
+      const floats = parseFloat(getComputedStyle(el).marginBottom) < 0;
+      document.documentElement.style.setProperty("--pr-header-h", floats ? `${Math.round(el.getBoundingClientRect().height) + 10}px` : "0px");
+    };
     measure(); const ro = new ResizeObserver(measure); ro.observe(el);
     let raf = 0; const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => setScrolled(window.scrollY > 8)); };
     onScroll(); window.addEventListener("scroll", onScroll, { passive: true });

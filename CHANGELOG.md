@@ -2,6 +2,11 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
+## 0.3.0
+- Added the app frame: `AppShell` (left bar with the apps, top bar, bottom bar on phones) and `ShellNav`, `AppIcon`, `AppTitle`, `SherpaGuide` (the suite's thin-line icons), `CommandPalette` with `useCommandShortcut`, and `AssistantPanel` (the Sherpa assistant: answer, how sure, sources, what it could not see). `WorkspaceSwitcher` (client and engagement) plugs into the shell.
+- Less wasted space at the top: the page header only reserves room under a floating header (it reserved about 95px under a plain one), and inside `AppShell` it uses a 24px gap. The gallery header is one row.
+- Gallery: App shell page.
+
 ## 0.2.0
 - First release from its own repository (`proshore/proshore-design-system`), published to GitHub Packages.
 - Added `SignInScreen`, `GoogleSignInButton`, `GoogleMark` (Google Workspace sign-in, Proshore staff only) and `UserMenu` props `onSwitchAccount` and `onSignOut`.

@@ -4,6 +4,7 @@ import type { Appearance, HeaderUser, ThemePreference } from "@proshore/ui";
 import { pages, useRoute } from "./router";
 import { Foundations } from "./pages/Foundations";
 import { SignInPage } from "./pages/SignInPage";
+import { ShellPage } from "./pages/ShellPage";
 
 const LayoutPage = lazy(() => import("./pages/LayoutPage").then((m) => ({ default: m.LayoutPage })));
 const FormsPage = lazy(() => import("./pages/FormsPage").then((m) => ({ default: m.FormsPage })));
@@ -34,12 +35,14 @@ export function App() {
   useEffect(() => { try { localStorage.setItem("proshore-theme", pref); } catch { /* ignore */ } }, [pref]);
   useEffect(() => { window.scrollTo(0, 0); }, [path]);
 
-  const fullPage = path === "/sign-in" || !signedIn;
+  const fullPage = path === "/sign-in" || path === "/shell" || !signedIn;
   return (
     <SherpaTheme appearance={appearance}>
       <div ref={setHost} style={{ display: "contents" }} />
       <PortalHost.Provider value={host}>
-        {fullPage ? (
+        {path === "/shell" && signedIn ? (
+          <ShellPage theme={pref} onTheme={setPref} />
+        ) : fullPage ? (
           <SignInPage notice={!signedIn ? "You have been signed out." : undefined} onSignIn={() => { setSignedIn(true); if (path === "/sign-in") window.location.hash = "/foundations"; }} />
         ) : (
           <>
@@ -47,11 +50,9 @@ export function App() {
             <AppHeader
               product="Design system"
               homeHref="#/foundations"
+              nav={<nav className="g-nav" aria-label="Gallery">{pages.map((p) => <a key={p.path} href={`#${p.path}`} aria-current={path === p.path ? "page" : undefined}>{p.label}</a>)}</nav>}
               user={<UserMenu user={user} theme={pref} onTheme={setPref} onSwitchAccount={() => toast.show("Account chooser would open here (demo)", { tone: "info" })} onSignOut={() => setSignedIn(false)} />}
             />
-            <nav className="g-nav" aria-label="Gallery">
-              {pages.map((p) => <a key={p.path} href={`#${p.path}`} aria-current={path === p.path ? "page" : undefined}>{p.label}</a>)}
-            </nav>
             <main id="main" tabIndex={-1}>
               <Suspense fallback={<div role="status" style={{ padding: 48 }}>Loading…</div>}>
                 {(() => {
