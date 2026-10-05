@@ -2,7 +2,7 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
-## Unreleased
+## 0.6.0
 - **Breaking:** the deprecated names are removed, as announced in 0.5.0. The old `--sherpa-*` design tokens (40, via `theme/compat.css`), the `.sherpa-*` CSS classes (`.sherpa-theme`, `.sherpa-eyebrow`, `.sherpa-eyebrow--chip`, `.sherpa-display`, `.sherpa-mark`, `.sherpa-demo-tag`, `.sherpa-grid-2`) and `SherpaTheme` no longer exist. Migrate: replace `--sherpa-` with `--pr-`, `.sherpa-x` with `.pr-x`, and `SherpaTheme` with `ProshoreTheme`. Checked: Discovery, the gallery, the Discovery example and Billing have no remaining uses.
 
 ## 0.5.0
