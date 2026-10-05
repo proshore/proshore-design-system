@@ -243,7 +243,9 @@ button.stepper__btn:hover { background: var(--accent-a3); }
   box-shadow: 0 10px 30px -16px rgba(5,0,92,.28); backdrop-filter: saturate(1.6) blur(16px); -webkit-backdrop-filter: saturate(1.6) blur(16px); }
 .app > .pr-header[data-scrolled] { background: color-mix(in srgb, var(--pr-surface) 92%, transparent); box-shadow: 0 16px 36px -16px rgba(5,0,92,.4); }
 .app > .pr-header[data-layer="proshore"] { box-shadow: inset 0 3px 0 var(--pr-accent-mark), 0 10px 30px -16px rgba(5,0,92,.28); }
-.pr-header__product { color: var(--gray-11); border-left-color: var(--pr-line); }
+/* The product name next to the logo: light on the dark header, grey on the light one. */
+.pr-header__product { color: rgba(255,255,255,.88); border-left-color: rgba(255,255,255,.3); }
+.app > .pr-header .pr-header__product { color: var(--gray-11); border-left-color: var(--pr-line); }
 .pr-chip { background: var(--pr-surface-muted); border-color: var(--pr-line); color: var(--gray-12); }
 .pr-chip__eng { color: var(--gray-11); }
 .pr-nav a, .pr-nav button, .pr-navbtn { color: var(--gray-11); }

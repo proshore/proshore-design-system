@@ -60,3 +60,12 @@ for (const [size, viewport] of Object.entries(sizes)) {
     await expect(page).toHaveScreenshot(`state-command-palette-${size}.png`);
   });
 }
+
+/** The product name and wordmark only show on wide screens, so they need their own test. */
+for (const theme of themes) {
+  test(`@visual header on a wide screen ${theme}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1700, height: 400 });
+    await open(page, "/foundations", theme);
+    await expect(page.locator("header").first()).toHaveScreenshot(`state-header-wide-${theme}.png`);
+  });
+}
