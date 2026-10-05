@@ -1,10 +1,10 @@
 import { CheckIcon, ExclamationTriangleIcon, LockClosedIcon } from "../icons";
 import type { ReactNode } from "react";
+import { useMessages } from "../i18n/I18nProvider";
 
 export type StepState = "complete" | "current" | "upcoming" | "attention" | "blocked";
 export type StepItem = { id: string; label: string; description?: ReactNode; state: StepState };
 
-const stateText: Record<StepState, string> = { complete: "Complete", current: "Current step", upcoming: "Not started", attention: "Needs attention", blocked: "Blocked" };
 
 /**
  * Stepper: ordered steps of ONE task (setup, review, publish). Use for progress through a task;
@@ -14,11 +14,12 @@ const stateText: Record<StepState, string> = { complete: "Complete", current: "C
  * @example
  * <Stepper steps={[{ id: "scope", label: "Scope", state: "complete" }, { id: "scan", label: "Scan", state: "current" }, { id: "review", label: "Review", state: "upcoming" }]} />
  */
-export function Stepper({ steps, orientation = "horizontal", onSelect, label = "Progress" }: {
+export function Stepper({ steps, orientation = "horizontal", onSelect, label }: {
   steps: StepItem[]; orientation?: "horizontal" | "vertical"; onSelect?: (id: string) => void; label?: string;
 }) {
+  const { t } = useMessages();
   return (
-    <ol className="stepper" data-orientation={orientation} aria-label={label}>
+    <ol className="stepper" data-orientation={orientation} aria-label={label ?? t("stepper.label")}>
       {steps.map((s, i) => {
         const inner = (
           <>
@@ -27,7 +28,7 @@ export function Stepper({ steps, orientation = "horizontal", onSelect, label = "
             </span>
             <span className="stepper__text">
               <span className="stepper__label">{s.label}</span>
-              <span className="stepper__state">{stateText[s.state]}</span>
+              <span className="stepper__state">{t(`stepper.${s.state}`)}</span>
               {s.description && <span className="stepper__desc">{s.description}</span>}
             </span>
           </>

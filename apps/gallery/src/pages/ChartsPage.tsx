@@ -1,4 +1,4 @@
-import { BarChart, ChartCard, Legend, Page, PageHeader, Section, Sparkline, StackedBar, TrendLine, barTable, categorical, trendTable } from "@proshore/ui";
+import { BarChart, ChartCard, Legend, Page, PageHeader, Section, Sparkline, StackedBar, TrendLine, barTable, categorical, trendTable, useMessages } from "@proshore/ui";
 
 const series = categorical([{ key: "paid", label: "Done" }, { key: "open", label: "Open" }]);
 const bars = [{ label: "Finance", values: { paid: 40, open: 12 } }, { label: "Operations", values: { paid: 32, open: 9 } }, { label: "IT", values: { paid: 18, open: 14 } }];
@@ -7,16 +7,17 @@ const points = ["Jun", "Jul", "Aug", "Sep", "Oct"].map((x, i) => ({ x, values: {
 const legend = (<Legend items={series.map((s) => ({ label: s.label, color: s.color, pattern: s.pattern }))} />);
 
 export function ChartsPage() {
+  const { t } = useMessages();
   return (
     <Page>
       <PageHeader eyebrow="Components" title="Charts" description="Every chart has a text title that states the finding, a data table for screen readers, patterns as well as colour, and says where the data comes from." />
       <Section title="Bar chart">
-        <ChartCard title="IT has the largest share still open" description="Done and open requests per team." source="Requests, demo data" table={barTable(series, bars)} legend={legend}>
+        <ChartCard title="IT has the largest share still open" description="Done and open requests per team." source="Requests, demo data" table={barTable(series, bars, false, t)} legend={legend}>
           <BarChart series={series} data={bars} unit="Requests" stacked />
         </ChartCard>
       </Section>
       <Section title="Trend">
-        <ChartCard title="New requests rose after August" description="Requests per month." source="Requests, demo data" table={trendTable(trendSeries, points)}>
+        <ChartCard title="New requests rose after August" description="Requests per month." source="Requests, demo data" table={trendTable(trendSeries, points, t)}>
           <TrendLine series={trendSeries} points={points} unit="Requests" />
         </ChartCard>
       </Section>

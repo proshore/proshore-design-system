@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Cluster, ConfirmDialog, FileDropzone, KanbanBoard, ModalDialog, Note, Page, PageHeader, Pagination, Section, StatusPage, TextField, toast } from "@proshore/ui";
+import { Button, Cluster, ConfirmDialog, FileDropzone, KanbanBoard, ModalDialog, Note, Page, PageHeader, Pagination, Section, StatusPage, TextField, toast, useMessages } from "@proshore/ui";
 import type { StatusKind } from "@proshore/ui";
 
 const kinds: { kind: StatusKind; label: string }[] = [{ kind: "forbidden", label: "No access (403)" }, { kind: "not-found", label: "Not found (404)" }, { kind: "error", label: "Server error (500)" }, { kind: "session-expired", label: "Session expired (401)" }, { kind: "offline", label: "Offline" }];
@@ -7,6 +7,7 @@ const cols = [{ id: "todo", label: "To do" }, { id: "doing", label: "In progress
 type Task = { id: string; title: string; col: string };
 
 export function DialogsPage() {
+  const { t, locale } = useMessages();
   const [confirm, setConfirm] = useState(false);
   const [danger, setDanger] = useState(false);
   const [form, setForm] = useState(false);
@@ -30,7 +31,7 @@ export function DialogsPage() {
         </ModalDialog>
       </Section>
       <Section title="Pagination">
-        <Pagination page={page} pageCount={8} onPageChange={setPage} range={`${page * 10 + 1}-${page * 10 + 10} of 80`} label="Example pagination" />
+        <Pagination page={page} pageCount={8} onPageChange={setPage} range={t("table.range", { from: page * 10 + 1, to: page * 10 + 10, total: 80 })} label={locale.startsWith("en") ? "Example pagination" : undefined} />
       </Section>
       <Section title="File dropzone" description="Say what is allowed up front; check again on the server.">
         <FileDropzone label="Upload a CSV" accept={[".csv"]} description="CSV, up to 5 MB." onFiles={(f) => setFiles(f.map((x) => x.name))} />

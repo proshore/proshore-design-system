@@ -1,6 +1,7 @@
 import { MagnifyingGlassIcon } from "../icons";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { Dialog, Modal, ModalOverlay } from "react-aria-components";
+import { useMessages } from "../i18n/I18nProvider";
 
 export type Command = { id: string; label: string; group: string; hint?: string; run: () => void };
 
@@ -11,7 +12,9 @@ export type Command = { id: string; label: string; group: string; hint?: string;
  * @example
  * <CommandPalette open={open} onOpenChange={setOpen} commands={[{ id: "home", label: "Overview", group: "Pages", run: () => (location.hash = "/") }]} />
  */
-export function CommandPalette({ open, onOpenChange, commands, placeholder = "Jump to a page, app or record" }: { open: boolean; onOpenChange: (o: boolean) => void; commands: Command[]; placeholder?: string }) {
+export function CommandPalette({ open, onOpenChange, commands, placeholder: placeholderProp }: { open: boolean; onOpenChange: (o: boolean) => void; commands: Command[]; placeholder?: string }) {
+  const { t, tn } = useMessages();
+  const placeholder = placeholderProp ?? t("command.placeholder");
   const [q, setQ] = useState("");
   const [i, setI] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);
@@ -31,14 +34,14 @@ export function CommandPalette({ open, onOpenChange, commands, placeholder = "Ju
   return (
     <ModalOverlay isOpen={open} onOpenChange={onOpenChange} isDismissable className="pr-cmd-overlay">
       <Modal className="pr-cmd">
-        <Dialog aria-label="Jump to" className="pr-cmd__dlg">
+        <Dialog aria-label={t("command.dialog")} className="pr-cmd__dlg">
           <div className="pr-cmd__field">
             <MagnifyingGlassIcon aria-hidden />
             <input autoFocus className="pr-cmd__input" role="combobox" aria-expanded="true" aria-controls="pr-cmd-list" aria-autocomplete="list" aria-label={placeholder}
               aria-activedescendant={hits[i] ? `pr-cmd-${hits[i].id}` : undefined} placeholder={placeholder} value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={onKey} />
-            <kbd className="pr-cmd__kbd">Esc</kbd>
+            <kbd className="pr-cmd__kbd">{t("command.esc")}</kbd>
           </div>
-          <ul className="pr-cmd__list" id="pr-cmd-list" role="listbox" aria-label="Results" ref={listRef}>
+          <ul className="pr-cmd__list" id="pr-cmd-list" role="listbox" aria-label={t("command.results")} ref={listRef}>
             {hits.map((c, k) => (
               <li key={c.id} id={`pr-cmd-${c.id}`} role="option" aria-selected={k === i} className="pr-cmd__opt" onMouseMove={() => setI(k)} onClick={() => run(c)}>
                 <span className="pr-cmd__label">{c.label}</span>
@@ -46,7 +49,7 @@ export function CommandPalette({ open, onOpenChange, commands, placeholder = "Ju
                 <span className="pr-cmd__group">{c.group}</span>
               </li>
             ))}
-            {hits.length === 0 && <li className="pr-cmd__none" role="presentation">Nothing matches “{q}”.</li>}
+            {hits.length === 0 && <li className="pr-cmd__none" role="presentation">{tn("command.none", { query: q })}</li>}
           </ul>
         </Dialog>
       </Modal>

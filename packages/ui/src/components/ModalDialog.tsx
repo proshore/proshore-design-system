@@ -2,6 +2,7 @@ import { useId, type ReactNode } from "react";
 import { Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 import { Button } from "../primitives/Button";
 import { Text } from "../primitives/Text";
+import { useMessages } from "../i18n/I18nProvider";
 
 /**
  * ModalDialog (React Aria Modal): a short, focused question or form that must be answered before going on. Focus is
@@ -40,15 +41,16 @@ export function ModalDialog({ open, onOpenChange, title, description, children, 
  * @example
  * <ConfirmDialog open={open} onOpenChange={setOpen} title="Suspend this user?" description="They lose access immediately." confirmLabel="Suspend" tone="danger" onConfirm={suspend} />
  */
-export function ConfirmDialog({ open, onOpenChange, title, description, confirmLabel = "Confirm", cancelLabel = "Cancel", tone = "default", busy = false, onConfirm }: {
+export function ConfirmDialog({ open, onOpenChange, title, description, confirmLabel, cancelLabel, tone = "default", busy = false, onConfirm }: {
   open: boolean; onOpenChange: (o: boolean) => void; title: ReactNode; description?: ReactNode;
   confirmLabel?: string; cancelLabel?: string; tone?: "default" | "danger"; busy?: boolean; onConfirm: () => void;
 }) {
+  const { t } = useMessages();
   return (
     <ModalDialog open={open} onOpenChange={onOpenChange} title={title} description={description} alert={tone === "danger"}
       footer={<>
-        <Button variant="outline" onClick={() => onOpenChange(false)}>{cancelLabel}</Button>
-        <Button className={tone === "danger" ? "pr-btn--danger" : undefined} disabled={busy} onClick={onConfirm}>{busy ? "Working…" : confirmLabel}</Button>
+        <Button variant="outline" onClick={() => onOpenChange(false)}>{cancelLabel ?? t("dialog.cancel")}</Button>
+        <Button className={tone === "danger" ? "pr-btn--danger" : undefined} disabled={busy} onClick={onConfirm}>{busy ? t("dialog.working") : confirmLabel ?? t("dialog.confirm")}</Button>
       </>} />
   );
 }

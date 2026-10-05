@@ -2,6 +2,7 @@ import { Button } from "../../primitives/Button";
 import { Text } from "../../primitives/Text";
 import { useState, type ReactNode } from "react";
 import { Panel, Stack } from "../layout";
+import { useMessages } from "../../i18n/I18nProvider";
 import type { Coverage, TableData } from "./shared";
 
 /**
@@ -27,17 +28,18 @@ export interface ChartCardProps {
 }
 
 export function ChartCard({ title, description, caveat, coverage, legend, source, table, children }: ChartCardProps) {
+  const { t, tn } = useMessages();
   const [asTable, setAsTable] = useState(false);
   return (
     <Panel
       title={title}
-      actions={<Button size="1" variant="soft" className="ch-card__toggle" aria-pressed={asTable} onClick={() => setAsTable((v) => !v)}>{asTable ? "View as chart" : "View as table"}</Button>}
-      footer={<span className="ch-card__foot">Source: {source}</span>}
+      actions={<Button size="1" variant="soft" className="ch-card__toggle" aria-pressed={asTable} onClick={() => setAsTable((v) => !v)}>{asTable ? t("charts.viewAsChart") : t("charts.viewAsTable")}</Button>}
+      footer={<span className="ch-card__foot">{tn("charts.source", { source })}</span>}
     >
       <Stack gap={3}>
         <Text as="p" size="2" color="gray">{description}</Text>
         {(caveat || coverage === "partial") && (
-          <div className="ch-card__caveat" role="note"><span aria-hidden="true">{"◐"}</span><span><strong>Partial coverage.</strong> {caveat ?? "Values are at least what is shown."}</span></div>
+          <div className="ch-card__caveat" role="note"><span aria-hidden="true">{"◐"}</span><span><strong>{t("charts.partialCoverage")}</strong> {caveat ?? t("charts.atLeastShown")}</span></div>
         )}
         {!asTable && legend}
         {asTable ? (

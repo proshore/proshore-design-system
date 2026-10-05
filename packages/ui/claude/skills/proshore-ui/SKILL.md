@@ -78,6 +78,9 @@ expect(violations).toEqual([]);
 ```
 - Do not claim a screen works or looks right without having run it and looked at it. State what you checked and what you did not.
 
+## 5b. Language (English and Dutch)
+Built-in text is translatable. Wrap the app once: `<I18nProvider locale="nl">` (same as `LocaleProvider`; sets strings, dates and numbers). No provider means English, so never assume Dutch unless the app sets it. Override single strings with `<I18nProvider locale="nl" messages={{ pagination: { label: "Pages" } }}>` (partial, keys are in `src/i18n/messages.ts`, define the object outside the component). In your own components use `const { t } = useMessages()` and `t("table.range", { from: 1, to: 10, total: 37 })`. Props such as `label`, `confirmLabel` or `placeholder` still override the catalogue. Text you pass in (column headers, `noun`, titles, series labels) you must translate yourself. For charts pass the translator to the table helpers: `barTable(series, data, false, t)`, `trendTable(series, points, t)`. Do not hard-code English UI text in new code that sits next to these components; add keys to both `en` and `nl` instead. Test a screen in Dutch too (axe, no overflow: Dutch strings are often 20-30% longer).
+
 ## 6. Money and tables (suggestions for financial screens, not part of the package)
 Format with `Intl.NumberFormat` using the user's locale, show the currency code or symbol on every amount, right-align amounts with tabular figures, show negatives with a minus sign and a word ("credit"), and never rely on red and green alone. Show totals in a footer row. Keep rounding rules in one function. Dates: ISO in exports, locale format on screen.
 

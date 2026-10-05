@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { ProshoreIcon } from "../components/Brand";
 import { MagnifyingGlassIcon } from "../icons";
 import { AppIcon, type AppGlyph } from "./AppIcons";
+import { useMessages } from "../i18n/I18nProvider";
 
 /** One app in the left bar. `status` is read to screen reader users with the name, for example "Concept" or "Live". */
 export type ShellApp = { id: string; name: string; href: string; glyph: AppGlyph; status?: string };
@@ -34,7 +35,7 @@ export function ShellNav({ items, label, trailing }: { items: ShellNavItem[]; la
  * </AppShell>
  */
 export function AppShell({
-  apps, currentApp, appName, homeHref = "#/", appsLabel = "Apps", client, nav, actions, onSearch, searchLabel = "Search or jump to", theme, user, proshoreOnly = false, overlays, children,
+  apps, currentApp, appName, homeHref = "#/", appsLabel, client, nav, actions, onSearch, searchLabel, theme, user, proshoreOnly = false, overlays, children,
 }: {
   apps: ShellApp[]; currentApp: string; appName: string; homeHref?: string; appsLabel?: string;
   client?: ReactNode; nav?: ReactNode; actions?: ReactNode;
@@ -43,11 +44,12 @@ export function AppShell({
   /** Marks the page as Proshore-only with an accent line on the top bar. */ proshoreOnly?: boolean;
   overlays?: ReactNode; children: ReactNode;
 }) {
+  const { t } = useMessages();
   return (
     <div className="app pr-shell">
-      <a className="skip" href="#main">Skip to content</a>
-      <aside className="pr-rail" aria-label={appsLabel}>
-        <a className="pr-rail__brand" href={homeHref} aria-label="Proshore, home"><ProshoreIcon height={26} /></a>
+      <a className="skip" href="#main">{t("shell.skipToContent")}</a>
+      <aside className="pr-rail" aria-label={appsLabel ?? t("shell.apps")}>
+        <a className="pr-rail__brand" href={homeHref} aria-label={t("shell.home")}><ProshoreIcon height={26} /></a>
         <ul className="pr-rail__apps">
           {apps.map((a) => (
             <li key={a.id}>
@@ -67,7 +69,7 @@ export function AppShell({
           {client && (<><span className="pr-bar__sep" aria-hidden>/</span>{client}</>)}
           {nav}
           <span className="pr-bar__grow" />
-          {onSearch && <button type="button" className="pr-bar__iconbtn" onClick={onSearch} aria-label={`${searchLabel} (opens command palette)`}><MagnifyingGlassIcon aria-hidden /></button>}
+          {onSearch && <button type="button" className="pr-bar__iconbtn" onClick={onSearch} aria-label={t("shell.opensPalette", { label: searchLabel ?? t("shell.search") })}><MagnifyingGlassIcon aria-hidden /></button>}
           {actions}
           <span className="pr-bar__mobile">{theme}{user}</span>
         </div>

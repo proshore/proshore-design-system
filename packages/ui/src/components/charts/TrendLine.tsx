@@ -2,6 +2,8 @@ import { useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { GridRows } from "@visx/grid";
 import { scaleLinear, scalePoint } from "@visx/scale";
+import { useMessages } from "../../i18n/I18nProvider";
+import { englishT, type Translate } from "../../i18n/translate";
 import { atLeast, markerPath, monotone, niceScale, nf, useWidth, type Coverage, type Series, type TableData, type MarkerShape } from "./shared";
 
 export interface TrendPoint { x: string; /** Extra line in the tooltip, e.g. a date. */ caption?: string; values: Record<string, number | null>; coverage?: Coverage }
@@ -15,10 +17,11 @@ export interface TrendPoint { x: string; /** Extra line in the tooltip, e.g. a d
  */
 export interface TrendLineProps { series: Series[]; points: TrendPoint[]; unit: string; height?: number }
 
-export function trendTable(series: Series[], points: TrendPoint[]): TableData {
+/** Table view of the same data. Pass `t` from `useMessages()` to get it in the current language (English by default). */
+export function trendTable(series: Series[], points: TrendPoint[], t: Translate = englishT): TableData {
   return {
-    head: ["Period", ...series.map((s) => s.label), "Coverage"],
-    rows: points.map((p) => [p.caption ? `${p.x} (${p.caption})` : p.x, ...series.map((s) => { const v = p.values[s.key]; return v == null ? "No data" : atLeast(p.coverage, nf(v)); }), p.coverage === "partial" ? "Partial (at least)" : p.coverage === "none" ? "None" : "Complete"]),
+    head: [t("charts.period"), ...series.map((s) => s.label), t("charts.coverage")],
+    rows: points.map((p) => [p.caption ? `${p.x} (${p.caption})` : p.x, ...series.map((s) => { const v = p.values[s.key]; return v == null ? t("charts.noData") : atLeast(p.coverage, nf(v)); }), p.coverage === "partial" ? t("charts.partialAtLeast") : p.coverage === "none" ? t("charts.none") : t("charts.complete")]),
   };
 }
 
@@ -32,6 +35,7 @@ const DEFAULT_SHAPES: MarkerShape[] = ["circle", "square", "diamond", "triangle"
  *   points={[{ x: "Jan", values: { open: 14 } }, { x: "Feb", values: { open: 11 } }, { x: "Mar", values: { open: 9 } }]} />
  */
 export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps) {
+  const { t } = useMessages();
   const [ref, W] = useWidth(640);
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const wide = W >= 480;
@@ -67,7 +71,7 @@ export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [series, points, W, height, max]);
 
-  const summary = `${unit}. ` + series.map((s) => `${s.label}: ` + points.map((p) => `${p.x} ${p.values[s.key] == null ? "no data" : atLeast(p.coverage, p.values[s.key] as number)}`).join(", ")).join(". ") + ".";
+  const summary = `${unit}. ` + series.map((s) => `${s.label}: ` + points.map((p) => `${p.x} ${p.values[s.key] == null ? t("charts.noDataLower") : atLeast(p.coverage, p.values[s.key] as number)}`).join(", ")).join(". ") + ".";
   const tip = active && points[active.i];
   const tipX = active ? Math.min(Math.max(x(active.i), 90), W - 90) : 0;
   const tipY = active && tip ? y((tip.values[series[active.s].key] ?? 0) as number) - 12 : 0;
@@ -108,7 +112,7 @@ export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps
               const isCur = cur.s === si && cur.i === i;
               return (
                 <g key={i} className="ch-pt" role="img" tabIndex={isCur ? 0 : -1} data-pt={`${si}-${i}`} data-active={active?.s === si && active.i === i ? "" : undefined}
-                  aria-label={`${s.label}, ${p.x}${p.caption ? `, ${p.caption}` : ""}: ${atLeast(p.coverage, nf(v))} ${unit.toLowerCase()}${hollow ? ", partial scan, count is at least" : ""}`}
+                  aria-label={t("charts.pointLabel", { series: s.label, x: p.x, caption: p.caption ? t("charts.pointCaption", { caption: p.caption }) : "", value: atLeast(p.coverage, nf(v)), unit: unit.toLowerCase(), partial: hollow ? t("charts.pointPartial") : "" })}
                   onPointerEnter={() => setActive({ s: si, i })} onPointerLeave={() => setActive(null)}
                   onFocus={() => { setCur({ s: si, i }); setActive({ s: si, i }); }} onBlur={() => setActive(null)} onKeyDown={(e) => onKey(e, si, i)}>
                   <circle cx={x(i)} cy={y(v)} r="12" fill="transparent" />
@@ -123,8 +127,8 @@ export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps
       {tip && active && (
         <div className="ch-tip" aria-hidden="true" style={{ left: tipX, top: tipY }}>
           <div className="ch-tip__head">{tip.x}{tip.caption ? `, ${tip.caption}` : ""}</div>
-          {series.map((s) => <div className="ch-tip__row" key={s.key}><span>{s.label}</span><strong>{tip.values[s.key] == null ? "No data" : atLeast(tip.coverage, nf(tip.values[s.key] as number))}</strong></div>)}
-          {tip.coverage === "partial" && <div className="ch-tip__note">Partial scan: counts are at least.</div>}
+          {series.map((s) => <div className="ch-tip__row" key={s.key}><span>{s.label}</span><strong>{tip.values[s.key] == null ? t("charts.noData") : atLeast(tip.coverage, nf(tip.values[s.key] as number))}</strong></div>)}
+          {tip.coverage === "partial" && <div className="ch-tip__note">{t("charts.tooltipPartial")}</div>}
         </div>
       )}
     </div>

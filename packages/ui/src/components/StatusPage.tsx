@@ -1,14 +1,16 @@
 import type { ReactNode } from "react";
 import { PrayerFlags, Ridgeline } from "./Motifs";
+import { useMessages } from "../i18n/I18nProvider";
+import type { MessageKey } from "../i18n/translate";
 
 export type StatusKind = "forbidden" | "not-found" | "error" | "session-expired" | "offline";
 
-const copy: Record<StatusKind, { code: string; title: string; text: string }> = {
-  forbidden: { code: "403", title: "You do not have access to this page", text: "Your sign-in works, but this page is not part of the access you were given. Ask the person who manages access for this app." },
-  "not-found": { code: "404", title: "This page does not exist", text: "The link may be old or mistyped. Check the address, or go back to where you came from." },
-  error: { code: "500", title: "Something went wrong on our side", text: "It is not you. Try again in a moment. If it keeps happening, tell the team and mention what you were doing." },
-  "session-expired": { code: "401", title: "You have been signed out", text: "For your security you are signed out after a period of inactivity. Sign in again to continue where you were." },
-  offline: { code: "", title: "You are offline", text: "The page cannot reach the server. Check your connection; your changes are kept until it is back." },
+const copy: Record<StatusKind, { code: string; title: MessageKey; text: MessageKey }> = {
+  forbidden: { code: "403", title: "status.forbiddenTitle", text: "status.forbiddenText" },
+  "not-found": { code: "404", title: "status.notFoundTitle", text: "status.notFoundText" },
+  error: { code: "500", title: "status.errorTitle", text: "status.errorText" },
+  "session-expired": { code: "401", title: "status.sessionExpiredTitle", text: "status.sessionExpiredText" },
+  offline: { code: "", title: "status.offlineTitle", text: "status.offlineText" },
 };
 
 /**
@@ -23,6 +25,7 @@ const copy: Record<StatusKind, { code: string; title: string; text: string }> = 
 export function StatusPage({ kind, title, description, actions, reference }: {
   kind: StatusKind; title?: string; description?: ReactNode; actions?: ReactNode; reference?: string;
 }) {
+  const { t } = useMessages();
   const c = copy[kind];
   return (
     <section className="pr-status" aria-labelledby="pr-status-title" data-kind={kind}>
@@ -30,10 +33,10 @@ export function StatusPage({ kind, title, description, actions, reference }: {
       <div className="pr-status__in">
         {c.code && <p className="pr-status__code" aria-hidden>{c.code}</p>}
         <PrayerFlags className="pr-status__flags" width={140} />
-        <h1 id="pr-status-title" className="pr-status__title">{title ?? c.title}</h1>
-        <p className="pr-status__text">{description ?? c.text}</p>
+        <h1 id="pr-status-title" className="pr-status__title">{title ?? t(c.title)}</h1>
+        <p className="pr-status__text">{description ?? t(c.text)}</p>
         {actions && <div className="pr-status__actions">{actions}</div>}
-        {reference && <p className="pr-status__ref">Reference: <code>{reference}</code></p>}
+        {reference && <p className="pr-status__ref">{t("status.reference")} <code>{reference}</code></p>}
       </div>
     </section>
   );

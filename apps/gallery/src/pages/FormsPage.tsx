@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Rules } from "../doc/Doc";
-import { Button, Checkbox, DateRangePicker, Grid, LocaleProvider, MultiSelect, Page, PageHeader, RadioGroup, SearchField, Section, Select, Stack, Switch, TextArea, TextField } from "@proshore/ui";
+import { Button, Checkbox, DateRangePicker, Grid, LocaleProvider, MultiSelect, Page, PageHeader, RadioGroup, SearchField, Section, Select, Stack, Switch, TextArea, TextField, useMessages } from "@proshore/ui";
 import type { DateRange } from "@proshore/ui";
 
 const teams = [{ value: "fin", label: "Finance" }, { value: "ops", label: "Operations" }, { value: "hr", label: "People" }];
 
 export function FormsPage() {
+  const { locale } = useMessages();
   const [range, setRange] = useState<DateRange>(null);
   const [selected, setSelected] = useState<string[]>(["fin"]);
   const [radio, setRadio] = useState("all");
@@ -15,7 +16,7 @@ export function FormsPage() {
       <PageHeader eyebrow="Components" title="Forms" description="Every field has a visible label, a hint when needed, and an error that says how to fix it." />
       <Section title="Fields and states" description="React Aria form primitives with visible labels, descriptions, errors and states. Values are plain strings, so apps never touch library types. Dates are ISO strings; wrap in LocaleProvider for Dutch.">
         <Rules dos={["Give every field a visible label; hide it only for search boxes.", "Say what is wrong and how to fix it, next to the field.", "Show the same field states everywhere: default, focus, error, disabled."]} donts={["Do not use placeholder text instead of a label.", "Do not validate on every keystroke before the person has finished.", "Do not clear what someone typed when there is an error."]} />
-        <LocaleProvider locale="en-GB">
+        <LocaleProvider locale={locale.startsWith("nl") ? "nl-NL" : "en-GB"}>
           <Grid min={300}>
             <Stack gap={4}>
               <TextField label="Full name" placeholder="Alex Voorbeeld" />
