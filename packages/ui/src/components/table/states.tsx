@@ -5,6 +5,9 @@ import type { ReactNode } from "react";
 import { PrayerFlags } from "../Motifs";
 import { FilterChips, type ActiveFilter } from "./FilterBar";
 
+/**
+ * Loading placeholder shaped like a table.
+ */
 export function TableSkeleton({ columns = 5, rows = 6, label = "Loading" }: { columns?: number; rows?: number; label?: string }) {
   return (
     <div className="dt-state" aria-busy="true">
@@ -18,6 +21,9 @@ export function TableSkeleton({ columns = 5, rows = 6, label = "Loading" }: { co
   );
 }
 
+/**
+ * Message for a list with no items yet, with an optional action.
+ */
 export function EmptyState({ title = "Nothing here yet", description, action }: { title?: string; description?: ReactNode; action?: ReactNode }) {
   return (
     <div className="dt-state dt-state--msg">
@@ -31,6 +37,9 @@ export function EmptyState({ title = "Nothing here yet", description, action }: 
 
 export const NO_RESULTS_HINT = "No items match. That is not the same as no issues: check scan coverage.";
 
+/**
+ * Message when filters or search match nothing; says that is not the same as no issues.
+ */
 export function NoResults({ filters = [], search, onReset, hint = false, noun = "items" }: { filters?: ActiveFilter[]; search?: string; onReset?: () => void; hint?: boolean; noun?: string }) {
   return (
     <div className="dt-state dt-state--msg">
@@ -47,6 +56,9 @@ export function NoResults({ filters = [], search, onReset, hint = false, noun = 
   );
 }
 
+/**
+ * Message when a list could not be loaded, with an optional retry.
+ */
 export function ErrorState({ title = "The list could not be loaded", message, onRetry }: { title?: string; message?: ReactNode; onRetry?: () => void }) {
   return (
     <div className="dt-state dt-state--msg dt-state--error" role="alert">

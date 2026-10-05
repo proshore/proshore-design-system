@@ -10,6 +10,14 @@ export type KanbanColumn = { id: string; label: string };
  * `onMove(id, columnId)`. Moving a card always works with the keyboard and a screen reader (a labelled select on each card)
  * and is announced; drag and drop is not included, and if you add it, keep this as the way that always works.
  * Each column shows a count and an empty message. Keep cards short; open the detail in a SlideOver.
+ *
+ * @example
+ * <KanbanBoard
+ *   columns={[{ id: "todo", label: "To do" }, { id: "done", label: "Done" }]}
+ *   items={cards} getId={(c) => c.id} getColumn={(c) => c.status} cardLabel={(c) => c.title}
+ *   onMove={(id, column) => move(id, column)}
+ *   renderCard={(c) => <Text>{c.title}</Text>}
+ * />
  */
 export function KanbanBoard<T>({ columns, items, getId, getColumn, onMove, renderCard, cardLabel, emptyText = "Nothing here.", label = "Board" }: {
   columns: KanbanColumn[]; items: T[]; getId: (item: T) => string; getColumn: (item: T) => string;

@@ -13,6 +13,7 @@ const ChartsPage = lazy(() => import("./pages/ChartsPage").then((m) => ({ defaul
 const OverlaysPage = lazy(() => import("./pages/OverlaysPage").then((m) => ({ default: m.OverlaysPage })));
 const DialogsPage = lazy(() => import("./pages/DialogsPage").then((m) => ({ default: m.DialogsPage })));
 const ActionsPage = lazy(() => import("./pages/ActionsPage").then((m) => ({ default: m.ActionsPage })));
+const ApiPage = lazy(() => import("./pages/ApiPage").then((m) => ({ default: m.ApiPage })));
 const BrandPage = lazy(() => import("./pages/BrandPage").then((m) => ({ default: m.BrandPage })));
 
 const user: HeaderUser = { id: "u1", name: "Sam Example", email: "sam.example@proshore.nl", role: "Designer", org: "Proshore", staff: true };
@@ -65,6 +66,7 @@ export function App() {
                     case "/overlays": return <OverlaysPage />;
                     case "/dialogs": return <DialogsPage />;
                     case "/actions": return <ActionsPage />;
+                    case "/api": return <ApiPage />;
                     case "/brand": return <BrandPage />;
                     default: return <Foundations />;
                   }

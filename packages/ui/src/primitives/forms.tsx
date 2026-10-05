@@ -24,6 +24,12 @@ function Meta({ label, hideLabel, description, error }: Pick<FieldProps, "label"
   );
 }
 
+/**
+ * TextField: single-line text input with a visible label, optional description and error text (React Aria). Controlled with `value` and `onChange`, or uncontrolled with `defaultValue`.
+ *
+ * @example
+ * <TextField label="Customer name" value={name} onChange={setName} isRequired error={name ? undefined : "Enter a name"} />
+ */
 export function TextField({ label, hideLabel, description, error, value, defaultValue, onChange, placeholder, type = "text", isRequired, isDisabled, className, id, name, autoComplete, icon }: FieldProps & {
   value?: string; defaultValue?: string; onChange?: (v: string) => void; placeholder?: string; type?: "text" | "email" | "url" | "tel" | "password" | "number"; autoComplete?: string; icon?: ReactNode;
 }) {
@@ -37,6 +43,9 @@ export function TextField({ label, hideLabel, description, error, value, default
   );
 }
 
+/**
+ * Multi-line text input with a visible label, same field API as TextField.
+ */
 export function TextArea({ label, hideLabel, description, error, value, defaultValue, onChange, onKeyDown, placeholder, rows = 3, isRequired, isDisabled, className, id }: FieldProps & { value?: string; defaultValue?: string; onChange?: (v: string) => void; onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void; placeholder?: string; rows?: number }) {
   return (
     <RACTextField validationBehavior="aria" className={`pr-field${className ? " " + className : ""}`} value={value} defaultValue={defaultValue} onChange={onChange} isInvalid={!!error} isRequired={isRequired} isDisabled={isDisabled} id={id}>
@@ -60,6 +69,9 @@ export function SearchField({ label, hideLabel = true, value, onChange, onClear,
   );
 }
 
+/**
+ * Checkbox with a visible label (React Aria). Controlled with `isSelected` and `onChange`.
+ */
 export function Checkbox({ children, isSelected, defaultSelected, onChange, isDisabled, isIndeterminate, className, "aria-label": ariaLabel, id }: {
   children?: ReactNode; isSelected?: boolean; defaultSelected?: boolean; onChange?: (v: boolean) => void; isDisabled?: boolean; isIndeterminate?: boolean; className?: string; "aria-label"?: string; id?: string;
 }) {
@@ -70,10 +82,16 @@ export function Checkbox({ children, isSelected, defaultSelected, onChange, isDi
   );
 }
 
+/**
+ * On/off switch with a visible label (React Aria).
+ */
 export function Switch({ children, isSelected, onChange, isDisabled }: { children: ReactNode; isSelected?: boolean; onChange?: (v: boolean) => void; isDisabled?: boolean }) {
   return (<RACSwitch className="pr-switch" isSelected={isSelected} onChange={onChange} isDisabled={isDisabled}><span className="pr-switch__track" aria-hidden><span className="pr-switch__thumb" /></span><span>{children}</span></RACSwitch>);
 }
 
+/**
+ * Radio group with a visible label; `options` are { value, label }.
+ */
 export function RadioGroup({ label, hideLabel, description, value, onChange, options, orientation = "vertical", isDisabled, className }: {
   label: string; hideLabel?: boolean; description?: ReactNode; value?: string; onChange?: (v: string) => void; options: { value: string; label: ReactNode; hint?: ReactNode }[]; orientation?: "vertical" | "horizontal"; isDisabled?: boolean; className?: string;
 }) {
@@ -90,6 +108,12 @@ export function RadioGroup({ label, hideLabel, description, value, onChange, opt
 
 export type Option = { value: string; label: string };
 
+/**
+ * Select: pick one option from a list (React Aria), with a visible label. `options` are { value, label }; `onChange` gives the chosen value.
+ *
+ * @example
+ * <Select label="Environment" options={[{ value: "prod", label: "Production" }, { value: "test", label: "Test" }]} value={env} onChange={setEnv} />
+ */
 export function Select({ label, hideLabel, description, error, options, value, onChange, placeholder = "Select", isDisabled, isRequired, className, size = "2" }: FieldProps & {
   options: Option[]; value?: string | null; onChange?: (v: string) => void; placeholder?: string; size?: "1" | "2";
 }) {
@@ -135,6 +159,9 @@ export function MultiSelect({ label, hideLabel, description, options, value, onC
 
 /** Date range as two segmented date fields plus a calendar. Values are ISO dates (yyyy-mm-dd). Wrap the app in LocaleProvider for Dutch. */
 export type DateRange = { start: string; end: string } | null;
+/**
+ * Date range as two segmented date fields with a calendar; `value` is { start, end } or null.
+ */
 export function DateRangePicker({ label, hideLabel, description, value, onChange, className }: { label: string; hideLabel?: boolean; description?: ReactNode; value: DateRange; onChange: (v: DateRange) => void; className?: string }) {
   return (
     <RACDateRangePicker className={`pr-field${className ? " " + className : ""}`} value={value ? { start: parseDate(value.start), end: parseDate(value.end) } : null}

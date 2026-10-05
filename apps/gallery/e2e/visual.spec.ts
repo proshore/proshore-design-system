@@ -69,3 +69,17 @@ for (const theme of themes) {
     await expect(page.locator("header").first()).toHaveScreenshot(`state-header-wide-${theme}.png`);
   });
 }
+
+/** The API reference is generated and about 180 cards long, so a full-page screenshot is neither stable nor useful: capture a fixed search result instead. */
+for (const [size, viewport] of Object.entries(sizes)) {
+  for (const theme of themes) {
+    test(`@visual api reference search ${size} ${theme}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await open(page, "/api", theme);
+      await page.getByRole("searchbox", { name: "Search the API" }).fill("Pagination");
+      await expect(page.getByRole("article", { name: "Pagination" })).toBeVisible();
+      await expect(page.getByText("2 of ")).toBeVisible();
+      await expect(page).toHaveScreenshot(`state-api-search-${size}-${theme}.png`, { fullPage: true });
+    });
+  }
+}

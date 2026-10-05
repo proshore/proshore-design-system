@@ -17,7 +17,7 @@ Needs React and React DOM 19 (peer dependencies). The package is ES modules with
 import "@proshore/ui/styles.css";                       // once, at the app root
 import { ProshoreTheme, Page, PageHeader, Section, DataTable } from "@proshore/ui";
 ```
-Wrap the app in `ProshoreTheme appearance="light" | "dark"`. See `claude/skills/proshore-ui/SKILL.md` for the full set-up, page patterns and rules, and `claude/skills/proshore-ui/reference/` for every component and token.
+Wrap the app in `ProshoreTheme appearance="light" | "dark"`. See `claude/skills/proshore-ui/SKILL.md` for the full set-up, page patterns and rules, and `claude/skills/proshore-ui/reference/` for every component and token. The gallery also has an **API reference** page (`#/api`) with every export, its props, defaults, types, description and a usage snippet, generated from the same source. Write an `@example` tag in a component's JSDoc to control its snippet.
 
 ## What is inside
 Theme and tokens; layout (`Page`, `PageHeader`, `Section`, `Grid`, `Stack`, `Cluster`, `Panel`, `StatCard`, `KeyValue`); forms; `DataTable`; charts (`ChartCard`, `BarChart`, `TrendLine`, `StackedBar`, `Sparkline`); `SlideOver`, `Tabs`, `Breadcrumbs`, `Stepper`, `Timeline`, `Note`, `toast`; the header family (`AppHeader`, `WorkspaceSwitcher`, `UserMenu` with sign out and switch account) and `SignInScreen` (Google Workspace sign-in, Proshore staff only); 32 icons; `ProshoreIcon`, `ProshoreWordmark`, `Avatar`, `ClientMark`; brand motifs `Ridgeline` and `PrayerFlags`.

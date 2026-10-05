@@ -4,10 +4,14 @@
   "version": "0.4.0",
   "type": "module",
   "scripts": {
+    "gen:api": "node ../../packages/ui/scripts/gen-api.mjs",
+    "predev": "npm run gen:api",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "prebuild": "npm run gen:api",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "pretypecheck": "npm run gen:api",
     "test:e2e": "playwright test --grep-invert @visual",
     "test:visual": "playwright test --grep @visual",
     "test:visual:update": "playwright test --grep @visual --update-snapshots"

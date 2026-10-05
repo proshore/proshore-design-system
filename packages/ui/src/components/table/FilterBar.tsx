@@ -23,6 +23,9 @@ export function useActiveFilters<T>(state: TableState<T>, columns: ColumnDef<T>[
   return out;
 }
 
+/**
+ * Removable chips that show which filters and search are active.
+ */
 export function FilterChips({ filters, search, onClearSearch }: { filters: ActiveFilter[]; search?: string; onClearSearch?: () => void }) {
   if (!filters.length && !search?.trim()) return null;
   return (
@@ -80,6 +83,9 @@ function FacetButton<T>({ column, state }: { column: ColumnDef<T>; state: TableS
   );
 }
 
+/**
+ * Search and filter controls for a table, driven by the state from useTableState.
+ */
 export function FilterBar<T>({ state, columns, noun = "items", searchLabel, searchPlaceholder, showSearch = true, showFilters = true, right, hasActiveFilters }: {
   state: TableState<T>; columns: ColumnDef<T>[]; noun?: string; searchLabel?: string; searchPlaceholder?: string;
   showSearch?: boolean; showFilters?: boolean; right?: ReactNode; hasActiveFilters?: boolean;

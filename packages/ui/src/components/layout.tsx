@@ -98,10 +98,16 @@ export function WithAside({ children, aside, asideWidth = 300, asideFirst = fals
   );
 }
 
+/**
+ * Vertical stack of items with a gap from the spacing scale.
+ */
 export function Stack({ children, gap = 4 }: { children: ReactNode; gap?: 1 | 2 | 3 | 4 | 5 | 6 }) {
   return <div className="l-stack" style={{ "--l-gap": `var(--space-${gap})` } as CSSProperties}>{children}</div>;
 }
 
+/**
+ * Horizontal row of items that wraps, with a gap from the spacing scale.
+ */
 export function Cluster({ children, gap = 2, justify = "start", align = "center" }: { children: ReactNode; gap?: 1 | 2 | 3 | 4; justify?: "start" | "between" | "end"; align?: "center" | "start" }) {
   return <div className="l-cluster" style={{ "--l-gap": `var(--space-${gap})`, justifyContent: justify === "between" ? "space-between" : justify === "end" ? "flex-end" : "flex-start", alignItems: align === "start" ? "flex-start" : "center" } as CSSProperties}>{children}</div>;
 }

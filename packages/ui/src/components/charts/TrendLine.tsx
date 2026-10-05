@@ -24,6 +24,13 @@ export function trendTable(series: Series[], points: TrendPoint[]): TableData {
 
 const DEFAULT_SHAPES: MarkerShape[] = ["circle", "square", "diamond", "triangle"];
 
+/**
+ * Multi-series line chart for change over scans or time; see TrendLineProps.
+ *
+ * @example
+ * <TrendLine unit="findings" series={[{ key: "open", label: "Open", color: "var(--chart-1)" }]}
+ *   points={[{ x: "Jan", values: { open: 14 } }, { x: "Feb", values: { open: 11 } }, { x: "Mar", values: { open: 9 } }]} />
+ */
 export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps) {
   const [ref, W] = useWidth(640);
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");

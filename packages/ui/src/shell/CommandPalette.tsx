@@ -7,6 +7,9 @@ export type Command = { id: string; label: string; group: string; hint?: string;
 /**
  * Jump to anything: pages, apps, records. Opens with Ctrl or Cmd+K. Built as an ARIA combobox: the input keeps focus,
  * arrows move the highlighted option (aria-activedescendant), Enter runs it, Esc closes.
+ *
+ * @example
+ * <CommandPalette open={open} onOpenChange={setOpen} commands={[{ id: "home", label: "Overview", group: "Pages", run: () => (location.hash = "/") }]} />
  */
 export function CommandPalette({ open, onOpenChange, commands, placeholder = "Jump to a page, app or record" }: { open: boolean; onOpenChange: (o: boolean) => void; commands: Command[]; placeholder?: string }) {
   const [q, setQ] = useState("");

@@ -20,4 +20,5 @@ export const pages = [
   { path: "/brand", label: "Brand and icons" },
   { path: "/shell", label: "App shell" },
   { path: "/sign-in", label: "Sign in" },
+  { path: "/api", label: "API reference" },
 ] as const;

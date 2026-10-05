@@ -18,6 +18,9 @@ export function ProshoreWordmark({ height = 20 }: { height?: number }) {
   );
 }
 
+/**
+ * The Proshore icon mark at a given height.
+ */
 export function ProshoreIcon({ height = 28 }: { height?: number }) {
   return (
     <svg aria-hidden viewBox="68 66 138 249" height={height} fill="#ff5102" style={{ display: "block" }}>

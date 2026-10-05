@@ -22,6 +22,10 @@ type Turn = { q: string; answer: AssistantAnswer | null };
  * AssistantPanel: the Sherpa assistant as a slide-over. The panel owns the conversation view and the answer shape
  * (answer, how sure, sources, what it could not see); the app supplies `onAsk`, which returns an answer or null when it has
  * no grounded answer, and the panel then says so instead of inventing one. `badge` marks demo or canned answers.
+ *
+ * @example
+ * <AssistantPanel open={open} onOpenChange={setOpen} title="Ask about this scan" context="Scan of 12 repositories"
+ *   onAsk={(q) => ({ text: "Three applications use the legacy login.", confidence: { level: 2, label: "Likely" }, gaps: "Two repositories were not scanned." })} />
  */
 export function AssistantPanel({ open, onOpenChange, name = "Ask Sherpa", title, context, starters = [], onAsk, badge, disclaimer, placeholder = "Ask a question", noAnswer }: {
   open: boolean; onOpenChange: (o: boolean) => void; name?: string; title: ReactNode; context: string;

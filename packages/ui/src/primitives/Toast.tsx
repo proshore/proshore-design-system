@@ -8,6 +8,9 @@ const queue = new ToastQueue<ToastContentData>({ maxVisibleToasts: 3 });
  * toast.show("Saved"): a message for something that just happened and then goes away (5 s by default, dismissible,
  * announced to screen readers). Use Note for messages that must stay on the page. React Aria's Toast is still marked
  * UNSTABLE, so ALL use goes through this file: if the API changes, only this file changes.
+ *
+ * @example
+ * toast.show("Saved", { tone: "success" });
  */
 export const toast = {
   show(message: string, opts: { tone?: ToastContentData["tone"]; timeout?: number } = {}) {

@@ -20,7 +20,8 @@
     "test:visual": "npm run test:visual -w gallery && npm run test:visual -w discovery-example",
     "test:visual:update": "npm run test:visual:update -w gallery && npm run test:visual:update -w discovery-example",
     "export:design-system": "npm run export:design-system -w @proshore/ui",
-    "test:export": "npm run pack && npm run test:export -w @proshore/ui"
+    "test:export": "npm run pack && npm run test:export -w @proshore/ui",
+    "api": "npm run gen:api -w gallery"
   },
   "devDependencies": {
     "knip": "^6.38.0"

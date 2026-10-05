@@ -45,6 +45,13 @@ function summary(series: Series[], data: BarDatum[], unit: string, stacked: bool
 const GAP = 2;             // px between stacked segments
 const tick = { fill: "var(--gray-11)", fontSize: "var(--font-size-1)", fontFamily: "inherit" } as const;
 
+/**
+ * Bar chart for comparing magnitudes across categories; see BarChartProps.
+ *
+ * @example
+ * <BarChart unit="findings" series={[{ key: "open", label: "Open", color: "var(--chart-1)" }]}
+ *   data={[{ label: "Billing", values: { open: 12 } }, { label: "Portal", values: { open: 7 } }]} />
+ */
 export function BarChart({ series, data, unit, orientation = "horizontal", stacked = false, height = 220 }: BarChartProps) {
   const [ref, W] = useWidth(640);
   const idOf = usePatternIds();

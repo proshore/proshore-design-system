@@ -10,6 +10,11 @@ import { Eyebrow } from "./Bits";
  * scrolling body made of groups, sticky footer with the actions. Modal: focus is trapped, Esc and a click outside
  * close it, focus returns to whatever opened it. Renders into <body>, so it uses the page-level tokens.
  * Do not use for forms longer than one screen or for anything that must stay open while the user works elsewhere.
+ *
+ * @example
+ * <SlideOver open={open} onOpenChange={setOpen} eyebrow="Application" title="Billing portal" footer={<Button onClick={() => setOpen(false)}>Close</Button>}>
+ *   <Text>Details of the selected row.</Text>
+ * </SlideOver>
  */
 export function SlideOver({ open, onOpenChange, eyebrow, title, chips, children, footer, nav, size = "md" }: {
   open: boolean; onOpenChange: (o: boolean) => void; eyebrow: ReactNode; title: ReactNode; chips?: ReactNode; children: ReactNode; footer?: ReactNode;

@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import type { ColumnDef, SortPrimitive } from "./types";
 
+/**
+ * Wraps matches of `query` inside `text` in a mark.
+ */
 export function Highlight({ text, query }: { text: string; query: string }): ReactNode {
   const q = query.trim();
   if (!q) return text;
