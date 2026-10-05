@@ -256,16 +256,16 @@ button.stepper__btn:hover { background: var(--accent-a3); }
 .pr-hero { background: none; color: var(--gray-12); }
 .pr-hero__in { max-width: none; padding: calc(var(--pr-header-h, 71px) + 24px) var(--page-x) 8px; }
 .pr-hero[data-size="lg"] .pr-hero__in { padding: calc(var(--pr-header-h, 71px) + 40px) var(--page-x) 16px; }
-.pr-hero .sherpa-eyebrow { color: var(--gray-11); }
+.pr-hero :is(.pr-eyebrow, .sherpa-eyebrow) { color: var(--gray-11); }
 .pr-hero__title { color: var(--gray-12); font-size: clamp(1.75rem, 2.4vw, 2.25rem); max-width: 28ch; }
 .pr-hero__desc { color: var(--gray-11); max-width: 68ch; }
-.pr-hero .sherpa-display { color: var(--gray-12); font-size: clamp(2rem, 3.4vw, 3.25rem); max-width: 26ch; margin: 14px 0 16px; }
-.pr-hero .sherpa-display strong { color: var(--gray-12); }
+.pr-hero :is(.pr-display, .sherpa-display) { color: var(--gray-12); font-size: clamp(2rem, 3.4vw, 3.25rem); max-width: 26ch; margin: 14px 0 16px; }
+.pr-hero :is(.pr-display, .sherpa-display) strong { color: var(--gray-12); }
 .l-body { max-width: none; padding: 32px var(--page-x) 96px; gap: 56px; }
 .l-body[data-pull] { margin-top: 0; padding-top: 32px; }
 /* prose keeps a readable line length; data uses the whole width */
 .l-section__desc { max-width: 68ch; } .pr-band__q { max-width: 60ch; }
-[data-surface="inverse"] .sherpa-eyebrow--chip { background: var(--gray-12); color: var(--color-background); }
+[data-surface="inverse"] :is(.pr-eyebrow--chip, .sherpa-eyebrow--chip) { background: var(--gray-12); color: var(--color-background); }
 /* two columns on wide screens: chart beside the list */
 .l-cols { display: grid; gap: var(--space-6); grid-template-columns: minmax(0, 1fr); align-items: start; }
 @media (min-width: 1200px) { .l-cols { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
@@ -276,11 +276,11 @@ button.stepper__btn:hover { background: var(--accent-a3); }
 @media (max-width: 1500px) { .pr-header__product { display: none; } }
 .pr-nav { min-width: 0; }
 .pr-header { padding-inline: var(--space-4); }
-.pr-hero .sherpa-display { max-width: 34ch; font-size: clamp(2rem, 3vw, 2.875rem); }
+.pr-hero :is(.pr-display, .sherpa-display) { max-width: 34ch; font-size: clamp(2rem, 3vw, 2.875rem); }
 .pr-hero[data-size="lg"] .pr-hero__in { padding-bottom: 8px; }
 /* contrast fixes after Layout v4 */
 .pr-nav .count { opacity: 1; }
-.pr-hero .sherpa-eyebrow--chip { color: var(--color-background); }
+.pr-hero :is(.pr-eyebrow--chip, .sherpa-eyebrow--chip) { color: var(--color-background); }
 
 /* Calmer severity bar: a thin ribbon, counts live in the legend. */
 

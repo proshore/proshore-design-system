@@ -6,13 +6,13 @@ import { appLanding, suiteApps, suiteProducts } from "../fixtures/suite";
 export function AppLanding({ id }: { id: string }) {
   const app = suiteApps.find((a) => a.id === id);
   const info = appLanding[id];
-  if (!app || !info) return <Page><PageHero><h1 className="sherpa-display">App not found</h1><Button href="#/overview">Back to Discovery</Button></PageHero></Page>;
+  if (!app || !info) return <Page><PageHero><h1 className="pr-display">App not found</h1><Button href="#/overview">Back to Discovery</Button></PageHero></Page>;
   const product = suiteProducts.find((p) => p.id === app.product);
   return (
     <Page>
       <PageHero eyebrow={<>{product?.name} · {product?.tagline} <DemoTag /></>} size="md">
         <AppTitle glyph={app.glyph}>
-          <h1 className="sherpa-display" style={{ margin: 0 }}>{app.name}</h1>
+          <h1 className="pr-display" style={{ margin: 0 }}>{app.name}</h1>
           <p className="pr-hero__desc" style={{ marginTop: 8 }}>{app.status}</p>
         </AppTitle>
       </PageHero>

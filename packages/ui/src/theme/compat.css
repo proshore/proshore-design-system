@@ -1,6 +1,6 @@
 /* Compatibility: the old --sherpa-* token names, kept for one minor version. They simply point at the new --pr-* tokens.
-   Migrate with: replace --sherpa- by --pr- in your CSS. These aliases will be removed in 0.5.0. */
-:root, .sherpa-theme {
+   Migrate with: replace --sherpa- by --pr- in your CSS. These aliases will be removed in 0.6.0. */
+:root, :is(.pr-theme, .sherpa-theme) {
   --sherpa-accent-mark: var(--pr-accent-mark);
   --sherpa-accent-text: var(--pr-accent-text);
   --sherpa-band-bg: var(--pr-band-bg);

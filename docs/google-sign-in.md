@@ -1,6 +1,6 @@
 # Google Workspace sign-in for Proshore apps
 
-Status: **server library built (`packages/auth`, `@proshore/auth`), NOT verified against real Google yet** (tested only against a local fake Google). The design system ships the screens (`SignInScreen`, the account menu with "Switch account" and "Sign out", `StatusPage kind="session-expired"` and `kind="forbidden"`). Each app implements the actual login. This page says what that takes, so it is the same everywhere.
+Status: **server library built (`packages/auth`, `@proshore/auth`) and verified against real Google on localhost (5 Oct 2026)**; staging and production hosts are not verified yet. One Google Cloud project for all apps, one OAuth client per app (Jeroen, decision 83). The design system ships the screens (`SignInScreen`, the account menu with "Switch account" and "Sign out", `StatusPage kind="session-expired"` and `kind="forbidden"`). Each app implements the actual login. This page says what that takes, so it is the same everywhere.
 
 ## What sign-in does and does not do
 Signing in proves who someone is (a Proshore Google Workspace account). It does **not** say what they may see: customer access and roles are separate, per app and per engagement, and are checked on the server. Hiding a page in the browser is not access control.

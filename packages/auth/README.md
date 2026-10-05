@@ -2,7 +2,7 @@
 
 Server-side "Sign in with Google Workspace, Proshore staff only" for Proshore's internal apps. Small, framework-neutral, one dependency (`jose`). It works on standard Web `Request` and `Response`, so it mounts in Node `http`, Express (via an adapter), Next route handlers, Hono and similar.
 
-Status: **0.1.0, tested against a local fake Google only. Not yet verified against real Google.** Do the first real sign-in on a staging client before trusting it.
+Status: **0.1.0. Tested against a local fake Google (automated, no network) and verified against real Google on localhost on 5 Oct 2026**, with a Proshore Workspace OAuth client (consent screen type Internal): sign-in with a proshore.nl account, rejection of a non-proshore.nl account, switch account, the session and logout, and a returning session. **Not yet verified:** staging and production hosts. Do a first real sign-in on each new host (it needs its own redirect URI) before trusting it there.
 
 ## What it does
 - `login(req)`: 302 to Google, authorization code flow with PKCE (S256), `state`, `nonce`, scope `openid email profile`, `hd=proshore.nl` hint. `?switch=1` adds `prompt=select_account`. Optional `?returnTo=/path`. Transient state lives in a 10 minute, signed, `HttpOnly` cookie.

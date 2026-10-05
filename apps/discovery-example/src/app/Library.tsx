@@ -78,7 +78,7 @@ export function Library({ dataDemos }: { dataDemos?: ReactNode }) {
                 <Text size="9" weight="bold" style={{ letterSpacing: "-0.02em" }}>Display, 3rem</Text>
                 <Heading size="7">Heading, 2rem</Heading><Heading size="5">Section title, 1.25rem</Heading>
                 <Text size="3">Body, 1rem. Plain language first, technical detail on demand.</Text>
-                <Text size="2" color="gray">Secondary, 0.875rem</Text><span className="sherpa-eyebrow">Eyebrow, Geist Mono uppercase</span>
+                <Text size="2" color="gray">Secondary, 0.875rem</Text><span className="pr-eyebrow">Eyebrow, Geist Mono uppercase</span>
               </Stack>
             </Panel>
             <Panel eyebrow="Spacing (4, 8, 16, 24, 32) and radius (8, pill)">

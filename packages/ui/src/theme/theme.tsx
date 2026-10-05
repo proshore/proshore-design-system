@@ -9,8 +9,8 @@ export type Appearance = "light" | "dark";
  */
 export function ProshoreTheme({ appearance, children, root = true }: { appearance: Appearance; children: ReactNode; root?: boolean }) {
   useEffect(() => { if (root) document.documentElement.dataset.theme = appearance; }, [appearance, root]);
-  return <div className="sherpa-theme" data-theme={appearance} data-root={root || undefined}>{children}</div>;
+  return <div className="pr-theme" data-theme={appearance} data-root={root || undefined}>{children}</div>;
 }
 
-/** @deprecated Old name of ProshoreTheme. Removed in 0.5.0. */
+/** @deprecated Old name of ProshoreTheme. Removed in 0.6.0. */
 export const SherpaTheme: typeof ProshoreTheme = (props) => <ProshoreTheme {...props} />;

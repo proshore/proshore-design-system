@@ -15,6 +15,6 @@
 .pr-gbtn[data-hovered] { background: #f1f3f4; box-shadow: 0 1px 2px rgba(60,64,67,.25); }
 .pr-gbtn[data-focus-visible] { outline: 2px solid var(--focus-8); outline-offset: 3px; }
 .pr-gbtn[data-disabled] { cursor: progress; opacity: .8; }
-:root[data-theme="dark"] .pr-gbtn, .sherpa-theme[data-theme="dark"] .pr-gbtn { background: #131314; border-color: #8e918f; color: #e3e3e3; }
-:root[data-theme="dark"] .pr-gbtn[data-hovered], .sherpa-theme[data-theme="dark"] .pr-gbtn[data-hovered] { background: #1f2022; }
+:root[data-theme="dark"] .pr-gbtn, :is(.pr-theme, .sherpa-theme)[data-theme="dark"] .pr-gbtn { background: #131314; border-color: #8e918f; color: #e3e3e3; }
+:root[data-theme="dark"] .pr-gbtn[data-hovered], :is(.pr-theme, .sherpa-theme)[data-theme="dark"] .pr-gbtn[data-hovered] { background: #1f2022; }
 @media (prefers-reduced-motion: reduce) { .pr-gbtn { transition: none; } }

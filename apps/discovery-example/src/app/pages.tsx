@@ -25,7 +25,7 @@ export function Overview({ openAsk, persona }: PageProps) {
   return (
     <Page>
       <PageHero eyebrow={<Cluster><span>Discovery · {workspace.name}</span><DemoTag /></Cluster>}>
-        <h1 id="q" className="sherpa-display">
+        <h1 id="q" className="pr-display">
           <strong>Can the current ordering landscape support expansion,</strong> and where should we{" "}
           <HandMark>invest first?</HandMark>
         </h1>

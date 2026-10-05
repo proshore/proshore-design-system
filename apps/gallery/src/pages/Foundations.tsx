@@ -70,7 +70,7 @@ export function Foundations() {
             <code>mono</code><Text size="2" mono>INV-1042 · 2026-10-05 · 12,480</Text>
           </div>
         </Panel>
-        <Text size="2" color="gray">Eyebrow: <span className="sherpa-eyebrow">Geist Mono, uppercase, small</span></Text>
+        <Text size="2" color="gray">Eyebrow: <span className="pr-eyebrow">Geist Mono, uppercase, small</span></Text>
       </Section>
 
       <Section id="space" title="Spacing and radius" description="Spacing is a 4px-based scale. Radius: 8 for cards and inputs, pill for buttons, larger for panels.">

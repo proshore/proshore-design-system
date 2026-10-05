@@ -69,7 +69,7 @@ export function Setup() {
             {checklist.map((c) => (
               <li key={c.text}><Text size="2" style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
                 {c.ok ? <CheckCircledIcon aria-hidden style={{ marginTop: 3, flex: "none", color: "var(--pr-coverage-complete)" }} /> : <ExclamationTriangleIcon aria-hidden style={{ marginTop: 3, flex: "none", color: "var(--pr-coverage-partial)" }} />}
-                <span><span className="sherpa-eyebrow" style={{ display: "block" }}>{c.ok ? "Done" : "Needs attention"}</span>{c.text}</span></Text></li>))}
+                <span><span className="pr-eyebrow" style={{ display: "block" }}>{c.ok ? "Done" : "Needs attention"}</span>{c.text}</span></Text></li>))}
           </ul>
         </Panel>
       }>

@@ -41,7 +41,7 @@ export function AppHeader({ product, homeHref = "#/", launcher, client, nav, pro
     <header ref={ref} className="pr-header" data-scrolled={scrolled || undefined} data-layer={proshoreOnly ? "proshore" : "client"}>
       <a href={homeHref} className="pr-header__brand" aria-label={t("header.home", { product })}>
         <ProshoreIcon height={28} /><span className="pr-header__word"><ProshoreWordmark height={14} /></span>
-        {!launcher && <span className="sherpa-eyebrow pr-header__product">{product}</span>}
+        {!launcher && <span className="pr-eyebrow pr-header__product">{product}</span>}
       </a>
       {launcher && (<><span className="pr-header__sep" aria-hidden>/</span>{launcher}</>)}
       {client && (<><span className="pr-header__sep" aria-hidden>/</span>{client}</>)}

@@ -12,7 +12,7 @@ export function Timeline({ entries, label }: { entries: TimelineEntry[]; label?:
         <li key={e.id} className="timeline__item" data-kind={e.kind ?? "system"}>
           <span className="timeline__dot" aria-hidden />
           <div className="timeline__body">
-            <span className="timeline__meta"><span className="sherpa-eyebrow">{e.when}</span> · {e.actor}</span>
+            <span className="timeline__meta"><span className="pr-eyebrow">{e.when}</span> · {e.actor}</span>
             <span>{e.text}</span>
           </div>
         </li>

@@ -20,7 +20,7 @@ export function ProcessFlow({ steps, lanes, label = "Process flow" }: { steps: F
       </ol>
       {lanes.map((lane) => (
         <div key={lane.id} className="flow__lane">
-          <div className="flow__lane-label"><span className="sherpa-eyebrow">Application</span><strong>{lane.label}</strong>{lane.hint && <span className="flow__hint">{lane.hint}</span>}</div>
+          <div className="flow__lane-label"><span className="pr-eyebrow">Application</span><strong>{lane.label}</strong>{lane.hint && <span className="flow__hint">{lane.hint}</span>}</div>
           <div className="flow__cells">
             {steps.map((s) => (
               <div key={s.id} className="flow__cell">

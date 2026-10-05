@@ -35,7 +35,7 @@ export function SlideOver({ open, onOpenChange, eyebrow, title, chips, children,
                 {nav && (
                   <>
                     <Tooltip content={t("slideOver.previous")}><IconButton variant="ghost" color="gray" aria-label={t("slideOver.previous")} disabled={nav.index <= 0} onClick={nav.onPrev}><ChevronLeftIcon /></IconButton></Tooltip>
-                    <span className="sherpa-eyebrow" aria-live="polite">{tn("slideOver.position", { index: nav.index + 1, total: nav.total })}</span>
+                    <span className="pr-eyebrow" aria-live="polite">{tn("slideOver.position", { index: nav.index + 1, total: nav.total })}</span>
                     <Tooltip content={t("slideOver.next")}><IconButton variant="ghost" color="gray" aria-label={t("slideOver.next")} disabled={nav.index >= nav.total - 1} onClick={nav.onNext}><ChevronRightIcon /></IconButton></Tooltip>
                   </>
                 )}
