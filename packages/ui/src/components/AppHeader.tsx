@@ -43,7 +43,7 @@ export function AppHeader({ product, homeHref = "#/", launcher, client, nav, pro
       </a>
       {launcher && (<><span className="pr-header__sep" aria-hidden>/</span>{launcher}</>)}
       {client && (<><span className="pr-header__sep" aria-hidden>/</span>{client}</>)}
-      {nav}
+      {nav && <div className="pr-header__nav">{nav}</div>}
       {proshoreOnly && <span className="pr-layer">Proshore only</span>}
       <span className="pr-header__grow" />
       <div className="pr-header__actions">{actions}</div>

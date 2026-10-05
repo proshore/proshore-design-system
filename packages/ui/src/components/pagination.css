@@ -1,0 +1,7 @@
+/* Pagination. Kept apart from table.css so a page that uses Pagination without a DataTable still gets its styles. */
+.dt-pager { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.dt-pager__range { font-variant-numeric: tabular-nums; margin-inline-end: var(--space-3); }
+.dt-pager__page { margin-inline: var(--space-1); }
+.dt-pager [data-disabled] { opacity: .45; cursor: not-allowed; }
+@media (max-width: 720px) { .dt-pager { justify-content: flex-start; } }
+@media (max-width: 520px) { .dt-pager__range { flex-basis: 100%; margin-inline-end: 0; } }

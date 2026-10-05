@@ -6,6 +6,7 @@ export interface StackSegment { label: string; value: number; color: string; pat
 /**
  * Single-row part-to-whole (severity split, scan coverage split). Use for 2 to 5 parts of one total.
  * Do not use to compare several totals (BarChart stacked) or as a pie/donut substitute for many slices.
+ * Drawn as one soft pill; each part is named and counted under it, so colour is never the only cue (patterns appear only for partial coverage).
  * The text summary below is always rendered so small segments stay readable and screen readers get the data.
  */
 export interface StackedBarProps {
@@ -24,7 +25,7 @@ export function StackedBar({ segments, unit, coverage = "complete", subject }: S
   return (
     <div>
       <div role="img" aria-label={text}>
-        <div className="ch-stack__bar">{parts.map((s) => <Fill key={s.label} color={s.color} pattern={s.pattern} partial={coverage === "partial"} title={`${s.label}: ${nf(s.value)}`} style={{ flex: `${s.value} 0 0` }} />)}</div>
+        <div className="ch-stack__bar">{parts.map((s) => <Fill key={s.label} color={s.color} pattern={coverage === "partial" ? s.pattern : "solid"} partial={coverage === "partial"} title={`${s.label}: ${nf(s.value)}`} style={{ flex: `${s.value} 0 0` }} />)}</div>
         <div className="ch-stack__labels" aria-hidden="true">{parts.map((s) => <span key={s.label} title={`${s.label} ${nf(s.value)}`} style={{ flex: `${s.value} 0 0` }}>{s.label} {nf(s.value)}</span>)}</div>
       </div>
       <Text as="p" size="1" color="gray" mt="2">{text}</Text>

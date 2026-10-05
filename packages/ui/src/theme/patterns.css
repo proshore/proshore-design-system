@@ -335,3 +335,11 @@ button.stepper__btn:hover { background: var(--accent-a3); }
 /* The wordmark follows the header: white on the dark header, navy (page text) on the light one. */
 .pr-header .pr-header__word svg { color: #fff; }
 .app > .pr-header .pr-header__word svg { color: var(--gray-12); }
+
+/* Phones. Row 1: brand, client, actions, account. Row 2: the page links, full width and scrollable, so they are never cut off or hidden. */
+.pr-header__nav { display: flex; min-width: 0; align-self: stretch; }
+@media (max-width: 900px) {
+  .pr-header__nav { order: 5; flex: 1 0 100%; margin: 0 calc(-1 * var(--space-3)); padding: 0 var(--space-3); overflow-x: auto; scrollbar-width: none; }
+  .pr-header__nav::-webkit-scrollbar { display: none; }
+}
+@media (max-width: 520px) { .dt-pager__range { flex-basis: 100%; margin-inline-end: 0; } }

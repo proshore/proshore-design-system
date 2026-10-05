@@ -8,9 +8,14 @@ export type MarkerShape = "circle" | "square" | "diamond" | "triangle";
 export interface Series { key: string; label: string; color: string; pattern?: Pattern; shape?: MarkerShape }
 
 const SHAPES: MarkerShape[] = ["circle", "square", "diamond", "triangle"];
-/** Fixed categorical order. Never cycle: fold extra series into "Other" or use small multiples. */
+/**
+ * Fixed series order. The first series is the strong blue, the second a light tint of the same blue (so "done" and "open" read
+ * as one total split in two), then teal, green, amber. Never cycle: fold extra series into "Other" or use small multiples.
+ * Bars are flat fills now; a pattern is only used to mark partial coverage (hatched) and by SEVERITY_SERIES.
+ */
 export function categorical(keys: { key: string; label: string }[]): Series[] {
-  return keys.slice(0, 6).map((k, i) => ({ ...k, color: `var(--chart-${i + 1})`, shape: SHAPES[i % 4], pattern: (["solid", "dots", "grid", "solid", "dots", "grid"] as Pattern[])[i] }));
+  const colors = ["var(--chart-1)", "var(--chart-1-tint)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
+  return keys.slice(0, 6).map((k, i) => ({ ...k, color: colors[i], shape: SHAPES[i % 4], pattern: "solid" as Pattern }));
 }
 /** Severity series: critical/high use the danger tokens; every level also has its own pattern and marker shape. */
 export const SEVERITY_SERIES: Series[] = [
@@ -37,6 +42,21 @@ export function niceScale(max: number): { max: number; ticks: number[] } {
     if (n * step < best.top - 1e-9) best = { step, n, top: n * step };
   }
   return { max: best.top, ticks: Array.from({ length: best.n + 1 }, (_, i) => +(i * best.step).toFixed(6)) };
+}
+
+/** Smooth but honest curve: monotone cubic (Fritsch-Carlson), so it never overshoots between points and never invents a peak. One cubic piece per segment. */
+export function monotone(pts: { x: number; y: number }[]) {
+  const n = pts.length; if (n < 2) return [] as string[];
+  const dx: number[] = [], m: number[] = [], t: number[] = new Array(n).fill(0);
+  for (let i = 0; i < n - 1; i++) { dx[i] = pts[i + 1].x - pts[i].x; m[i] = (pts[i + 1].y - pts[i].y) / dx[i]; }
+  t[0] = m[0]; t[n - 1] = m[n - 2];
+  for (let i = 1; i < n - 1; i++) t[i] = m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2;
+  for (let i = 0; i < n - 1; i++) {
+    if (m[i] === 0) { t[i] = 0; t[i + 1] = 0; continue; }
+    const a = t[i] / m[i], b = t[i + 1] / m[i], q = a * a + b * b;
+    if (q > 9) { const tau = 3 / Math.sqrt(q); t[i] = tau * a * m[i]; t[i + 1] = tau * b * m[i]; }
+  }
+  return pts.slice(0, -1).map((p, i) => `M${p.x},${p.y}C${p.x + dx[i] / 3},${p.y + (t[i] * dx[i]) / 3} ${pts[i + 1].x - dx[i] / 3},${pts[i + 1].y - (t[i + 1] * dx[i]) / 3} ${pts[i + 1].x},${pts[i + 1].y}`);
 }
 
 export function markerPath(shape: MarkerShape, cx: number, cy: number, r: number): string {

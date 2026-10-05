@@ -21,7 +21,7 @@ export function ChartsPage() {
         </ChartCard>
       </Section>
       <Section title="Stacked bar and sparkline">
-        <StackedBar subject="Requests by status" unit="requests" segments={[{ label: "Done", value: 60, color: "var(--chart-1)" }, { label: "In progress", value: 25, color: "var(--chart-2)", pattern: "dots" }, { label: "Waiting", value: 15, color: "var(--chart-3)", pattern: "grid" }]} />
+        <StackedBar subject="Requests by status" unit="requests" segments={[{ label: "Done", value: 60, color: "var(--chart-1)" }, { label: "In progress", value: 25, color: "var(--chart-1-tint)" }, { label: "Waiting", value: 15, color: "var(--chart-2)" }]} />
         <Sparkline values={[3, 5, 4, 7, 6, 9]} label="Requests over the last six weeks, rising" />
       </Section>
     </Page>

@@ -141,7 +141,7 @@
 .pr-tabpanel { padding-top: var(--space-3); outline: none; } .pr-tabpanel[data-focus-visible] { outline: 2px solid var(--focus-8); outline-offset: 2px; }
 /* Simple table */
 .pr-simpletable { overflow-x: auto; border-radius: 8px; } .pr-simpletable:focus-visible { outline: 2px solid var(--focus-8); outline-offset: 2px; }
-.pr-simpletable table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: var(--font-size-2); }
+.pr-simpletable table { border-collapse: collapse; width: 100%; min-width: 320px; font-size: var(--font-size-2); }
 .pr-simpletable th, .pr-simpletable td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--sherpa-line); vertical-align: top; }
 .pr-simpletable thead th { font-family: var(--code-font-family); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 500; color: var(--gray-11); }
 .pr-simpletable tbody th { font-weight: 600; }

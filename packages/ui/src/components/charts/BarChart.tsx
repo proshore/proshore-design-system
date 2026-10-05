@@ -74,8 +74,8 @@ export function BarChart({ series, data, unit, orientation = "horizontal", stack
     return wrap(M.t + ph + M.b, (
         <Group left={M.l} top={M.t}>
           <g aria-hidden="true">
-            <GridRows scale={y} width={pw} tickValues={ticks} stroke="var(--chart-grid)" />
-            <line x1={0} x2={pw} y1={ph} y2={ph} stroke="var(--chart-axis)" />
+            <GridRows scale={y} width={pw} tickValues={ticks} stroke="var(--chart-gridline)" strokeDasharray="3 5" />
+            <line x1={0} x2={pw} y1={ph} y2={ph} stroke="var(--chart-gridline)" />
             <AxisLeft scale={y} tickValues={ticks} hideAxisLine hideTicks tickLabelProps={{ ...tick, textAnchor: "end", dy: "0.33em", dx: -8 }} />
           </g>
           {data.map((d, i) => {
@@ -89,12 +89,12 @@ export function BarChart({ series, data, unit, orientation = "horizontal", stack
               bars = <g>{segs.map(({ s, v }, si) => {
                 const y1 = y(acc + v), y0 = y(acc); acc += v; const last = si === segs.length - 1;
                 const h = Math.max(2, y0 - y1 - (si > 0 ? GAP : 0));
-                return <path key={s.key} d={last ? roundedEnd(cx - bw / 2, y0 - h, bw, h, 4, "top") : `M${cx - bw / 2},${y0 - h}h${bw}v${h}h${-bw}z`} fill={`url(#${idOf(s.key, cov === "partial")})`} stroke={cov === "partial" ? s.color : undefined} strokeDasharray={cov === "partial" ? "4 3" : undefined} strokeWidth={cov === "partial" ? 1.5 : undefined}><title>{`${s.label}: ${atLeast(cov, v)}`}</title></path>;
+                return <path key={s.key} d={last ? roundedEnd(cx - bw / 2, y0 - h, bw, h, Math.min(10, bw / 2), "top") : `M${cx - bw / 2},${y0 - h}h${bw}v${h}h${-bw}z`} fill={`url(#${idOf(s.key, cov === "partial")})`} stroke={cov === "partial" ? s.color : undefined} strokeDasharray={cov === "partial" ? "4 3" : undefined} strokeWidth={cov === "partial" ? 1.5 : undefined}><title>{`${s.label}: ${atLeast(cov, v)}`}</title></path>;
               })}{text(cx, y(t) - 5, atLeast(cov, nf(t)))}</g>;
             } else {
               bars = <g>{series.map((s, si) => {
                 const v = val(d, si); const x0 = cx - (k * bw + (k - 1) * GAP) / 2 + si * (bw + GAP); const h = Math.max(0, ph - y(v));
-                return <g key={s.key}><path d={roundedEnd(x0, ph - h, bw, h, 4, "top")} fill={`url(#${idOf(s.key, cov === "partial")})`} stroke={cov === "partial" ? s.color : undefined} strokeDasharray={cov === "partial" ? "4 3" : undefined} strokeWidth={cov === "partial" ? 1.5 : undefined}><title>{`${s.label}: ${atLeast(cov, v)}`}</title></path>{text(x0 + bw / 2, y(v) - 5, atLeast(cov, nf(v)))}</g>;
+                return <g key={s.key}><path d={roundedEnd(x0, ph - h, bw, h, Math.min(10, bw / 2), "top")} fill={`url(#${idOf(s.key, cov === "partial")})`} stroke={cov === "partial" ? s.color : undefined} strokeDasharray={cov === "partial" ? "4 3" : undefined} strokeWidth={cov === "partial" ? 1.5 : undefined}><title>{`${s.label}: ${atLeast(cov, v)}`}</title></path>{text(x0 + bw / 2, y(v) - 5, atLeast(cov, nf(v)))}</g>;
               })}</g>;
             }
             return <g key={d.label}>{bars}<text x={cx} y={ph + 18} textAnchor="middle" className="ch-svg-label ch-svg-label--sm" aria-hidden="true"><title>{d.label}</title>{wrapLabel(d.label, band - 8).map((l, li) => <tspan key={li} x={cx} dy={li ? 15 : 0}>{l}</tspan>)}</text></g>;
@@ -103,34 +103,39 @@ export function BarChart({ series, data, unit, orientation = "horizontal", stack
     ));
   }
 
-  // horizontal
+  // horizontal: soft pills on a faint track, value at the end
   const lw = Math.min(160, Math.max(72, Math.round(W * 0.28))), rw = 56;
   const iw = Math.max(40, W - lw - rw);
   const x = scaleLinear<number>({ domain: [0, max], range: [0, iw] });
-  const k = series.length; const LH = 18;
-  const rowH = (d: BarDatum) => (d.coverage === "none" || stacked ? 28 : k * LH + (k - 1) * 3);
-  const ROW_GAP = 14;
+  const k = series.length; const LH = 16, SH = 22;
+  const rowH = (d: BarDatum) => (d.coverage === "none" || stacked ? SH : k * LH + (k - 1) * 6);
+  const ROW_GAP = 18;
   const tops: number[] = []; let yy = 6; data.forEach((d) => { tops.push(yy); yy += rowH(d) + ROW_GAP; });
   const ph = yy - ROW_GAP + 6;
+  const partialStyle = (s: Series, cov: Coverage) => (cov === "partial" ? { stroke: s.color, strokeDasharray: "4 3", strokeWidth: 1.5 } : {});
   return wrap(ph + 30, (
       <Group left={lw} top={0}>
         <g aria-hidden="true">
-          <GridColumns scale={x} height={ph} tickValues={ticks} stroke="var(--chart-grid)" />
-          <line x1={0} x2={0} y1={0} y2={ph} stroke="var(--chart-axis)" />
+          <GridColumns scale={x} height={ph} tickValues={ticks} stroke="var(--chart-gridline)" strokeDasharray="3 5" />
           <AxisBottom top={ph} scale={x} tickValues={ticks} hideAxisLine hideTicks tickLabelProps={{ ...tick, textAnchor: "middle", dy: "0.4em" }} />
         </g>
         {data.map((d, i) => {
           const cov = d.coverage ?? "complete"; const top = tops[i]; const h = rowH(d);
-          const seg = (s: Series, v: number, x0: number, w: number, y0: number, hh: number, last: boolean) => (
-            <path key={s.key} d={last ? roundedEnd(x0, y0, w, hh, 4, "right") : `M${x0},${y0}h${w}v${hh}h${-w}z`} fill={`url(#${idOf(s.key, cov === "partial")})`} stroke={cov === "partial" ? s.color : undefined} strokeDasharray={cov === "partial" ? "4 3" : undefined} strokeWidth={cov === "partial" ? 1.5 : undefined}><title>{`${s.label}: ${atLeast(cov, v)}`}</title></path>
-          );
-          const valText = (px: number, py: number, t: string) => <text x={px + 6} y={py} dominantBaseline="middle" className="ch-val-svg">{t}</text>;
+          const valText = (px: number, py: number, t: string) => <text x={px + 8} y={py} dominantBaseline="middle" className="ch-val-svg ch-val-svg--strong">{t}</text>;
+          const pill = (id: string, w: number, y0: number, hh: number) => <clipPath id={id}><rect x={0} y={y0} width={w} height={hh} rx={Math.min(hh / 2, w / 2)} /></clipPath>;
           let mark: React.ReactNode;
-          if (cov === "none") mark = <g><rect x={1} y={top} width={Math.max(40, iw + rw - 8)} height={h} rx={4} className="ch-none-svg" /><text x={(iw + rw - 8) / 2} y={top + h / 2} textAnchor="middle" dominantBaseline="middle" className="ch-none-text">{iw + rw < 380 ? "No data, not measured" : "No data: not measured, so unknown rather than zero"}</text></g>;
+          if (cov === "none") mark = <g><rect x={1} y={top} width={Math.max(40, iw + rw - 8)} height={h} rx={h / 2} className="ch-none-svg" /><text x={(iw + rw - 8) / 2} y={top + h / 2} textAnchor="middle" dominantBaseline="middle" className="ch-none-text">{iw + rw < 380 ? "No data, not measured" : "No data: not measured, so unknown rather than zero"}</text></g>;
           else if (stacked) {
             const t = total(d, series); let acc = 0; const segs = series.map((s, si) => ({ s, v: val(d, si) })).filter((z) => z.v > 0);
-            mark = <g>{segs.map(({ s, v }, si) => { const x0 = x(acc) + (si > 0 ? GAP : 0); const w = Math.max(2, x(acc + v) - x(acc) - (si > 0 ? GAP : 0)); acc += v; return seg(s, v, x0, w, top, h, si === segs.length - 1); })}{valText(x(t), top + h / 2, atLeast(cov, nf(t)))}</g>;
-          } else mark = <g>{series.map((s, si) => { const v = val(d, si); const w = Math.max(2, x(v)); const y0 = top + si * (LH + 3); return <g key={s.key}>{seg(s, v, 0, w, y0, LH, true)}{valText(x(v), y0 + LH / 2, atLeast(cov, nf(v)))}</g>; })}</g>;
+            const clip = idOf(`clip${i}`); const w = Math.max(3, x(t));
+            mark = <g>
+              <rect x={0} y={top} width={iw} height={h} rx={h / 2} fill="var(--chart-track)" />
+              {pill(clip, w, top, h)}
+              <g clipPath={`url(#${clip})`}>{segs.map(({ s, v }) => { const x0 = x(acc); const sw = Math.max(0, x(acc + v) - x(acc)); acc += v; return <rect key={s.key} x={x0} y={top} width={sw} height={h} fill={`url(#${idOf(s.key, cov === "partial")})`}><title>{`${s.label}: ${atLeast(cov, v)}`}</title></rect>; })}</g>
+              {cov === "partial" && <rect x={0.75} y={top + 0.75} width={w - 1.5} height={h - 1.5} rx={h / 2} fill="none" stroke="var(--gray-11)" strokeDasharray="4 3" strokeWidth={1.5} />}
+              {valText(x(t), top + h / 2, atLeast(cov, nf(t)))}
+            </g>;
+          } else mark = <g>{series.map((s, si) => { const v = val(d, si); const w = Math.max(3, x(v)); const y0 = top + si * (LH + 6); return <g key={s.key}><rect x={0} y={y0} width={iw} height={LH} rx={LH / 2} fill="var(--chart-track)" /><rect x={0} y={y0} width={w} height={LH} rx={Math.min(LH / 2, w / 2)} fill={`url(#${idOf(s.key, cov === "partial")})`} {...partialStyle(s, cov)}><title>{`${s.label}: ${atLeast(cov, v)}`}</title></rect>{valText(x(v), y0 + LH / 2, atLeast(cov, nf(v)))}</g>; })}</g>;
           return (
             <g key={d.label}>
               <text x={-12} y={top + h / 2} textAnchor="end" dominantBaseline="middle" className="ch-svg-label" aria-hidden="true"><title>{d.label}</title>{fit(d.label, lw - 16)}</text>

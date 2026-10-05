@@ -63,6 +63,7 @@ export function App() {
         {!signedIn || path === "/sign-in" ? (
           <SignInScreen
             product="Sherpa Discovery" productMark={<AppIcon glyph="workspace" size={44} />} busy={busy}
+            footer="Demo only: this button does not contact Google, it just signs you in to the prototype."
             notice={signedOutNotice ? "You have been signed out." : undefined}
             onSignIn={() => { setBusy(true); setTimeout(() => { setBusy(false); setSignedIn(true); setSignedOutNotice(false); if (path === "/sign-in") window.location.hash = "/overview"; }, 900); }}
           />

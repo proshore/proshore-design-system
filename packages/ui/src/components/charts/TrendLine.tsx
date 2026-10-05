@@ -1,8 +1,8 @@
-import { useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { GridRows } from "@visx/grid";
 import { scaleLinear, scalePoint } from "@visx/scale";
-import { atLeast, markerPath, niceScale, nf, useWidth, type Coverage, type Series, type TableData, type MarkerShape } from "./shared";
+import { atLeast, markerPath, monotone, niceScale, nf, useWidth, type Coverage, type Series, type TableData, type MarkerShape } from "./shared";
 
 export interface TrendPoint { x: string; /** Extra line in the tooltip, e.g. a date. */ caption?: string; values: Record<string, number | null>; coverage?: Coverage }
 
@@ -26,6 +26,7 @@ const DEFAULT_SHAPES: MarkerShape[] = ["circle", "square", "diamond", "triangle"
 
 export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps) {
   const [ref, W] = useWidth(640);
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const wide = W >= 480;
   const M = { t: 16, r: wide ? 112 : 40, b: 30, l: 40 };
   const pw = Math.max(40, W - M.l - M.r), ph = height - M.t - M.b;
@@ -68,9 +69,10 @@ export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps
     <div className="ch-svg-wrap" ref={ref}>
       <div className="ch-unit">{unit}</div>
       <svg ref={svgRef} width={W} height={height} viewBox={`0 0 ${W} ${height}`} role="group" aria-label={summary}>
+        <defs><linearGradient id={`tl${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={series[0]?.color} stopOpacity=".26" /><stop offset="1" stopColor={series[0]?.color} stopOpacity="0" /></linearGradient></defs>
         <g aria-hidden="true">
-          <GridRows scale={ys} left={M.l} width={pw} tickValues={ticks} stroke="var(--chart-grid)" />
-          <line x1={M.l} x2={M.l + pw} y1={y(0)} y2={y(0)} stroke="var(--chart-axis)" />
+          <GridRows scale={ys} left={M.l} width={pw} tickValues={ticks.filter((v) => v > 0)} stroke="var(--chart-gridline)" strokeDasharray="3 5" />
+          <line x1={M.l} x2={M.l + pw} y1={y(0)} y2={y(0)} stroke="var(--chart-gridline)" />
           <AxisLeft left={M.l} scale={ys} tickValues={ticks} hideAxisLine hideTicks tickLabelProps={{ className: "ch-svg-text", textAnchor: "end", dy: "0.33em", dx: -8 }} />
           <AxisBottom top={M.t + ph} scale={xs} tickValues={points.map((_, i) => i)} tickFormat={(i) => `${points[i as number].x}${points[i as number].coverage === "partial" ? " ◐" : ""}`} hideAxisLine hideTicks
             tickLabelProps={(_v, i) => ({ className: "ch-svg-text", textAnchor: i === 0 && n > 1 ? "start" : i === n - 1 && n > 1 ? "end" : "middle", dy: "0.3em" })} tickLength={8} />
@@ -78,9 +80,22 @@ export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps
         {active && <line x1={x(active.i)} x2={x(active.i)} y1={M.t} y2={M.t + ph} stroke="var(--chart-axis)" strokeDasharray="2 3" aria-hidden="true" />}
         {series.map((s, si) => (
           <g key={s.key}>
-            {points.slice(1).map((p, k) => { const a = points[k].values[s.key], b = p.values[s.key]; if (a == null || b == null) return null;
-              const dashed = points[k].coverage === "partial" || p.coverage === "partial";
-              return <line key={k} x1={x(k)} y1={y(a)} x2={x(k + 1)} y2={y(b)} stroke={s.color} strokeWidth="2" strokeLinecap="round" strokeDasharray={dashed ? "5 4" : undefined} aria-hidden="true" />; })}
+            {(() => {
+              // contiguous runs of known values: a null leaves a gap (unknown, not zero)
+              const runs: number[][] = []; let cur2: number[] = [];
+              points.forEach((p, i) => { if (p.values[s.key] != null) cur2.push(i); else { if (cur2.length) runs.push(cur2); cur2 = []; } }); if (cur2.length) runs.push(cur2);
+              return runs.map((run, ri) => {
+                const rp = run.map((i) => ({ x: x(i), y: y(points[i].values[s.key] as number) }));
+                const segs = monotone(rp);
+                return (
+                  <g key={ri} aria-hidden="true">
+                    {series.length === 1 && rp.length > 1 && <path d={`${segs.map((d, k) => (k === 0 ? d : d.replace(/^M[^C]*/, ""))).join("")}L${rp[rp.length - 1].x},${y(0)}L${rp[0].x},${y(0)}Z`} fill={`url(#tl${uid})`} />}
+                    {segs.map((d, k) => { const dashed = points[run[k]].coverage === "partial" || points[run[k + 1]].coverage === "partial";
+                      return <path key={k} d={d} fill="none" stroke={s.color} strokeWidth="2.5" strokeLinecap="round" strokeDasharray={dashed ? "5 4" : undefined} />; })}
+                  </g>
+                );
+              });
+            })()}
             {points.map((p, i) => { const v = p.values[s.key]; if (v == null) return null;
               const last = endLabels.some((l) => l.si === si && l.li === i); const hollow = p.coverage === "partial"; const r = last ? 6 : 4.5;
               const isCur = cur.s === si && cur.i === i;
@@ -91,7 +106,7 @@ export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps
                   onFocus={() => { setCur({ s: si, i }); setActive({ s: si, i }); }} onBlur={() => setActive(null)} onKeyDown={(e) => onKey(e, si, i)}>
                   <circle cx={x(i)} cy={y(v)} r="12" fill="transparent" />
                   <circle className="ch-pt__ring" cx={x(i)} cy={y(v)} r={r + 5} />
-                  <path d={markerPath(shapeOf(s, si), x(i), y(v), r)} fill={hollow ? "var(--sherpa-surface)" : s.color} stroke={hollow ? s.color : "var(--sherpa-surface)"} strokeWidth="2" />
+                  {(last || hollow || (active?.s === si && active.i === i)) && <>{last && <circle cx={x(i)} cy={y(v)} r={r + 5} fill={s.color} opacity=".16" />}<path d={markerPath(shapeOf(s, si), x(i), y(v), r)} fill={hollow ? "var(--sherpa-surface)" : last ? "var(--sherpa-surface)" : s.color} stroke={hollow || last ? s.color : "var(--sherpa-surface)"} strokeWidth={last ? 2.5 : 2} /></>}
                 </g>
               ); })}
           </g>

@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/overlays", "/dialogs", "/brand", "/examples", "/shell", "/sign-in"];
+const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/actions", "/overlays", "/dialogs", "/brand", "/examples", "/shell", "/sign-in"];
 const themes = ["light", "dark"] as const;
 const WCAG = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa", "best-practice"];
 

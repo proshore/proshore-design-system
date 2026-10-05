@@ -10,6 +10,7 @@ export function useRoute() {
 
 export const pages = [
   { path: "/foundations", label: "Foundations" },
+  { path: "/actions", label: "Actions" },
   { path: "/layout", label: "Layout and feedback" },
   { path: "/forms", label: "Forms" },
   { path: "/tables", label: "Tables" },

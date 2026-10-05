@@ -1,11 +1,13 @@
 /* Chart tokens and mark styles. Series colours are picked for >=3:1 non-text contrast on --sherpa-surface in both themes.
-   Colour is never the only channel: every series also carries a pattern (bars) or a shape (lines). */
+   Colour is never the only channel: series differ in lightness, are named in the legend and in the data table, bars carry their value, lines carry a marker shape; partial coverage is hatched and dashed. */
 .sherpa-theme[data-theme="light"] {
   --chart-1: var(--pr-clear-blue);      --chart-2: #0f7f8f; /* teal: the orange is not used in the product */  --chart-3: var(--pr-terai-dark);
   --chart-4: var(--pr-marigold-dark);   --chart-5: var(--pr-neutral-dark);  --chart-6: var(--pr-lapis-light);
   --chart-sev-critical: var(--sherpa-danger-border); --chart-sev-high: var(--sherpa-danger-fg);
   --chart-sev-medium: var(--pr-marigold-dark); --chart-sev-low: var(--pr-clear-blue); --chart-sev-review: var(--pr-neutral);
   --chart-grid: var(--pr-neutral-lighter); --chart-axis: var(--pr-neutral);
+  --chart-1-tint: color-mix(in srgb, var(--chart-1) 30%, var(--sherpa-surface)); --chart-track: color-mix(in srgb, var(--gray-12) 7%, var(--sherpa-surface));
+  --chart-gridline: color-mix(in srgb, var(--gray-12) 10%, transparent);
 }
 .sherpa-theme[data-theme="dark"] {
   --chart-1: var(--pr-clear-blue-light); --chart-2: #4fc3d1; --chart-3: var(--pr-terai-light);
@@ -13,6 +15,8 @@
   --chart-sev-critical: var(--sherpa-danger-fg); --chart-sev-high: #ff5c74;
   --chart-sev-medium: var(--pr-marigold-light); --chart-sev-low: var(--pr-clear-blue-light); --chart-sev-review: var(--pr-neutral-light);
   --chart-grid: rgba(255,255,255,.14); --chart-axis: var(--pr-neutral-light);
+  --chart-1-tint: color-mix(in srgb, var(--chart-1) 32%, var(--sherpa-surface)); --chart-track: color-mix(in srgb, var(--gray-12) 10%, var(--sherpa-surface));
+  --chart-gridline: color-mix(in srgb, var(--gray-12) 14%, transparent);
 }
 
 .ch-fill { display: block; background-color: var(--fill); background-image: var(--pat, none); background-size: var(--pat-size, auto); min-width: 0; }
@@ -40,9 +44,9 @@
 .ch-none { display: flex; align-items: center; justify-content: center; text-align: center; font-size: var(--font-size-1); color: var(--gray-11); border: 1.5px dashed var(--chart-axis); border-radius: 4px; padding: 0 var(--space-2); }
 
 /* Stacked bar */
-.ch-stack__bar { display: flex; gap: 2px; height: 28px; }
-.ch-stack__bar .ch-fill { border-radius: 4px; min-width: 3px; }
-.ch-stack__labels { display: flex; gap: 2px; margin-top: var(--space-1); }
+.ch-stack__bar { display: flex; gap: 2px; height: 16px; border-radius: 999px; overflow: hidden; background: var(--chart-track); }
+.ch-stack__bar .ch-fill { border-radius: 0; min-width: 3px; }
+.ch-stack__labels { display: flex; gap: 2px; margin-top: var(--space-2); }
 .ch-stack__labels > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-1); color: var(--gray-12); font-variant-numeric: tabular-nums; }
 .ch-stack__none { height: 28px; }
 
@@ -68,3 +72,5 @@
 .ch-none-svg { fill: none; stroke: var(--chart-axis); stroke-width: 1.5; stroke-dasharray: 4 3; }
 .ch-none-text { font-size: var(--font-size-1); fill: var(--gray-11); }
 .ch-svg-label--sm { font-size: var(--font-size-1); }
+
+.ch-val-svg--strong { font-weight: 600; }

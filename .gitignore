@@ -7,3 +7,4 @@ playwright-report
 .DS_Store
 *.tsbuildinfo
 .env*
+# visual test diffs are in test-results (already ignored); baselines in e2e/visual-baselines are committed

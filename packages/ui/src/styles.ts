@@ -8,3 +8,4 @@ import "./theme/primitives.css";
 import "./components/charts/charts.css"; // imported here too: a re-export-only module (charts/index) can be dropped from a library build together with its CSS
 import "./shell/shell.css";
 import "./components/dialogs.css";
+import "./components/table/table.css"; // also here: EmptyState and friends are used without a DataTable

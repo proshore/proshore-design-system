@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import "./pagination.css";
 import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from "../icons";
 import { IconButton } from "../primitives/Button";
 import { Text } from "../primitives/Text";

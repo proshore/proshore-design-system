@@ -12,6 +12,7 @@ const TablesPage = lazy(() => import("./pages/TablesPage").then((m) => ({ defaul
 const ChartsPage = lazy(() => import("./pages/ChartsPage").then((m) => ({ default: m.ChartsPage })));
 const OverlaysPage = lazy(() => import("./pages/OverlaysPage").then((m) => ({ default: m.OverlaysPage })));
 const DialogsPage = lazy(() => import("./pages/DialogsPage").then((m) => ({ default: m.DialogsPage })));
+const ActionsPage = lazy(() => import("./pages/ActionsPage").then((m) => ({ default: m.ActionsPage })));
 const BrandPage = lazy(() => import("./pages/BrandPage").then((m) => ({ default: m.BrandPage })));
 const ExamplesPage = lazy(() => import("./pages/ExamplesPage").then((m) => ({ default: m.ExamplesPage })));
 
@@ -64,6 +65,7 @@ export function App() {
                     case "/charts": return <ChartsPage />;
                     case "/overlays": return <OverlaysPage />;
                     case "/dialogs": return <DialogsPage />;
+                    case "/actions": return <ActionsPage />;
                     case "/brand": return <BrandPage />;
                     case "/examples": return <ExamplesPage />;
                     default: return <Foundations />;

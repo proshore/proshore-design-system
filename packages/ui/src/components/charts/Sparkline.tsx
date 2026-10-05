@@ -1,4 +1,5 @@
-import { markerPath } from "./shared";
+import { useId } from "react";
+import { markerPath, monotone } from "./shared";
 
 /**
  * Tiny trend for stat cards and table cells. Use only to show direction; the exact number must sit next to it.
@@ -15,11 +16,18 @@ export function Sparkline({ values, partial = [], label, color = "var(--chart-1)
   const pad = 5; const lo = Math.min(...values), hi = Math.max(...values), span = hi - lo || 1;
   const x = (i: number) => pad + (values.length === 1 ? (width - 2 * pad) / 2 : (i * (width - 2 * pad)) / (values.length - 1));
   const y = (v: number) => height - pad - ((v - lo) / span) * (height - 2 * pad);
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const pts = values.map((v, i) => ({ x: x(i), y: y(v) }));
+  const segs = monotone(pts);
+  const area = pts.length > 1 ? `${segs.map((d, k) => (k === 0 ? d : d.replace(/^M[^C]*/, ""))).join("")}L${pts[pts.length - 1].x},${height}L${pts[0].x},${height}Z` : "";
+  const lastI = values.length - 1;
   return (
     <svg className="ch-spark" width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label}>
-      {values.slice(1).map((v, i) => <line key={i} x1={x(i)} y1={y(values[i])} x2={x(i + 1)} y2={y(v)} stroke={color} strokeWidth="2" strokeLinecap="round" strokeDasharray={partial[i] || partial[i + 1] ? "3 3" : undefined} />)}
-      {values.map((v, i) => { const last = i === values.length - 1; const hollow = !!partial[i];
-        return <path key={i} d={markerPath("circle", x(i), y(v), last ? 3.5 : 2)} fill={hollow ? "var(--sherpa-surface)" : color} stroke={last || hollow ? color : "none"} strokeWidth={hollow ? 1.5 : 0} />; })}
+      <defs><linearGradient id={`sp${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={color} stopOpacity=".25" /><stop offset="1" stopColor={color} stopOpacity="0" /></linearGradient></defs>
+      {area && <path d={area} fill={`url(#sp${uid})`} />}
+      {segs.map((d, i) => <path key={i} d={d} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeDasharray={partial[i] || partial[i + 1] ? "3 3" : undefined} />)}
+      {values.map((v, i) => { const last = i === lastI; const hollow = !!partial[i]; if (!last && !hollow) return null;
+        return <g key={i}>{last && <circle cx={x(i)} cy={y(v)} r={6} fill={color} opacity=".18" />}<path d={markerPath("circle", x(i), y(v), last ? 3.5 : 2.5)} fill={hollow || last ? "var(--sherpa-surface)" : color} stroke={color} strokeWidth="1.75" /></g>; })}
     </svg>
   );
 }
