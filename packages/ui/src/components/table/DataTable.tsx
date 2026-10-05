@@ -1,11 +1,12 @@
+import { Pagination } from "../Pagination";
 import { Note } from "../Note";
 import {
-  ArrowDownIcon, ArrowUpIcon, CaretSortIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon,
+  ArrowDownIcon, ArrowUpIcon, CaretSortIcon, CheckIcon,
   DownloadIcon, InfoCircledIcon, RowsIcon, ViewVerticalIcon,
 } from "../../icons";
 import { Checkbox, Select } from "../../primitives/forms";
 import { Menu, MenuItem, MenuTrigger, Popover } from "react-aria-components";
-import { Button, IconButton } from "../../primitives/Button";
+import { Button } from "../../primitives/Button";
 import { Text } from "../../primitives/Text";
 import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { FilterBar, useActiveFilters } from "./FilterBar";
@@ -142,9 +143,6 @@ export function DataTable<T>(props: DataTableProps<T>) {
   const first = s.page * s.pageSize;
   useRowMotion(bodyRef, s.pageRows.map((r) => getRowId(r)).join("|"));
   const rangeText = s.filtered.length ? `${first + 1}-${first + s.pageRows.length} of ${s.filtered.length}` : "0 of 0";
-  const PagerBtn = ({ label, disabled, onClick, children }: { label: string; disabled: boolean; onClick: () => void; children: ReactNode }) => (
-    <IconButton size="2" variant="outline" color="gray" aria-label={label} aria-disabled={disabled || undefined} data-disabled={disabled || undefined} onClick={() => { if (!disabled) onClick(); }}>{children}</IconButton>
-  );
 
   return (
     <div className="dt" ref={rootRef} data-density={s.density}>
@@ -230,14 +228,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
             <Text size="2" color="gray" aria-hidden>Rows per page</Text>
             <Select label="Rows per page" hideLabel size="2" value={String(s.pageSize)} onChange={(v) => s.setPageSize(Number(v) as PageSize)} options={PAGE_SIZES.map((n) => ({ value: String(n), label: String(n) }))} />
           </div>
-          <nav className="dt-pager" aria-label={`${caption} pagination`}>
-            <Text size="2" aria-live="polite" className="dt-pager__range">{rangeText}</Text>
-            {s.pageCount > 5 && <PagerBtn label="First page" disabled={s.page === 0} onClick={() => s.setPage(0)}><DoubleArrowLeftIcon aria-hidden /></PagerBtn>}
-            <PagerBtn label="Previous page" disabled={s.page === 0} onClick={() => s.setPage(s.page - 1)}><ChevronLeftIcon aria-hidden /></PagerBtn>
-            <Text size="2" color="gray" className="dt-pager__page">Page {s.page + 1} of {s.pageCount}</Text>
-            <PagerBtn label="Next page" disabled={s.page >= s.pageCount - 1} onClick={() => s.setPage(s.page + 1)}><ChevronRightIcon aria-hidden /></PagerBtn>
-            {s.pageCount > 5 && <PagerBtn label="Last page" disabled={s.page >= s.pageCount - 1} onClick={() => s.setPage(s.pageCount - 1)}><DoubleArrowRightIcon aria-hidden /></PagerBtn>}
-          </nav>
+          <Pagination page={s.page} pageCount={s.pageCount} onPageChange={s.setPage} range={rangeText} label={`${caption} pagination`} />
         </div>
       )}
     </div>

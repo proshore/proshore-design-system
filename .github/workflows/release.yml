@@ -27,7 +27,7 @@ jobs:
       - run: npm run check
       - run: npm run pack
       - name: Publish to GitHub Packages
-        run: npm publish release/proshore-ui-*.tgz
+        run: npm publish ./release/proshore-ui-*.tgz
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: GitHub release with the tarball

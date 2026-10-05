@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/overlays", "/brand", "/examples", "/shell", "/sign-in"];
+const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/overlays", "/dialogs", "/brand", "/examples", "/shell", "/sign-in"];
 const themes = ["light", "dark"] as const;
 const WCAG = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa", "best-practice"];
 
@@ -94,4 +94,38 @@ test("app shell: palette and assistant open, labelled, accessible", async ({ pag
   await page.getByRole("button", { name: "Ask Sherpa" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   expect(await violations(page)).toEqual([]);
+});
+
+test("dialogs: confirm opens as an alertdialog, cancel and Esc close it, focus returns", async ({ page }) => {
+  await open(page, "/dialogs", "light");
+  const trigger = page.getByRole("button", { name: "Confirm (cannot be undone)" });
+  await trigger.click();
+  await expect(page.getByRole("alertdialog", { name: /suspend kim demo/i })).toBeVisible();
+  expect(await violations(page)).toEqual([]);
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("alertdialog")).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
+test("dialogs: dark theme dialog and danger button are accessible", async ({ page }) => {
+  await open(page, "/dialogs", "dark");
+  await page.getByRole("button", { name: "Confirm (cannot be undone)" }).click();
+  expect(await violations(page)).toEqual([]);
+});
+
+test("pagination moves and disables at the ends", async ({ page }) => {
+  await open(page, "/dialogs", "light");
+  const nav = page.getByRole("navigation", { name: "Example pagination" });
+  await expect(nav.getByText("Page 1 of 8")).toBeVisible();
+  await expect(nav.getByRole("button", { name: "Previous page" })).toHaveAttribute("aria-disabled", "true");
+  await nav.getByRole("button", { name: "Next page" }).click();
+  await expect(nav.getByText("Page 2 of 8")).toBeVisible();
+});
+
+test("status pages render each kind with one h1", async ({ page }) => {
+  await open(page, "/dialogs", "light");
+  for (const label of ["No access (403)", "Not found (404)", "Server error (500)", "Session expired (401)", "Offline"]) {
+    await page.getByRole("button", { name: label }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCount(2); // the page title and the status page
+  }
 });

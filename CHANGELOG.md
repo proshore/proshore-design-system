@@ -6,7 +6,8 @@ All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a mino
 - Added the app frame: `AppShell` (left bar with the apps, top bar, bottom bar on phones) and `ShellNav`, `AppIcon`, `AppTitle`, `SherpaGuide` (the suite's thin-line icons), `CommandPalette` with `useCommandShortcut`, and `AssistantPanel` (the Sherpa assistant: answer, how sure, sources, what it could not see). `WorkspaceSwitcher` (client and engagement) plugs into the shell.
 - Less wasted space at the top: the page header only reserves room under a floating header (it reserved about 95px under a plain one), and inside `AppShell` it uses a 24px gap. The gallery header is one row.
 - Fixed: the avatar on the dark header was nearly invisible (dark initials on a tint of the header colour) and looked lighter when the menu was open; it is now a light chip and identical in every state. Gallery header: the current page is a white underlined link, not a pill.
-- Gallery: App shell page.
+- Added `ModalDialog` and `ConfirmDialog`, `StatusPage` (403, 404, 500, session expired, offline), `Pagination` (DataTable uses it), `FileDropzone` and `KanbanBoard`.
+- Gallery: App shell page and a Dialogs and boards page.
 - Added `apps/discovery-example`: Sherpa Discovery built on the package, as a reference for Sherpa apps.
 
 ## 0.2.0

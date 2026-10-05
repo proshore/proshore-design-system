@@ -15,6 +15,7 @@ export const pages = [
   { path: "/tables", label: "Tables" },
   { path: "/charts", label: "Charts" },
   { path: "/overlays", label: "Overlays and menus" },
+  { path: "/dialogs", label: "Dialogs and boards" },
   { path: "/brand", label: "Brand and icons" },
   { path: "/shell", label: "App shell" },
   { path: "/examples", label: "Examples" },
