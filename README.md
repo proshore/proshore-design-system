@@ -21,6 +21,14 @@ npx proshore-ui-init     # adds the Claude skill and a CLAUDE.md section, so Cla
 ```
 More in [`packages/ui/README.pack.md`](packages/ui/README.pack.md). In CI of a consuming project, use a token with `read:packages` in the `NPM_TOKEN`-style secret for `.npmrc` (never commit it).
 
+## Claude Design (optional)
+Besides the package, the design system can be mirrored as a **Design System artifact in Claude Design**: a read-only reference page on claude.ai with the colours (light and dark), type, spacing, radius, logos and a few static component previews. It is meant for designers and for people who work in Claude Design, who **do not need access to this repository**: they only need access to the artifact on claude.ai.
+
+- This repo stays the source of truth. The artifact is a generated copy and is never edited by hand.
+- Developers building apps do not use it. They install `@proshore/ui` (see above) and `npx proshore-ui-init`, which is what makes Claude write correct code.
+- Only maintainers update it, after a release: `npm run pack`, then `npm run export:design-system`, then publish the output in a Claude session. What it contains, its known gaps and the update steps are in [docs/claude-design-system.md](docs/claude-design-system.md).
+- Publishing from CI is not verified. For now it is a manual step.
+
 ## Develop
 ```bash
 npm install
