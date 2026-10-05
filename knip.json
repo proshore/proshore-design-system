@@ -25,6 +25,17 @@
         "src/**/*.{ts,tsx}",
         "e2e/**/*.ts"
       ]
+    },
+    "packages/auth": {
+      "entry": [
+        "src/index.ts",
+        "test/*.test.ts",
+        "examples/*.mjs"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "test/**/*.ts"
+      ]
     }
   },
   "ignoreDependencies": [
