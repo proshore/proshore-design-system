@@ -2,6 +2,9 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
+## Unreleased
+- **Breaking:** the deprecated names are removed, as announced in 0.5.0. The old `--sherpa-*` design tokens (40, via `theme/compat.css`), the `.sherpa-*` CSS classes (`.sherpa-theme`, `.sherpa-eyebrow`, `.sherpa-eyebrow--chip`, `.sherpa-display`, `.sherpa-mark`, `.sherpa-demo-tag`, `.sherpa-grid-2`) and `SherpaTheme` no longer exist. Migrate: replace `--sherpa-` with `--pr-`, `.sherpa-x` with `.pr-x`, and `SherpaTheme` with `ProshoreTheme`. Checked: Discovery, the gallery, the Discovery example and Billing have no remaining uses.
+
 ## 0.5.0
 - **Deprecation window extended:** the old `--sherpa-*` token names and `SherpaTheme` still work in 0.5.x and are now removed in **0.6.0** (the 0.4.0 notes said 0.5.0; nobody outside Discovery had migrated yet). Migrate by replacing `--sherpa-` with `--pr-` and `SherpaTheme` with `ProshoreTheme`.
 - CSS class names renamed from `.sherpa-*` to `.pr-*` for the shared classes: `.pr-theme`, `.pr-eyebrow` (and `.pr-eyebrow--chip`), `.pr-display`, `.pr-mark`, `.pr-demo-tag`, `.pr-grid-2`. The old class names keep working in the stylesheet (selectors match both) and are removed in 0.6.0 together with the old token names. Components now render the new names. Product-specific classes in apps (for example Discovery's `.sherpa-trail`) are not part of the package and are unchanged.

@@ -61,7 +61,7 @@ describe("tokens.json shape", () => {
   test("skipped tokens are reported with a reason", () => {
     assert.ok(run.report.skippedTokens.length > 0);
     for (const s of run.report.skippedTokens) assert.ok(s.name && s.reason);
-    assert.ok(run.report.skippedTokens.some((s) => s.name === "sherpa-canvas"), "compat aliases are listed, not silently dropped");
+    assert.ok(!run.report.skippedTokens.some((s) => s.name.startsWith("sherpa-")), "the old --sherpa-* aliases no longer exist, so nothing is skipped for them");
   });
 });
 

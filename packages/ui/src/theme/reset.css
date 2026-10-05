@@ -6,5 +6,5 @@ button, input, select, textarea { font: inherit; color: inherit; letter-spacing:
 button { cursor: pointer; }
 img, svg { vertical-align: middle; }
 a { color: inherit; }
-:is(.pr-theme, .sherpa-theme)[data-root] { min-height: 100vh; background: var(--color-background); color: var(--gray-12); }
-:is(.pr-theme, .sherpa-theme):not([data-root]) { color: var(--gray-12); }
+.pr-theme[data-root] { min-height: 100vh; background: var(--color-background); color: var(--gray-12); }
+.pr-theme:not([data-root]) { color: var(--gray-12); }

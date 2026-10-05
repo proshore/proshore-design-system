@@ -12,5 +12,3 @@ export function ProshoreTheme({ appearance, children, root = true }: { appearanc
   return <div className="pr-theme" data-theme={appearance} data-root={root || undefined}>{children}</div>;
 }
 
-/** @deprecated Old name of ProshoreTheme. Removed in 0.6.0. */
-export const SherpaTheme: typeof ProshoreTheme = (props) => <ProshoreTheme {...props} />;

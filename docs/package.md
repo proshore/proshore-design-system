@@ -13,7 +13,7 @@ Pipeline (`packages/ui/scripts/pack.mjs`): library build of `src/core.ts` with V
 Tokens in light and dark (standard dark grey), layout primitives, forms, `DataTable` (TanStack state), charts (visx), `SlideOver`, tabs, breadcrumbs, stepper, timeline, notes, toasts, the header family (`AppHeader`, `WorkspaceSwitcher`, `UserMenu`), 32 icons, Proshore brand marks, `Avatar`, `ClientMark`, `Ridgeline` and `PrayerFlags`, Geist fonts. Peer dependencies: React and React DOM 19.
 ## Not in the package (stay in Discovery)
 Evidence, coverage and severity badges, `ProcessFlow`, the app launcher and the Sherpa suite icons, the Sherpa guide, and everything in `apps/discovery`. The entry list is `packages/ui/src/core.ts`; `src/index.ts` (the full set) is what Discovery uses. Keep both in step when adding components.
-Wording changed to be generic in the core: chart no-data text is "No data" (was "No evidence"); examples in comments are about invoices and revenue. Charts: the second series colour is now teal (it was saffron orange). Token names still start with `--sherpa-`.
+Wording changed to be generic in the core: chart no-data text is "No data" (was "No evidence"); examples in comments are about invoices and revenue. Charts: the second series colour is now teal (it was saffron orange). Token names still start with `--pr-`.
 
 ## Use in another project
 ```bash

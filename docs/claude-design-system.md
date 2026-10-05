@@ -44,7 +44,7 @@ Publishing from CI is **unverified**: nobody has tried it, and the type says a p
 - **The wordmark is navy**, so it is invisible on the dark theme; the logo README says to use the icon there.
 - **Latin fonts only.** The package ships Cyrillic and Vietnamese subsets; the mirror carries the Latin subset.
 - **Line heights are not in the source tokens**, so text styles carry size and weight only. Font weight 600 for steps 6 to 9 is our reading of the headings, not a token.
-- **Skipped on purpose:** the deprecated `--sherpa-*` aliases, layout sizes, easing curves, the demo border, `transparent` values, component-internal and media-query variables, and the `[data-surface="inverse"]` overrides (they change values inside the header and hero, not the theme).
+- **Skipped on purpose:** layout sizes, easing curves, the demo border, `transparent` values, component-internal and media-query variables, and the `[data-surface="inverse"]` overrides (they change values inside the header and hero, not the theme).
 - **The cascade is simple.** It understands `:root` and `:root[data-theme]` only, with specificity and source order. A new kind of theme selector is reported as skipped, not guessed.
 - **The cover keeps its derivation comment**, because the type requires it on the cover. All other previews must have no comment besides the first line.
 - Shadow values are exported as `{light, dark}` strings. The type's page may or may not draw them; this is unchecked.

@@ -17,7 +17,7 @@ Three layers. Components use only layer 3.
    - Light follows Relume "Base mode": canvas Clear Blue Lightest, surface White, text Lapis Blue Darker, primary button Lapis Blue Light (#5147ff), accent Saffron.
    - Dark follows the "Alternate / Deep Blue" logic: canvas Clear Blue Darkest, surface Clear Blue Darker, text White, primary button White with Lapis Blue Darker text, borders White 15%.
    - Relume defines few steps per scale, so in-between steps are interpolated (marked in the CSS). Muted text uses Neutral Dark, not Lapis Blue Dark, to keep hierarchy readable (decision to confirm).
-3. **`--sherpa-*` semantic tokens**: evidence states (Observed = Clear Blue, Inferred = Marigold, Confirmed = Terai Green, Unknown = Neutral with dashed border), danger (Saffron), coverage complete/partial/failed, surfaces, review accent (Saffron bar on the Proshore decision).
+3. **`--pr-*` semantic tokens** (named `--sherpa-*` before 0.4.0): evidence states (Observed = Clear Blue, Inferred = Marigold, Confirmed = Terai Green, Unknown = Neutral with dashed border), danger (Saffron), coverage complete/partial/failed, surfaces, review accent (Saffron bar on the Proshore decision).
 
 Typography: Geist (headings and body) and Geist Mono (code, secondary), self-hosted via `@fontsource-variable`. Sizes follow Relume: tiny .75, small .875, regular 1, medium 1.125, large 1.25 rem; heading steps 1.5 to 3 rem. Mobile size mode not implemented yet.
 Shape and spacing: radius 8px (Relume small/medium/large), full 9999px, 1px borders; 4/8/16/24/32 spacing; container 1280px; page padding 64px, 20px under 720px.
@@ -54,7 +54,7 @@ Sources: the Relume variable screenshots and a visit to proshore.eu (Geist / Gei
 | Issue in the guide | Decision in the app |
 | --- | --- |
 | Built for marketing pages: 56px headings, weight 400, section paddings up to 112px. | Keep the voice (bold lead phrase, light remainder) only on each page's hero. Dense UI uses the 12 to 20px text steps and 24px gaps. |
-| Two oranges: logo `#ff5102`, Saffron `#fa602d`. | Logo orange is the one brand orange (`--sherpa-brand-orange`). Saffron ramps stay for tints only. |
+| Two oranges: logo `#ff5102`, Saffron `#fa602d`. | Logo orange is the one brand orange (`--pr-brand-orange`). Saffron ramps stay for tints only. |
 | Orange fails text contrast on white (about 3.3:1). | Orange is never small text. It is for marks: logo, review accent bar, hand-drawn underline. Text-safe variants `#b82f00` (light) and `#ff9b73` (dark). |
 | Orange is both the brand accent and the only red-ish colour, so "critical" would look like "Proshore". | Orange means "Proshore's hand" (reviewed, marked). Danger uses a separate true red, `#9e1027` on `#fdecef` (dark: `#ff9aa8` on `#3d0a14`). The red is a proposed addition, not in Relume. |
 | Muted text = Lapis Blue Dark, barely lighter than base text. | Muted text is a navy-tinted gray `#55547f` (light) and `#b8bee3` (dark) so hierarchy is visible. |

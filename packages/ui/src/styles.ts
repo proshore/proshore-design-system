@@ -9,4 +9,3 @@ import "./components/charts/charts.css"; // imported here too: a re-export-only 
 import "./shell/shell.css";
 import "./components/dialogs.css";
 import "./components/table/table.css"; // also here: EmptyState and friends are used without a DataTable
-import "./theme/compat.css"; // old --sherpa-* token names, removed in 0.6.0

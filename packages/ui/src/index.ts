@@ -1,7 +1,7 @@
 // @proshore/ui public API. Import only from here, never from deep paths.
 // This package is product-neutral. Product-specific components (for example Sherpa Discovery's evidence badges) live in the product.
 export { Ridgeline, PrayerFlags } from "./components/Motifs";
-export { ProshoreTheme, SherpaTheme } from "./theme/theme";
+export { ProshoreTheme } from "./theme/theme";
 export type { Appearance } from "./theme/theme";
 export { PortalHost, usePortalHost } from "./theme/portal";
 export * from "./components/layout";

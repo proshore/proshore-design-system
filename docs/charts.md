@@ -23,14 +23,14 @@ Code: `src/components/charts/`. Live specimen: `#/lab/charts`. Hand-written SVG 
 | `--chart-4` | marigold-dark | marigold-light | Series 4 (solid, triangle) |
 | `--chart-5` | neutral-dark | neutral-light | Series 5 / "not scanned" |
 | `--chart-6` | lapis-light | lapis-lighter | Series 6 |
-| `--chart-sev-critical` | `--sherpa-danger-border` | `--sherpa-danger-fg` | Critical (solid, circle) |
-| `--chart-sev-high` | `--sherpa-danger-fg` | #ff5c74 (interp) | High (dots, square) |
+| `--chart-sev-critical` | `--pr-danger-border` | `--pr-danger-fg` | Critical (solid, circle) |
+| `--chart-sev-high` | `--pr-danger-fg` | #ff5c74 (interp) | High (dots, square) |
 | `--chart-sev-medium` | marigold-dark | marigold-light | Medium (solid, diamond) |
 | `--chart-sev-low` | clear-blue | clear-blue-light | Low (solid, triangle) |
 | `--chart-sev-review` | neutral | neutral-light | Review item, hotspot (grid) |
 | `--chart-grid`, `--chart-axis` | neutral-lighter, neutral | white 14%, neutral-light | Gridlines, axes (recessive) |
 
-Contrast against `--sherpa-surface` (computed WCAG ratio, non-text 3:1 target): light 3.07 (marigold, lowest) to 8.4; dark 5.1 to 9.8. Marigold in light mode is close to the limit, so it is never used alone: pattern, shape and value labels always accompany it. Colour-blind separation was not run through a simulator; separation relies on pattern and shape.
+Contrast against `--pr-surface` (computed WCAG ratio, non-text 3:1 target): light 3.07 (marigold, lowest) to 8.4; dark 5.1 to 9.8. Marigold in light mode is close to the limit, so it is never used alone: pattern, shape and value labels always accompany it. Colour-blind separation was not run through a simulator; separation relies on pattern and shape.
 
 Fixed order, never cycled. A 7th series folds into "Other" or becomes small multiples. Text never wears a series colour.
 

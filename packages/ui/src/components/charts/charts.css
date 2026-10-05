@@ -1,6 +1,6 @@
 /* Chart tokens and mark styles. Series colours are picked for >=3:1 non-text contrast on --pr-surface in both themes.
    Colour is never the only channel: series differ in lightness, are named in the legend and in the data table, bars carry their value, lines carry a marker shape; partial coverage is hatched and dashed. */
-:is(.pr-theme, .sherpa-theme)[data-theme="light"] {
+.pr-theme[data-theme="light"] {
   --chart-1: var(--pr-clear-blue);      --chart-2: #0f7f8f; /* teal: the orange is not used in the product */  --chart-3: var(--pr-terai-dark);
   --chart-4: var(--pr-marigold-dark);   --chart-5: var(--pr-neutral-dark);  --chart-6: var(--pr-lapis-light);
   --chart-sev-critical: var(--pr-danger-border); --chart-sev-high: var(--pr-danger-fg);
@@ -9,7 +9,7 @@
   --chart-1-tint: color-mix(in srgb, var(--chart-1) 30%, var(--pr-surface)); --chart-track: color-mix(in srgb, var(--gray-12) 7%, var(--pr-surface));
   --chart-gridline: color-mix(in srgb, var(--gray-12) 10%, transparent);
 }
-:is(.pr-theme, .sherpa-theme)[data-theme="dark"] {
+.pr-theme[data-theme="dark"] {
   --chart-1: var(--pr-clear-blue-light); --chart-2: #4fc3d1; --chart-3: var(--pr-terai-light);
   --chart-4: var(--pr-marigold-light);   --chart-5: var(--pr-neutral-light); --chart-6: var(--pr-lapis-lighter);
   --chart-sev-critical: var(--pr-danger-fg); --chart-sev-high: #ff5c74;

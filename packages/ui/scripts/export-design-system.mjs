@@ -43,7 +43,7 @@ const declarations = (body) => [...body.matchAll(/(--[A-Za-z0-9_-]+)\s*:\s*([^;]
 /**
  * Does one selector apply to the document element for a theme, and with which specificity?
  * Context: <html data-theme="light|dark"> (the library puts the theme on :root so portals inherit it).
- * `.sherpa-theme` wrappers and `[data-surface]` scopes are not the document element and are not mirrored.
+ * `.pr-theme` wrappers and `[data-surface]` scopes are not the document element and are not mirrored.
  */
 export function matchSelector(selector, theme) {
   const s = selector.trim();
@@ -108,12 +108,8 @@ const LAYOUT = /^--(pr-(gap|container-large|page-padding|shell-nav-width|panel-w
  */
 export function buildTokens(themeFiles, notes) {
   const rules = themeFiles.flatMap((f) => parseRules(f.css, f.name));
-  const isCompat = (name, r) => r.file === "compat.css";
-  // compat.css is a deprecated alias layer (--sherpa-*): reported as skipped, never exported.
-  const compat = new Set(rules.filter((r) => r.file === "compat.css").flatMap((r) => declarations(r.body).map((d) => d.name)));
-  const L = cascade(rules, "light", { exclude: isCompat }), D = cascade(rules, "dark", { exclude: isCompat });
+  const L = cascade(rules, "light"), D = cascade(rules, "dark");
   const skipped = [];
-  for (const n of [...compat].sort()) skipped.push({ name: n.slice(2), reason: "deprecated --sherpa-* alias (compat.css, removed in 0.5.0)" });
   const scoped = new Map(); // name -> first scope reason; reported later only if the name was never exported
   for (const s of L.skippedScopes) for (const n of s.names) if (!scoped.has(n)) scoped.set(n, `${s.reason}: ${s.scope}`.slice(0, 120));
 
