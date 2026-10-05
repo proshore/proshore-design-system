@@ -48,7 +48,7 @@ export function SignInScreen({ product, productMark, onSignIn, busy = false, dom
     <main className="pr-signin" id="main" tabIndex={-1}>
       <Ridgeline className="pr-signin__ridge" />
       <section className="pr-signin__card" aria-labelledby="signin-title">
-        <div className="pr-signin__brand"><ProshoreIcon height={30} /><ProshoreWordmark height={13} /></div>
+        <div className="pr-signin__brand"><ProshoreIcon height={48} /></div>
         {productMark && <div className="pr-signin__mark">{productMark}</div>}
         <h1 id="signin-title" className="pr-signin__title">Sign in to {product}</h1>
         <p className="pr-signin__lead">Use your Proshore Google Workspace account.</p>
@@ -56,6 +56,7 @@ export function SignInScreen({ product, productMark, onSignIn, busy = false, dom
         <GoogleSignInButton onPress={onSignIn} busy={busy} />
         <p className="pr-signin__fine">Only <strong>@{domain}</strong> accounts can sign in here. Signing in shows who you are; what you can open depends on the access you were given.</p>
         {footer && <div className="pr-signin__footer">{footer}</div>}
+        <div className="pr-signin__word"><ProshoreWordmark height={14} /></div>
       </section>
     </main>
   );
