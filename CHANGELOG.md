@@ -2,6 +2,9 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
+## Unreleased
+- Added `npm run export:design-system` (after `npm run pack`): generates a mirror of the tokens, logos, component stylesheet and static component previews in the file layout of Claude's "Design System" artifact type, into `packages/ui/.design-system/` (git-ignored). Usage notes for tokens are in `packages/ui/design-system-notes.json`, previews in `packages/ui/design-system-previews.mjs`. Publishing is a manual step; see `docs/claude-design-system.md`. New `npm run test:export` is part of `npm run check`. No change to the library or its visuals.
+
 ## 0.4.0
 - **Breaking-ish (aliases kept):** design tokens renamed from `--sherpa-*` to `--pr-*` (40 tokens, for example `--sherpa-surface` is now `--pr-surface`). The old names still work through `theme/compat.css` and are removed in 0.5.0. Migrate with a search and replace of `--sherpa-` by `--pr-`. `SherpaTheme` is now `ProshoreTheme`; `SherpaTheme` stays as a deprecated alias. The CSS class names `.sherpa-theme`, `.sherpa-eyebrow` and `.sherpa-display` are unchanged for now (they will be renamed with a deprecation period).
 - The mountain motif is off on `PageHeader` by default (`motif` turns it on) and stays on `PageHero`; use it on key pages such as a dashboard, not on every page.

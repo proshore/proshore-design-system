@@ -8,3 +8,6 @@ playwright-report
 *.tsbuildinfo
 .env*
 # visual test diffs are in test-results (already ignored); baselines in e2e/visual-baselines are committed
+
+# generated Claude design system mirror (npm run export:design-system)
+packages/ui/.design-system

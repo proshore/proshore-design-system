@@ -16,7 +16,9 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "tokens": "node scripts/export-tokens.mjs",
-    "pack": "node scripts/pack.mjs"
+    "pack": "node scripts/pack.mjs",
+    "export:design-system": "node scripts/export-design-system.mjs",
+    "test:export": "node --test scripts/export-design-system.test.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",
