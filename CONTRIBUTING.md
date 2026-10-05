@@ -12,7 +12,7 @@ Owners: Jeroen van der Horst and Babish (see `.github/CODEOWNERS`). Internal Pro
 ## Working
 ```bash
 npm install
-npm run dev        # gallery at http://localhost:5173
+npm run dev        # gallery at http://localhost:5180
 npm run check      # typecheck, build, unused code, e2e (axe light/dark, phone width, console errors)
 ```
 Local Chrome is used for e2e; CI uses Playwright's Chromium.
