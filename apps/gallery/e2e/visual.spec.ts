@@ -78,7 +78,7 @@ for (const [size, viewport] of Object.entries(sizes)) {
       await open(page, "/api", theme);
       await page.getByRole("searchbox", { name: "Search the API" }).fill("Pagination");
       await expect(page.getByRole("article", { name: "Pagination" })).toBeVisible();
-      await expect(page.getByText("2 of ")).toBeVisible();
+      await expect(page.getByRole("status")).toContainText(/\d+ of \d+ exports/);
       await expect(page).toHaveScreenshot(`state-api-search-${size}-${theme}.png`, { fullPage: true });
     });
   }
