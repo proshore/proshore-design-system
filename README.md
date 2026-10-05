@@ -5,6 +5,7 @@
 | Where | What |
 | --- | --- |
 | `packages/ui` | The package `@proshore/ui` (source, build, Claude skill, token export) |
+| `packages/auth` | The package `@proshore/auth`: server-side Google Workspace sign-in (proshore.nl only), see [`docs/google-sign-in.md`](docs/google-sign-in.md). Not yet verified against real Google. |
 | `apps/gallery` | Component gallery and example screens (foundations, components, user management, kanban, card board, bug reporting, sign-in). Also the test bench: axe in light and dark, phone width, console errors. |
 | `apps/discovery-example` | Sherpa Discovery on this package: app shell, client switcher, assistant, evidence components. The reference for building a Sherpa app. Uses real example customers, see CONTRIBUTING. |
 | `docs/` | Decisions and background (see the note in `docs/README.md`) |

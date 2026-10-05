@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Added `packages/auth` (`@proshore/auth` 0.1.0): server-side Sign in with Google Workspace (proshore.nl only) on Web `Request`/`Response`, with PKCE, server-side ID token verification and a signed session cookie. Tested against a local fake Google only, not yet against real Google.
+
 ## 0.3.1
 - Fixed: the Proshore wordmark in the dark blue header was navy on navy; it is now white there (and navy on light surfaces). The wordmark colour is the class `.pr-wordmark`, not an inline style.
 

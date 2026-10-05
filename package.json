@@ -14,8 +14,9 @@
     "unused": "knip",
     "test:e2e": "npm run test:e2e -w gallery && npm run test:e2e -w discovery-example",
     "pack": "npm run pack -w @proshore/ui",
-    "check": "npm run typecheck && npm run build && npm run unused && npm run test:e2e",
-    "dev:discovery": "npm run dev -w discovery-example"
+    "check": "npm run typecheck && npm run test:auth && npm run build && npm run unused && npm run test:e2e",
+    "dev:discovery": "npm run dev -w discovery-example",
+    "test:auth": "npm test -w @proshore/auth"
   },
   "devDependencies": {
     "knip": "^6.38.0"
