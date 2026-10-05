@@ -7,11 +7,10 @@ All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a mino
 - The mountain motif is off on `PageHeader` by default (`motif` turns it on) and stays on `PageHero`; use it on key pages such as a dashboard, not on every page.
 - Fixed: the product name in the dark header (for example "Design system") was grey on navy and hard to read; it is now light.
 - Sign-in screen: the Proshore icon sits centred at the top of the card and the wordmark centred at the bottom.
-- Added `packages/auth` (`@proshore/auth`) see its own entry below; the UI package is unaffected.
 - Charts redesigned: bar chart as soft pills on a faint track (second series a tint of the first, value at the end), smooth area trend with a halo on the latest value, stacked bar as one pill, sparkline as a smooth area. Patterns now mark partial coverage only; series are named in the legend, on the bars and in the table view. New tokens `--chart-1-tint`, `--chart-track`, `--chart-gridline`.
 - Fixed: phone header (avatar on its own row, page links cut off or hidden), `SimpleTable` clipped on phones, `Pagination` lost its styles on pages without a DataTable, `Pagination` wrapped badly on phones.
 - Gallery: Foundations rebuilt from the real tokens (full brand palette, interface scales, semantic and status colours, chart colours, type, spacing, radius), an Actions page, usage do and don't lists and a light/dark compare ported from Discovery's design page. Visual regression tests (`npm run test:visual`) for every page at desktop and phone width in light and dark.
-- Added `packages/auth` (`@proshore/auth` 0.1.0): server-side Sign in with Google Workspace (proshore.nl only) on Web `Request`/`Response`, with PKCE, server-side ID token verification and a signed session cookie. Tested against a local fake Google only, not yet against real Google.
+- Added `packages/auth` (`@proshore/auth` 0.1.0, a separate package; the UI package does not depend on it): server-side Sign in with Google Workspace (proshore.nl only) on Web `Request`/`Response`, with PKCE, server-side ID token verification and a signed session cookie. Tested against a local fake Google only, not yet against real Google.
 
 ## 0.3.1
 - Fixed: the Proshore wordmark in the dark blue header was navy on navy; it is now white there (and navy on light surfaces). The wordmark colour is the class `.pr-wordmark`, not an inline style.
