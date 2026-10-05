@@ -23,16 +23,16 @@
 .kb__card p { margin: 0; font-size: 14px; }
 .g-rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4); }
 .g-rules ul { list-style: none; margin: 0; padding: var(--space-3) var(--space-4); border-radius: var(--radius-3); display: grid; gap: var(--space-2); }
-.g-rules ul[data-kind="do"] { background: var(--sherpa-confirmed-bg); } .g-rules ul[data-kind="do"] svg { color: var(--sherpa-confirmed-fg); }
-.g-rules ul[data-kind="dont"] { background: var(--sherpa-danger-bg); } .g-rules ul[data-kind="dont"] svg { color: var(--sherpa-danger-fg); }
+.g-rules ul[data-kind="do"] { background: var(--pr-confirmed-bg); } .g-rules ul[data-kind="do"] svg { color: var(--pr-confirmed-fg); }
+.g-rules ul[data-kind="dont"] { background: var(--pr-danger-bg); } .g-rules ul[data-kind="dont"] svg { color: var(--pr-danger-fg); }
 .g-rules li { display: flex; gap: var(--space-2); align-items: flex-start; } .g-rules svg { flex: none; margin-top: 3px; }
 .g-compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: var(--space-4); }
-.g-frame { background: var(--sherpa-canvas); color: var(--gray-12); border: 1px solid var(--sherpa-line); border-radius: var(--radius-4); padding: var(--space-4); display: grid; gap: var(--space-4); }
+.g-frame { background: var(--pr-canvas); color: var(--gray-12); border: 1px solid var(--pr-line); border-radius: var(--radius-4); padding: var(--space-4); display: grid; gap: var(--space-4); }
 .g-preview { display: grid; gap: var(--space-4); }
 .g-family { display: grid; gap: var(--space-2); }
 .g-family__row { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: var(--space-2); }
 .g-sw { display: grid; gap: 2px; align-content: start; min-width: 0; }
-.g-sw > span { height: 44px; border-radius: var(--radius-2); border: 1px solid var(--sherpa-line); }
+.g-sw > span { height: 44px; border-radius: var(--radius-2); border: 1px solid var(--pr-line); }
 .g-sw code { font-size: 11px; color: var(--gray-11); overflow-wrap: anywhere; }
 .g-sw__hex { color: var(--gray-12) !important; font-weight: 600; }
 .g-scale { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; }

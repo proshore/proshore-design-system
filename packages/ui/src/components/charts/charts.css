@@ -1,29 +1,29 @@
-/* Chart tokens and mark styles. Series colours are picked for >=3:1 non-text contrast on --sherpa-surface in both themes.
+/* Chart tokens and mark styles. Series colours are picked for >=3:1 non-text contrast on --pr-surface in both themes.
    Colour is never the only channel: series differ in lightness, are named in the legend and in the data table, bars carry their value, lines carry a marker shape; partial coverage is hatched and dashed. */
 .sherpa-theme[data-theme="light"] {
   --chart-1: var(--pr-clear-blue);      --chart-2: #0f7f8f; /* teal: the orange is not used in the product */  --chart-3: var(--pr-terai-dark);
   --chart-4: var(--pr-marigold-dark);   --chart-5: var(--pr-neutral-dark);  --chart-6: var(--pr-lapis-light);
-  --chart-sev-critical: var(--sherpa-danger-border); --chart-sev-high: var(--sherpa-danger-fg);
+  --chart-sev-critical: var(--pr-danger-border); --chart-sev-high: var(--pr-danger-fg);
   --chart-sev-medium: var(--pr-marigold-dark); --chart-sev-low: var(--pr-clear-blue); --chart-sev-review: var(--pr-neutral);
   --chart-grid: var(--pr-neutral-lighter); --chart-axis: var(--pr-neutral);
-  --chart-1-tint: color-mix(in srgb, var(--chart-1) 30%, var(--sherpa-surface)); --chart-track: color-mix(in srgb, var(--gray-12) 7%, var(--sherpa-surface));
+  --chart-1-tint: color-mix(in srgb, var(--chart-1) 30%, var(--pr-surface)); --chart-track: color-mix(in srgb, var(--gray-12) 7%, var(--pr-surface));
   --chart-gridline: color-mix(in srgb, var(--gray-12) 10%, transparent);
 }
 .sherpa-theme[data-theme="dark"] {
   --chart-1: var(--pr-clear-blue-light); --chart-2: #4fc3d1; --chart-3: var(--pr-terai-light);
   --chart-4: var(--pr-marigold-light);   --chart-5: var(--pr-neutral-light); --chart-6: var(--pr-lapis-lighter);
-  --chart-sev-critical: var(--sherpa-danger-fg); --chart-sev-high: #ff5c74;
+  --chart-sev-critical: var(--pr-danger-fg); --chart-sev-high: #ff5c74;
   --chart-sev-medium: var(--pr-marigold-light); --chart-sev-low: var(--pr-clear-blue-light); --chart-sev-review: var(--pr-neutral-light);
   --chart-grid: rgba(255,255,255,.14); --chart-axis: var(--pr-neutral-light);
-  --chart-1-tint: color-mix(in srgb, var(--chart-1) 32%, var(--sherpa-surface)); --chart-track: color-mix(in srgb, var(--gray-12) 10%, var(--sherpa-surface));
+  --chart-1-tint: color-mix(in srgb, var(--chart-1) 32%, var(--pr-surface)); --chart-track: color-mix(in srgb, var(--gray-12) 10%, var(--pr-surface));
   --chart-gridline: color-mix(in srgb, var(--gray-12) 14%, transparent);
 }
 
 .ch-fill { display: block; background-color: var(--fill); background-image: var(--pat, none); background-size: var(--pat-size, auto); min-width: 0; }
-.ch-fill[data-pattern="dots"] { --pat: radial-gradient(var(--sherpa-surface) 1.3px, transparent 1.7px); --pat-size: 6px 6px; }
-.ch-fill[data-pattern="grid"] { --pat: linear-gradient(var(--sherpa-surface) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--sherpa-surface) 1.5px, transparent 1.5px); --pat-size: 6px 6px; }
+.ch-fill[data-pattern="dots"] { --pat: radial-gradient(var(--pr-surface) 1.3px, transparent 1.7px); --pat-size: 6px 6px; }
+.ch-fill[data-pattern="grid"] { --pat: linear-gradient(var(--pr-surface) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--pr-surface) 1.5px, transparent 1.5px); --pat-size: 6px 6px; }
 .ch-fill[data-pattern="empty"] { background: transparent; box-shadow: inset 0 0 0 1.5px var(--fill); }
-.ch-fill[data-partial] { opacity: .8; background-image: repeating-linear-gradient(45deg, var(--sherpa-surface) 0 2px, transparent 2px 6px), var(--pat, none); background-size: auto, var(--pat-size, auto); box-shadow: inset 0 0 0 1.5px var(--fill); }
+.ch-fill[data-partial] { opacity: .8; background-image: repeating-linear-gradient(45deg, var(--pr-surface) 0 2px, transparent 2px 6px), var(--pat, none); background-size: auto, var(--pat-size, auto); box-shadow: inset 0 0 0 1.5px var(--fill); }
 .ch-fill[data-partial]:not([data-pattern="empty"]) { outline: 1.5px dashed var(--fill); outline-offset: 0; }
 
 .ch-legend { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); list-style: none; margin: 0; padding: 0; font-size: var(--font-size-1); color: var(--gray-12); }
@@ -31,12 +31,12 @@
 .ch-legend .ch-fill { width: 12px; height: 12px; border-radius: 2px; flex: none; }
 
 .ch-card__toggle { white-space: nowrap; }
-.ch-card__caveat { display: flex; gap: var(--space-2); align-items: flex-start; color: var(--sherpa-coverage-partial); font-size: var(--font-size-1); }
+.ch-card__caveat { display: flex; gap: var(--space-2); align-items: flex-start; color: var(--pr-coverage-partial); font-size: var(--font-size-1); }
 .ch-card__foot { font-size: var(--font-size-1); color: var(--gray-11); }
 .ch-table-wrap { overflow-x: auto; }
 .ch-table { border-collapse: collapse; width: 100%; font-size: var(--font-size-2); font-variant-numeric: tabular-nums; }
 .ch-table caption { text-align: left; color: var(--gray-11); font-size: var(--font-size-1); padding-bottom: var(--space-2); }
-.ch-table th, .ch-table td { text-align: left; padding: var(--space-2) var(--space-3); border-top: 1px solid var(--sherpa-line); }
+.ch-table th, .ch-table td { text-align: left; padding: var(--space-2) var(--space-3); border-top: 1px solid var(--pr-line); }
 .ch-table thead th { border-top: 0; color: var(--gray-11); font-weight: 500; }
 .ch-table td:not(:first-child), .ch-table th:not(:first-child) { text-align: right; }
 
@@ -60,10 +60,10 @@
 .ch-pt__ring { fill: none; stroke: var(--focus-8); stroke-width: 2; opacity: 0; }
 .ch-pt:focus-visible .ch-pt__ring, .ch-pt[data-active] .ch-pt__ring { opacity: 1; }
 .ch-tip { position: absolute; z-index: 2; pointer-events: none; transform: translate(-50%, -100%); min-width: 150px; max-width: 240px; padding: var(--space-2) var(--space-3);
-  background: var(--sherpa-surface); color: var(--gray-12); border: 1px solid var(--sherpa-line); border-radius: 8px; box-shadow: 0 6px 20px -6px rgba(5,0,92,.35); font-size: var(--font-size-1); }
+  background: var(--pr-surface); color: var(--gray-12); border: 1px solid var(--pr-line); border-radius: 8px; box-shadow: 0 6px 20px -6px rgba(5,0,92,.35); font-size: var(--font-size-1); }
 .ch-tip__head { font-weight: 700; margin-bottom: var(--space-1); }
 .ch-tip__row { display: flex; justify-content: space-between; gap: var(--space-3); font-variant-numeric: tabular-nums; }
-.ch-tip__note { margin-top: var(--space-1); color: var(--sherpa-coverage-partial); }
+.ch-tip__note { margin-top: var(--space-1); color: var(--pr-coverage-partial); }
 .ch-spark { display: inline-block; vertical-align: middle; overflow: visible; }
 
 /* visx charts: labels and states drawn in SVG */

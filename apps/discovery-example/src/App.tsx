@@ -13,7 +13,7 @@ const IconsLab = lazy(() => import("./labs/IconsLab").then((m) => ({ default: m.
 const TableDemo = lazy(() => import("./labs/TableDemo").then((m) => ({ default: m.TableDemo })));
 import { PortalHost, SignInScreen, toast } from "@proshore/ui";
 import { AppIcon } from "@proshore/ui";
-import { SherpaTheme } from "@proshore/ui";
+import { ProshoreTheme } from "@proshore/ui";
 import type { Appearance, ThemePreference } from "@proshore/ui";
 
 function initialPref(): ThemePreference {
@@ -57,7 +57,7 @@ export function App() {
   useEffect(() => { try { localStorage.setItem("sherpa-theme", pref); } catch { /* ignore */ } }, [pref]);
   useEffect(() => { window.scrollTo(0, 0); }, [path]);
   return (
-    <SherpaTheme appearance={appearance}>
+    <ProshoreTheme appearance={appearance}>
       <div ref={setHost} style={{ display: "contents" }} />
       <PortalHost.Provider value={host}>
         {!signedIn || path === "/sign-in" ? (
@@ -88,6 +88,6 @@ export function App() {
         </Layout>
         )}
       </PortalHost.Provider>
-    </SherpaTheme>
+    </ProshoreTheme>
   );
 }

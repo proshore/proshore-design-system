@@ -26,7 +26,7 @@ const RULES = [
   "The title states the takeaway in plain language; axis units are always labelled; bars start at zero.",
   "Every chart has a View as table alternative and a text summary for screen readers.",
   "No composite risk scores, gauges, 3D, dual y axes, donuts, or pies with more than 4 slices.",
-  "Series colours come from --chart-1..6 in fixed order, never cycled; severity uses the --sherpa-danger-* family for critical and high.",
+  "Series colours come from --chart-1..6 in fixed order, never cycled; severity uses the --pr-danger-* family for critical and high.",
 ];
 
 /** Living specimen of the chart module. Demo data only; nothing here is a verified customer fact. */

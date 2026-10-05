@@ -106,7 +106,7 @@ export function TrendLine({ series, points, unit, height = 260 }: TrendLineProps
                   onFocus={() => { setCur({ s: si, i }); setActive({ s: si, i }); }} onBlur={() => setActive(null)} onKeyDown={(e) => onKey(e, si, i)}>
                   <circle cx={x(i)} cy={y(v)} r="12" fill="transparent" />
                   <circle className="ch-pt__ring" cx={x(i)} cy={y(v)} r={r + 5} />
-                  {(last || hollow || (active?.s === si && active.i === i)) && <>{last && <circle cx={x(i)} cy={y(v)} r={r + 5} fill={s.color} opacity=".16" />}<path d={markerPath(shapeOf(s, si), x(i), y(v), r)} fill={hollow ? "var(--sherpa-surface)" : last ? "var(--sherpa-surface)" : s.color} stroke={hollow || last ? s.color : "var(--sherpa-surface)"} strokeWidth={last ? 2.5 : 2} /></>}
+                  {(last || hollow || (active?.s === si && active.i === i)) && <>{last && <circle cx={x(i)} cy={y(v)} r={r + 5} fill={s.color} opacity=".16" />}<path d={markerPath(shapeOf(s, si), x(i), y(v), r)} fill={hollow ? "var(--pr-surface)" : last ? "var(--pr-surface)" : s.color} stroke={hollow || last ? s.color : "var(--pr-surface)"} strokeWidth={last ? 2.5 : 2} /></>}
                 </g>
               ); })}
           </g>

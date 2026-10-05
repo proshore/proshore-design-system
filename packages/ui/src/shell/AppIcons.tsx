@@ -61,5 +61,5 @@ export function SherpaGuide({ size = 20, framed = false, className }: { size?: n
     </svg>
   );
   if (!framed) return <span className={className} style={{ display: "inline-grid", width: size, height: size, placeItems: "center" }} aria-hidden="true">{svg}</span>;
-  return <span className={className} aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: size, height: size, borderRadius: "50%", border: "1px solid var(--sherpa-line)", background: "var(--sherpa-surface)", color: "var(--accent-11)" }}>{svg}</span>;
+  return <span className={className} aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: size, height: size, borderRadius: "50%", border: "1px solid var(--pr-line)", background: "var(--pr-surface)", color: "var(--accent-11)" }}>{svg}</span>;
 }

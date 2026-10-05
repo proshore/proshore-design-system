@@ -18,19 +18,19 @@ For exact props of a component, read its declaration file in `node_modules/@pros
 import "@proshore/ui/styles.css";
 // App.tsx
 import { useState } from "react";
-import { PortalHost, SherpaTheme, ToastHost } from "@proshore/ui";
+import { PortalHost, ProshoreTheme, ToastHost } from "@proshore/ui";
 
 export function App() {
   const [host, setHost] = useState<HTMLElement | null>(null);   // overlays (menus, drawers) render here and inherit light/dark
   const appearance = useSystemAppearance();                        // "light" | "dark"; offer System, Light, Dark to the user
   return (
-    <SherpaTheme appearance={appearance}>
+    <ProshoreTheme appearance={appearance}>
       <div ref={setHost} style={{ display: "contents" }} />
       <PortalHost.Provider value={host}>
         {/* shell, routes */}
         <ToastHost />
       </PortalHost.Provider>
-    </SherpaTheme>
+    </ProshoreTheme>
   );
 }
 ```
@@ -61,7 +61,7 @@ Rules: screens set no margins, paddings or widths of their own. Use `Page`, `Pag
 - **Icons:** import from `@proshore/ui` (Radix 15px icons). Do not add another icon library.
 
 ## 4. Visual rules
-1. **Tokens only.** Never hard-code a colour, font size, radius or spacing. Use the tokens in `reference/tokens.md` (`var(--gray-12)`, `var(--sherpa-surface)`, `var(--space-4)`). Text colours: `--gray-12` primary, `--gray-11` secondary.
+1. **Tokens only.** Never hard-code a colour, font size, radius or spacing. Use the tokens in `reference/tokens.md` (`var(--gray-12)`, `var(--pr-surface)`, `var(--space-4)`). Text colours: `--gray-12` primary, `--gray-11` secondary.
 2. **Calm colour.** Neutral surfaces, one accent (Proshore blue, `--accent-*`). Colour is for what needs action: critical items, failures, a caution. Status is shown with a word and a shape first. No orange in the product (the Proshore logo keeps its own orange). No decorative gradients.
 3. **Light and dark** both ship and both must pass checks. Dark is the standard dark grey (canvas `#121212`, cards `#1e1e1e`, text about 87% white), not black and not navy. Do not add a third theme.
 4. **Typography:** Geist and Geist Mono are loaded by the styles. Plain language first, technical detail on demand. Sentence case. Nothing smaller than 12px. Numbers use tabular figures in tables.
@@ -85,4 +85,4 @@ Format with `Intl.NumberFormat` using the user's locale, show the currency code 
 Do not invent a one-off look. In order: (1) compose it from existing primitives; (2) if it is genuinely new, build it inside this app using tokens and the same rules, keep it small, and tell the user it is a candidate to move into `@proshore/ui`; (3) never edit files in `node_modules`. Do not copy Discovery-specific components (evidence, coverage and severity badges, journey flow, app launcher): they are not part of this package on purpose.
 
 ## 8. Naming note
-Tokens start with `--sherpa-` (semantic: canvas, surface, line, status) because the design system grew inside the Sherpa product family. They are generic; use them as listed.
+Tokens start with `--pr-` (semantic: canvas, surface, line, status) because the design system grew inside the Sherpa product family. They are generic; use them as listed.

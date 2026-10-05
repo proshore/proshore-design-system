@@ -98,7 +98,7 @@ export function Legend({ items, label = "Legend" }: { items: LegendItem[]; label
           {it.kind === "line" ? (
             <svg width="22" height="12" aria-hidden="true" focusable="false">
               <line x1="0" x2="22" y1="6" y2="6" stroke={it.color} strokeWidth="2" strokeDasharray={it.partial ? "4 3" : undefined} />
-              <path d={markerPath(it.shape ?? "circle", 11, 6, 4)} fill={it.hollow ? "var(--sherpa-surface)" : it.color} stroke={it.hollow ? it.color : "var(--sherpa-surface)"} strokeWidth="2" />
+              <path d={markerPath(it.shape ?? "circle", 11, 6, 4)} fill={it.hollow ? "var(--pr-surface)" : it.color} stroke={it.hollow ? it.color : "var(--pr-surface)"} strokeWidth="2" />
             </svg>
           ) : <Fill color={it.color} pattern={it.pattern} partial={it.partial} />}
           <span>{it.label}</span>
@@ -126,9 +126,9 @@ export function SeriesPatterns({ series, idOf }: { series: Series[]; idOf: (key:
           {s.pattern === "empty"
             ? <rect x="0.75" y="0.75" width="4.5" height="4.5" style={{ fill: "none", stroke: s.color }} strokeWidth="1.5" />
             : <rect width="6" height="6" style={{ fill: s.color, opacity: partial ? 0.8 : 1 }} />}
-          {s.pattern === "dots" && <circle cx="3" cy="3" r="1.3" style={{ fill: "var(--sherpa-surface)" }} />}
-          {s.pattern === "grid" && <path d="M0 0H6M0 0V6" fill="none" style={{ stroke: "var(--sherpa-surface)" }} strokeWidth="1.5" />}
-          {partial && <rect width="6" height="2" style={{ fill: "var(--sherpa-surface)" }} />}
+          {s.pattern === "dots" && <circle cx="3" cy="3" r="1.3" style={{ fill: "var(--pr-surface)" }} />}
+          {s.pattern === "grid" && <path d="M0 0H6M0 0V6" fill="none" style={{ stroke: "var(--pr-surface)" }} strokeWidth="1.5" />}
+          {partial && <rect width="6" height="2" style={{ fill: "var(--pr-surface)" }} />}
         </pattern>
       )))}
     </defs>

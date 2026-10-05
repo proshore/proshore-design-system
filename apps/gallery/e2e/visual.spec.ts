@@ -47,8 +47,8 @@ for (const [size, viewport] of Object.entries(sizes)) {
   });
   test(`@visual slide-over ${size}`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await open(page, "light");
-    await page.getByRole("row", { name: /alex voorbeeld/i }).first().click();
+    await open(page, "/overlays", "light");
+    await page.getByRole("button", { name: "Open slide-over" }).click();
     await expect(page.getByRole("dialog")).toBeVisible();
     await expect(page).toHaveScreenshot(`state-slide-over-${size}.png`);
   });

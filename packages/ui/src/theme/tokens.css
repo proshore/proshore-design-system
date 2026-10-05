@@ -9,7 +9,7 @@
  *   2. .sherpa-theme[data-theme="light"] / .dark   Relume "Color Schemes" mapped to Radix Themes
  *      scale variables (--accent-*, --gray-*) so Radix components inherit the brand.
  *      Steps that Relume does not define are interpolated and marked (interp).
- *   3. --sherpa-*  semantic tokens (evidence, coverage, surfaces). Components use these.
+ *   3. --pr-*  semantic tokens (evidence, coverage, surfaces). Components use these.
  * Status colour always travels with an icon and label.
  */
 :root {
@@ -46,14 +46,14 @@
   --color-surface: var(--pr-white); --color-overlay: rgba(1,1,8,.5);
   --focus-8: var(--pr-lapis-light);
 
-  --sherpa-canvas: var(--pr-clear-blue-lightest); --sherpa-surface: var(--pr-white); --sherpa-surface-muted: var(--pr-neutral-lightest);
-  --sherpa-line: var(--pr-clear-blue-lighter); --sherpa-review-accent: var(--sherpa-accent-mark); --sherpa-accent-mark: var(--accent-11); --sherpa-accent-text: var(--accent-11); --sherpa-on-mark: #ffffff; --sherpa-hero-a: var(--pr-clear-blue-lighter); --sherpa-hero-b: var(--pr-clear-blue-lightest);
-  --sherpa-observed-fg: var(--pr-clear-blue-darker); --sherpa-observed-bg: var(--pr-clear-blue-lightest); --sherpa-observed-border: var(--pr-clear-blue-light);
-  --sherpa-inferred-fg: var(--pr-marigold-darker); --sherpa-inferred-bg: var(--pr-marigold-lightest); --sherpa-inferred-border: var(--pr-marigold-dark);
-  --sherpa-confirmed-fg: var(--pr-terai-darker); --sherpa-confirmed-bg: var(--pr-terai-lightest); --sherpa-confirmed-border: var(--pr-terai-dark);
-  --sherpa-unknown-fg: var(--pr-neutral-dark); --sherpa-unknown-bg: transparent; --sherpa-unknown-border: var(--pr-neutral);
-  --sherpa-danger-fg: #9e1027; --sherpa-danger-bg: #fdecef; --sherpa-danger-border: #d3243b;
-  --sherpa-coverage-complete: var(--pr-terai-darker); --sherpa-coverage-partial: var(--pr-marigold-darker); --sherpa-coverage-failed: #9e1027;
+  --pr-canvas: var(--pr-clear-blue-lightest); --pr-surface: var(--pr-white); --pr-surface-muted: var(--pr-neutral-lightest);
+  --pr-line: var(--pr-clear-blue-lighter); --pr-review-accent: var(--pr-accent-mark); --pr-accent-mark: var(--accent-11); --pr-accent-text: var(--accent-11); --pr-on-mark: #ffffff; --pr-hero-a: var(--pr-clear-blue-lighter); --pr-hero-b: var(--pr-clear-blue-lightest);
+  --pr-observed-fg: var(--pr-clear-blue-darker); --pr-observed-bg: var(--pr-clear-blue-lightest); --pr-observed-border: var(--pr-clear-blue-light);
+  --pr-inferred-fg: var(--pr-marigold-darker); --pr-inferred-bg: var(--pr-marigold-lightest); --pr-inferred-border: var(--pr-marigold-dark);
+  --pr-confirmed-fg: var(--pr-terai-darker); --pr-confirmed-bg: var(--pr-terai-lightest); --pr-confirmed-border: var(--pr-terai-dark);
+  --pr-unknown-fg: var(--pr-neutral-dark); --pr-unknown-bg: transparent; --pr-unknown-border: var(--pr-neutral);
+  --pr-danger-fg: #9e1027; --pr-danger-bg: #fdecef; --pr-danger-border: #d3243b;
+  --pr-coverage-complete: var(--pr-terai-darker); --pr-coverage-partial: var(--pr-marigold-darker); --pr-coverage-failed: #9e1027;
 }
 
 /* ---------- Dark: Relume "Alternate" / "Deep Blue" logic (interpretation) ---------- */
@@ -73,14 +73,14 @@
   --color-surface: var(--pr-clear-blue-darker); --color-overlay: rgba(1,1,8,.6);
   --focus-8: var(--pr-lapis-lighter);
 
-  --sherpa-canvas: var(--pr-clear-blue-darkest); --sherpa-surface: var(--pr-clear-blue-darker); --sherpa-surface-muted: var(--pr-lapis-darker);
-  --sherpa-line: rgba(255,255,255,.15); --sherpa-review-accent: var(--sherpa-accent-mark); --sherpa-accent-mark: var(--accent-11); --sherpa-accent-text: var(--accent-11); --sherpa-on-mark: #000000; --sherpa-hero-a: #16267a; --sherpa-hero-b: var(--pr-clear-blue-darkest);
-  --sherpa-observed-fg: var(--pr-clear-blue-light); --sherpa-observed-bg: var(--pr-lapis-darker); --sherpa-observed-border: var(--pr-clear-blue);
-  --sherpa-inferred-fg: var(--pr-marigold-light); --sherpa-inferred-bg: var(--pr-marigold-darkest); --sherpa-inferred-border: var(--pr-marigold-dark);
-  --sherpa-confirmed-fg: var(--pr-terai-light); --sherpa-confirmed-bg: var(--pr-terai-darkest); --sherpa-confirmed-border: var(--pr-terai-dark);
-  --sherpa-unknown-fg: var(--pr-neutral-light); --sherpa-unknown-bg: transparent; --sherpa-unknown-border: var(--pr-neutral);
-  --sherpa-danger-fg: #ff9aa8; --sherpa-danger-bg: #3d0a14; --sherpa-danger-border: #d3243b;
-  --sherpa-coverage-complete: var(--pr-terai-light); --sherpa-coverage-partial: var(--pr-marigold-light); --sherpa-coverage-failed: #ff9aa8;
+  --pr-canvas: var(--pr-clear-blue-darkest); --pr-surface: var(--pr-clear-blue-darker); --pr-surface-muted: var(--pr-lapis-darker);
+  --pr-line: rgba(255,255,255,.15); --pr-review-accent: var(--pr-accent-mark); --pr-accent-mark: var(--accent-11); --pr-accent-text: var(--accent-11); --pr-on-mark: #000000; --pr-hero-a: #16267a; --pr-hero-b: var(--pr-clear-blue-darkest);
+  --pr-observed-fg: var(--pr-clear-blue-light); --pr-observed-bg: var(--pr-lapis-darker); --pr-observed-border: var(--pr-clear-blue);
+  --pr-inferred-fg: var(--pr-marigold-light); --pr-inferred-bg: var(--pr-marigold-darkest); --pr-inferred-border: var(--pr-marigold-dark);
+  --pr-confirmed-fg: var(--pr-terai-light); --pr-confirmed-bg: var(--pr-terai-darkest); --pr-confirmed-border: var(--pr-terai-dark);
+  --pr-unknown-fg: var(--pr-neutral-light); --pr-unknown-bg: transparent; --pr-unknown-border: var(--pr-neutral);
+  --pr-danger-fg: #ff9aa8; --pr-danger-bg: #3d0a14; --pr-danger-border: #d3243b;
+  --pr-coverage-complete: var(--pr-terai-light); --pr-coverage-partial: var(--pr-marigold-light); --pr-coverage-failed: #ff9aa8;
 }
 
 /* ---------- Typography, shape, spacing (both modes) ---------- */
@@ -94,13 +94,13 @@
   --font-size-6: 1.5rem; --font-size-7: 2rem; --font-size-8: 2.5rem; --font-size-9: 3rem;
   /* Relume UI Styles: radius small/medium/large = 8px, full = 9999px, border 1px. */
   --radius-1: 4px; --radius-2: 8px; --radius-3: 8px; --radius-4: 8px; --radius-5: 8px; --radius-6: 8px;
-  --sherpa-radius-card: 8px;
-  --sherpa-gap: var(--space-4);
+  --pr-radius-card: 8px;
+  --pr-gap: var(--space-4);
   /* Relume Spacing & Sizing */
-  --sherpa-container-large: 1280px; --sherpa-page-padding: 64px; --sherpa-shell-nav-width: 220px; --sherpa-panel-width: 420px;
-  --sherpa-demo-border: 1px dashed var(--gray-8);
+  --pr-container-large: 1280px; --pr-page-padding: 64px; --pr-shell-nav-width: 220px; --pr-panel-width: 420px;
+  --pr-demo-border: 1px dashed var(--gray-8);
 }
-@media (max-width: 720px) { .sherpa-theme { --sherpa-page-padding: 20px; } }
+@media (max-width: 720px) { .sherpa-theme { --pr-page-padding: 20px; } }
 
 body { margin: 0; }
 :focus-visible { outline: 2px solid var(--focus-8); outline-offset: 2px; }
@@ -109,7 +109,7 @@ body { margin: 0; }
 
 .sherpa-grid-2 { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
 
-.sherpa-demo-tag { border: var(--sherpa-demo-border); border-radius: var(--radius-2); padding: 0 var(--space-2); }
+.sherpa-demo-tag { border: var(--pr-demo-border); border-radius: var(--radius-2); padding: 0 var(--space-2); }
 
 /* ---------- Brand behaviours (from proshore.eu) ---------- */
 /* Pill buttons, as on the website. Cards keep the 8px radius, tags 4px. */
@@ -119,12 +119,12 @@ body { margin: 0; }
 .sherpa-display { font-size: clamp(1.75rem, 3.2vw, 2.75rem); line-height: 1.15; letter-spacing: -0.02em; font-weight: 300; margin: 0; color: var(--gray-12); }
 .sherpa-display strong { font-weight: 700; }
 .sherpa-mark { position: relative; white-space: nowrap; }
-.sherpa-mark svg { position: absolute; left: 0; bottom: -0.32em; width: 100%; height: .4em; color: var(--sherpa-accent-mark); overflow: visible; }
+.sherpa-mark svg { position: absolute; left: 0; bottom: -0.32em; width: 100%; height: .4em; color: var(--pr-accent-mark); overflow: visible; }
 
 /* ---------- App frame ---------- */
-.app { display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: auto 1fr; min-height: 100vh; background: var(--sherpa-canvas); }
+.app { display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: auto 1fr; min-height: 100vh; background: var(--pr-canvas); }
 
-.app__main { box-sizing: border-box; min-width: 0; padding: var(--space-6) var(--sherpa-page-gutter, var(--space-6)); max-width: 1180px; width: 100%; margin: 0 auto; }
+.app__main { box-sizing: border-box; min-width: 0; padding: var(--space-6) var(--pr-page-gutter, var(--space-6)); max-width: 1180px; width: 100%; margin: 0 auto; }
 .navlink { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--pr-radius-pill); color: var(--gray-11); text-decoration: none; font-weight: 500; font-size: var(--font-size-2); }
 .navlink:hover { background: var(--accent-a3); color: var(--gray-12); }
 .navlink[aria-current="page"] { background: var(--accent-a4); color: var(--accent-11); }
@@ -137,7 +137,7 @@ body { margin: 0; }
   
   
   
-  .app__main { box-sizing: border-box; min-width: 0; padding: var(--space-4); --sherpa-page-gutter: var(--space-4); }
+  .app__main { box-sizing: border-box; min-width: 0; padding: var(--space-4); --pr-page-gutter: var(--space-4); }
   
   
 }
@@ -166,10 +166,10 @@ body { margin: 0; }
 .l-panel__head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-4); }
 .l-panel__head > div:first-child { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
 .l-panel__body { min-width: 0; }
-.l-panel__foot { margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--sherpa-line); }
-.l-panel[data-tone="review"] { box-shadow: inset 4px 0 0 var(--sherpa-review-accent); }
+.l-panel__foot { margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--pr-line); }
+.l-panel[data-tone="review"] { box-shadow: inset 4px 0 0 var(--pr-review-accent); }
 .l-kv { margin: 0; display: grid; }
-.l-kv__row { display: grid; grid-template-columns: var(--l-label, 150px) minmax(0, 1fr); gap: var(--space-4); padding: var(--space-2) 0; border-top: 1px solid var(--sherpa-line); align-items: start; }
+.l-kv__row { display: grid; grid-template-columns: var(--l-label, 150px) minmax(0, 1fr); gap: var(--space-4); padding: var(--space-2) 0; border-top: 1px solid var(--pr-line); align-items: start; }
 .l-kv__row:first-child { border-top: 0; }
 .l-kv dt { color: var(--gray-11); font-size: var(--font-size-2); }
 .l-kv dd { margin: 0; font-size: var(--font-size-2); min-width: 0; overflow-wrap: anywhere; }
@@ -203,26 +203,26 @@ body { background: var(--color-background); color: var(--gray-12); font-family: 
    Direction chosen by Jeroen: Concept C (hero, colour, sections) with Concept A's table.
    ===================================================================== */
 :root, :root[data-theme="light"], .sherpa-theme[data-theme="light"] {
-  --sherpa-canvas: #f4f5fc; --color-background: #f4f5fc; --sherpa-line: #e3e5f3;
-  --sherpa-card-shadow: 0 20px 40px -24px rgba(5,0,92,.28), 0 1px 0 rgba(5,0,92,.05);
-  --sherpa-header-bg: #111e5f; --sherpa-band-bg: var(--pr-clear-blue-lighter);
+  --pr-canvas: #f4f5fc; --color-background: #f4f5fc; --pr-line: #e3e5f3;
+  --pr-card-shadow: 0 20px 40px -24px rgba(5,0,92,.28), 0 1px 0 rgba(5,0,92,.05);
+  --pr-header-bg: #111e5f; --pr-band-bg: var(--pr-clear-blue-lighter);
 }
 :root[data-theme="dark"], .sherpa-theme[data-theme="dark"] {
-  --sherpa-canvas: #0b1340; --color-background: #0b1340; --sherpa-line: rgba(255,255,255,.12);
-  --sherpa-card-shadow: 0 20px 40px -24px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.07);
-  --sherpa-header-bg: #111e5f; --sherpa-band-bg: #1a2a86;
+  --pr-canvas: #0b1340; --color-background: #0b1340; --pr-line: rgba(255,255,255,.12);
+  --pr-card-shadow: 0 20px 40px -24px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.07);
+  --pr-header-bg: #111e5f; --pr-band-bg: #1a2a86;
 }
 /* Inverse surfaces (header, hero): tokens flip so everything inside reads on navy without per-component overrides. */
 [data-surface="inverse"] {
   --gray-11: #c8ccf0; --gray-12: #ffffff; --gray-a11: #c8ccf0; --gray-a12: #ffffff; --accent-11: #a8a3ff; --accent-a11: #ffffff; --accent-12: #ffffff;
-  --sherpa-line: rgba(255,255,255,.2); --sherpa-surface-muted: rgba(255,255,255,.1); --sherpa-surface: rgba(255,255,255,.08);
+  --pr-line: rgba(255,255,255,.2); --pr-surface-muted: rgba(255,255,255,.1); --pr-surface: rgba(255,255,255,.08);
   --accent-9: #ffffff; --accent-10: #e6e8fb; --accent-contrast: #05005c; --accent-a8: rgba(255,255,255,.45); --accent-a3: rgba(255,255,255,.12); --accent-a4: rgba(255,255,255,.18); --accent-a5: rgba(255,255,255,.24);
-  --sherpa-accent-text: var(--accent-11); --focus-8: #a8a3ff; color: #fff;
+  --pr-accent-text: var(--accent-11); --focus-8: #a8a3ff; color: #fff;
 }
-.app { display: block; background: var(--sherpa-canvas); min-height: 100vh; }
+.app { display: block; background: var(--pr-canvas); min-height: 100vh; }
 .app__main { max-width: none; padding: 0; margin: 0; width: 100%; }
-.pr-header { background: var(--sherpa-header-bg); border-bottom: 0; color: #fff; }
-.pr-header[data-layer="proshore"] { box-shadow: inset 0 3px 0 var(--sherpa-accent-mark); }
+.pr-header { background: var(--pr-header-bg); border-bottom: 0; color: #fff; }
+.pr-header[data-layer="proshore"] { box-shadow: inset 0 3px 0 var(--pr-accent-mark); }
 .pr-chip { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.2); }
 .pr-chip__eng { color: #c8ccf0; }
 .pr-nav { display: flex; gap: 2px; margin-left: var(--space-4); }
@@ -248,7 +248,7 @@ body { background: var(--color-background); color: var(--gray-12); font-family: 
 .l-section__desc { margin: 4px 0 0; color: var(--gray-11); max-width: 640px; font-size: var(--font-size-3); }
 .l-section { gap: var(--space-5); }
 /* Cards: soft shadow instead of borders */
-.l-panel[data-tone="review"] { box-shadow: var(--sherpa-card-shadow), inset 4px 0 0 var(--sherpa-review-accent); }
+.l-panel[data-tone="review"] { box-shadow: var(--pr-card-shadow), inset 4px 0 0 var(--pr-review-accent); }
 .l-stat { font-size: 2.875rem; letter-spacing: -0.035em; line-height: 1; font-weight: 700; }
 :root { --page-x: 40px; }
 @media (max-width: 900px) {
@@ -279,8 +279,8 @@ body { background: var(--color-background); color: var(--gray-12); font-family: 
   --gray-7: #444444; --gray-8: #5c5c5c; --gray-9: #8a8a8a; --gray-10: #9c9c9c; --gray-11: #b5b5b5; --gray-12: #ececec;
   --color-background: #121212; --color-panel-solid: #1e1e1e; --color-panel: #1e1e1e; --color-surface: #1e1e1e; --color-overlay: rgba(0,0,0,.6);
   --accent-surface: rgba(255,255,255,.06);
-  --sherpa-canvas: #121212; --sherpa-surface: #1e1e1e; --sherpa-surface-muted: #272727; --sherpa-line: rgba(255,255,255,.12);
-  --sherpa-header-bg: #1e1e1e; --sherpa-band-bg: #262626; --sherpa-hero-a: #1e1e1e; --sherpa-hero-b: #121212;
-  --sherpa-observed-bg: #16202e;
-  --sherpa-card-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+  --pr-canvas: #121212; --pr-surface: #1e1e1e; --pr-surface-muted: #272727; --pr-line: rgba(255,255,255,.12);
+  --pr-header-bg: #1e1e1e; --pr-band-bg: #262626; --pr-hero-a: #1e1e1e; --pr-hero-b: #121212;
+  --pr-observed-bg: #16202e;
+  --pr-card-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
 }

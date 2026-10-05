@@ -27,7 +27,7 @@ export function Sparkline({ values, partial = [], label, color = "var(--chart-1)
       {area && <path d={area} fill={`url(#sp${uid})`} />}
       {segs.map((d, i) => <path key={i} d={d} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeDasharray={partial[i] || partial[i + 1] ? "3 3" : undefined} />)}
       {values.map((v, i) => { const last = i === lastI; const hollow = !!partial[i]; if (!last && !hollow) return null;
-        return <g key={i}>{last && <circle cx={x(i)} cy={y(v)} r={6} fill={color} opacity=".18" />}<path d={markerPath("circle", x(i), y(v), last ? 3.5 : 2.5)} fill={hollow || last ? "var(--sherpa-surface)" : color} stroke={color} strokeWidth="1.75" /></g>; })}
+        return <g key={i}>{last && <circle cx={x(i)} cy={y(v)} r={6} fill={color} opacity=".18" />}<path d={markerPath("circle", x(i), y(v), last ? 3.5 : 2.5)} fill={hollow || last ? "var(--pr-surface)" : color} stroke={color} strokeWidth="1.75" /></g>; })}
     </svg>
   );
 }

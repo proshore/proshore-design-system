@@ -41,7 +41,7 @@ export function DialogsPage() {
       </Section>
       <Section title="Status pages" description="Shown in the page area, inside the shell. Pick one:">
         <Cluster>{kinds.map((k) => <Button key={k.kind} variant={kind === k.kind ? "solid" : "outline"} onClick={() => setKind(k.kind)}>{k.label}</Button>)}</Cluster>
-        <div style={{ border: "1px solid var(--sherpa-line)", borderRadius: 16, overflow: "hidden" }}>
+        <div style={{ border: "1px solid var(--pr-line)", borderRadius: 16, overflow: "hidden" }}>
           <StatusPage kind={kind} reference="REQ-7F3A" actions={<><Button variant="outline">Go back</Button><Button>{kind === "session-expired" ? "Sign in again" : "Back to the start"}</Button></>} />
         </div>
       </Section>

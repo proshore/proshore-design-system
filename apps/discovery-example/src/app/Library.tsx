@@ -15,7 +15,7 @@ import { Stepper } from "@proshore/ui";
 import { Timeline } from "@proshore/ui";
 import { CoverageBadge, EvidenceBadge, SeverityBadge } from "../ui";
 import { applications, insights, journey } from "../fixtures/brightfield";
-import { SherpaTheme } from "@proshore/ui";
+import { ProshoreTheme } from "@proshore/ui";
 import { FormsDemo } from "./FormsDemo";
 
 /** One documented example: preview, usage line, do and don't. `compare` shows light and dark side by side. */
@@ -27,7 +27,7 @@ function Demo({ id, title, use, dos, donts, compare, children }: {
       {compare ? (
         <div className="l-grid" style={{ "--l-min": "440px" } as React.CSSProperties}>
           {(["light", "dark"] as const).map((a) => (
-            <SherpaTheme key={a} appearance={a} root={false}><div className="lib__frame"><Eyebrow>{a}</Eyebrow>{children}</div></SherpaTheme>
+            <ProshoreTheme key={a} appearance={a} root={false}><div className="lib__frame"><Eyebrow>{a}</Eyebrow>{children}</div></ProshoreTheme>
           ))}
         </div>
       ) : <Panel><div className="lib__preview">{children}</div></Panel>}
@@ -68,10 +68,10 @@ export function Library({ dataDemos }: { dataDemos?: ReactNode }) {
         <Stack gap={6}>
           <Section id="foundations" title="Foundations" description="Tokens, not values. Components read semantic tokens so brand changes happen in one file.">
             <Panel eyebrow="Brand palette (Proshore, Relume)">
-              <div className="lib__swatches">{[["Lapis Blue Light", "--pr-lapis-light"], ["Lapis Blue Darker", "--pr-lapis-darker"], ["Clear Blue Lighter", "--pr-clear-blue-lighter"], ["Clear Blue Lightest", "--pr-clear-blue-lightest"], ["Clear Blue Darker", "--pr-clear-blue-darker"], ["Accent mark (Proshore blue)", "--sherpa-accent-mark"], ["Terai Green", "--pr-terai"], ["Marigold", "--pr-marigold"]].map(([n, v]) => swatch(n, v))}</div>
+              <div className="lib__swatches">{[["Lapis Blue Light", "--pr-lapis-light"], ["Lapis Blue Darker", "--pr-lapis-darker"], ["Clear Blue Lighter", "--pr-clear-blue-lighter"], ["Clear Blue Lightest", "--pr-clear-blue-lightest"], ["Clear Blue Darker", "--pr-clear-blue-darker"], ["Accent mark (Proshore blue)", "--pr-accent-mark"], ["Terai Green", "--pr-terai"], ["Marigold", "--pr-marigold"]].map(([n, v]) => swatch(n, v))}</div>
             </Panel>
             <Panel eyebrow="Semantic: evidence, coverage, danger">
-              <div className="lib__swatches">{[["Observed", "--sherpa-observed-bg"], ["Inferred", "--sherpa-inferred-bg"], ["Confirmed", "--sherpa-confirmed-bg"], ["Danger", "--sherpa-danger-bg"], ["Surface", "--sherpa-surface"], ["Canvas", "--sherpa-canvas"], ["Line", "--sherpa-line"], ["Review accent", "--sherpa-review-accent"]].map(([n, v]) => swatch(n, v))}</div>
+              <div className="lib__swatches">{[["Observed", "--pr-observed-bg"], ["Inferred", "--pr-inferred-bg"], ["Confirmed", "--pr-confirmed-bg"], ["Danger", "--pr-danger-bg"], ["Surface", "--pr-surface"], ["Canvas", "--pr-canvas"], ["Line", "--pr-line"], ["Review accent", "--pr-review-accent"]].map(([n, v]) => swatch(n, v))}</div>
             </Panel>
             <Panel eyebrow="Type: Geist and Geist Mono">
               <Stack gap={2}>

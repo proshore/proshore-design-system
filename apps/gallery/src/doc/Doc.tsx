@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { CheckCircledIcon, CrossCircledIcon, Eyebrow, Panel, SherpaTheme, Section, Text } from "@proshore/ui";
+import { CheckCircledIcon, CrossCircledIcon, Eyebrow, Panel, ProshoreTheme, Section, Text } from "@proshore/ui";
 
 /** Do and don't lists under a component, the way a design system documents usage. */
 export function Rules({ dos, donts }: { dos?: string[]; donts?: string[] }) {
@@ -20,7 +20,7 @@ export function Demo({ id, title, use, dos, donts, compare = false, children }: 
       {compare ? (
         <div className="g-compare">
           {(["light", "dark"] as const).map((a) => (
-            <SherpaTheme key={a} appearance={a} root={false}><div className="g-frame"><Eyebrow>{a}</Eyebrow>{children}</div></SherpaTheme>
+            <ProshoreTheme key={a} appearance={a} root={false}><div className="g-frame"><Eyebrow>{a}</Eyebrow>{children}</div></ProshoreTheme>
           ))}
         </div>
       ) : <Panel><div className="g-preview">{children}</div></Panel>}

@@ -2,7 +2,9 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
-## Unreleased
+## 0.4.0
+- **Breaking-ish (aliases kept):** design tokens renamed from `--sherpa-*` to `--pr-*` (40 tokens, for example `--sherpa-surface` is now `--pr-surface`). The old names still work through `theme/compat.css` and are removed in 0.5.0. Migrate with a search and replace of `--sherpa-` by `--pr-`. `SherpaTheme` is now `ProshoreTheme`; `SherpaTheme` stays as a deprecated alias. The CSS class names `.sherpa-theme`, `.sherpa-eyebrow` and `.sherpa-display` are unchanged for now (they will be renamed with a deprecation period).
+- Added `packages/auth` (`@proshore/auth`) see its own entry below; the UI package is unaffected.
 - Charts redesigned: bar chart as soft pills on a faint track (second series a tint of the first, value at the end), smooth area trend with a halo on the latest value, stacked bar as one pill, sparkline as a smooth area. Patterns now mark partial coverage only; series are named in the legend, on the bars and in the table view. New tokens `--chart-1-tint`, `--chart-track`, `--chart-gridline`.
 - Fixed: phone header (avatar on its own row, page links cut off or hidden), `SimpleTable` clipped on phones, `Pagination` lost its styles on pages without a DataTable, `Pagination` wrapped badly on phones.
 - Gallery: Foundations rebuilt from the real tokens (full brand palette, interface scales, semantic and status colours, chart colours, type, spacing, radius), an Actions page, usage do and don't lists and a light/dark compare ported from Discovery's design page. Visual regression tests (`npm run test:visual`) for every page at desktop and phone width in light and dark.

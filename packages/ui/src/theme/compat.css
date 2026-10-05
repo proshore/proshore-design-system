@@ -1,0 +1,44 @@
+/* Compatibility: the old --sherpa-* token names, kept for one minor version. They simply point at the new --pr-* tokens.
+   Migrate with: replace --sherpa- by --pr- in your CSS. These aliases will be removed in 0.5.0. */
+:root, .sherpa-theme {
+  --sherpa-accent-mark: var(--pr-accent-mark);
+  --sherpa-accent-text: var(--pr-accent-text);
+  --sherpa-band-bg: var(--pr-band-bg);
+  --sherpa-canvas: var(--pr-canvas);
+  --sherpa-card-shadow: var(--pr-card-shadow);
+  --sherpa-confirmed-bg: var(--pr-confirmed-bg);
+  --sherpa-confirmed-border: var(--pr-confirmed-border);
+  --sherpa-confirmed-fg: var(--pr-confirmed-fg);
+  --sherpa-container-large: var(--pr-container-large);
+  --sherpa-coverage-complete: var(--pr-coverage-complete);
+  --sherpa-coverage-failed: var(--pr-coverage-failed);
+  --sherpa-coverage-partial: var(--pr-coverage-partial);
+  --sherpa-danger: var(--pr-danger);
+  --sherpa-danger-bg: var(--pr-danger-bg);
+  --sherpa-danger-border: var(--pr-danger-border);
+  --sherpa-danger-fg: var(--pr-danger-fg);
+  --sherpa-demo-border: var(--pr-demo-border);
+  --sherpa-gap: var(--pr-gap);
+  --sherpa-header-bg: var(--pr-header-bg);
+  --sherpa-hero-a: var(--pr-hero-a);
+  --sherpa-hero-b: var(--pr-hero-b);
+  --sherpa-inferred-bg: var(--pr-inferred-bg);
+  --sherpa-inferred-border: var(--pr-inferred-border);
+  --sherpa-inferred-fg: var(--pr-inferred-fg);
+  --sherpa-line: var(--pr-line);
+  --sherpa-observed-bg: var(--pr-observed-bg);
+  --sherpa-observed-border: var(--pr-observed-border);
+  --sherpa-observed-fg: var(--pr-observed-fg);
+  --sherpa-on-mark: var(--pr-on-mark);
+  --sherpa-page-gutter: var(--pr-page-gutter);
+  --sherpa-page-padding: var(--pr-page-padding);
+  --sherpa-panel-width: var(--pr-panel-width);
+  --sherpa-radius-card: var(--pr-radius-card);
+  --sherpa-review-accent: var(--pr-review-accent);
+  --sherpa-shell-nav-width: var(--pr-shell-nav-width);
+  --sherpa-surface: var(--pr-surface);
+  --sherpa-surface-muted: var(--pr-surface-muted);
+  --sherpa-unknown-bg: var(--pr-unknown-bg);
+  --sherpa-unknown-border: var(--pr-unknown-border);
+  --sherpa-unknown-fg: var(--pr-unknown-fg);
+}

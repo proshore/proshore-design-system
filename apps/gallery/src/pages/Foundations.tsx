@@ -17,7 +17,7 @@ const nums = Array.from({ length: 12 }, (_, i) => i + 1);
 function Scale({ prefix }: { prefix: string }) {
   return <div className="g-scale">{nums.map((n) => <div key={n}><span style={{ background: `var(--${prefix}-${n})` }} /><small>{n}</small></div>)}</div>;
 }
-const semantic = ["--sherpa-canvas", "--sherpa-surface", "--sherpa-surface-muted", "--sherpa-line", "--sherpa-accent-mark", "--sherpa-accent-text", "--sherpa-on-mark", "--focus-8"];
+const semantic = ["--pr-canvas", "--pr-surface", "--pr-surface-muted", "--pr-line", "--pr-accent-mark", "--pr-accent-text", "--pr-on-mark", "--focus-8"];
 const status = [["Observed", "observed"], ["Inferred", "inferred"], ["Confirmed", "confirmed"], ["Unknown", "unknown"], ["Danger", "danger"]] as const;
 const charts = ["--chart-1", "--chart-1-tint", "--chart-2", "--chart-3", "--chart-4", "--chart-5", "--chart-6", "--chart-track"];
 const severity = ["--chart-sev-critical", "--chart-sev-high", "--chart-sev-medium", "--chart-sev-low", "--chart-sev-review"];
@@ -55,7 +55,7 @@ export function Foundations() {
 
       <Demo id="status" compare={compare} title="Status colours" use="Provenance and state: each has a background, a foreground and a border, so state is never colour alone (always add an icon and a word)."
         dos={["Pair every status colour with an icon and a label."]} donts={["Do not use a status colour as decoration."]}>
-        <Stack gap={3}>{status.map(([n, k]) => <Cluster key={k} gap={3}><Text size="2" weight="medium" style={{ width: 80 }}>{n}</Text>{["bg", "fg", "border"].map((p) => <Swatch key={p} token={`--sherpa-${k}-${p}`} label={p} />)}</Cluster>)}</Stack>
+        <Stack gap={3}>{status.map(([n, k]) => <Cluster key={k} gap={3}><Text size="2" weight="medium" style={{ width: 80 }}>{n}</Text>{["bg", "fg", "border"].map((p) => <Swatch key={p} token={`--pr-${k}-${p}`} label={p} />)}</Cluster>)}</Stack>
       </Demo>
 
       <Demo id="charts" compare={compare} title="Chart colours" use="Series are blue, a tint of the same blue, then teal, green, amber. Severity has its own set. Colour is never the only cue: values are printed on the bars and every chart has a table view."

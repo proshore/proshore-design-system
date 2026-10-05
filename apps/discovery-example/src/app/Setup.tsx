@@ -68,7 +68,7 @@ export function Setup() {
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "var(--space-3)" }}>
             {checklist.map((c) => (
               <li key={c.text}><Text size="2" style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                {c.ok ? <CheckCircledIcon aria-hidden style={{ marginTop: 3, flex: "none", color: "var(--sherpa-coverage-complete)" }} /> : <ExclamationTriangleIcon aria-hidden style={{ marginTop: 3, flex: "none", color: "var(--sherpa-coverage-partial)" }} />}
+                {c.ok ? <CheckCircledIcon aria-hidden style={{ marginTop: 3, flex: "none", color: "var(--pr-coverage-complete)" }} /> : <ExclamationTriangleIcon aria-hidden style={{ marginTop: 3, flex: "none", color: "var(--pr-coverage-partial)" }} />}
                 <span><span className="sherpa-eyebrow" style={{ display: "block" }}>{c.ok ? "Done" : "Needs attention"}</span>{c.text}</span></Text></li>))}
           </ul>
         </Panel>
@@ -106,7 +106,7 @@ export function Setup() {
               <Heading as="h2" size="4">Applications</Heading>
               <Text size="2" color="gray">A repository is not an application. One application can span several repositories, and one repository can hold several deployable parts. These groupings are <strong>proposals</strong> until the customer's Technical lead confirms them.</Text>
               {repos.map((r) => (
-                <Flex key={r.id} justify="between" align="center" gap="3" wrap="wrap" style={{ borderTop: "1px solid var(--sherpa-line)", paddingTop: "var(--space-3)" }}>
+                <Flex key={r.id} justify="between" align="center" gap="3" wrap="wrap" style={{ borderTop: "1px solid var(--pr-line)", paddingTop: "var(--space-3)" }}>
                   <Text size="2">{r.name}</Text>
                   <Flex gap="2" align="center"><Text size="1" color="gray" aria-hidden>Belongs to</Text>
                     <Select label={`Application for ${r.name}`} hideLabel value={r.appId} onChange={(v) => setRepos((rs) => rs.map((x) => (x.id === r.id ? { ...x, appId: v } : x)))}
@@ -122,7 +122,7 @@ export function Setup() {
               <Heading as="h2" size="4">Business context</Heading>
               <Text size="2" color="gray">Goals, processes and constraints the evidence will be read against. Each item keeps its source, so a guess is never shown as a fact.</Text>
               {setupContext.map((c) => { const M = evidenceMeta[c.source === "confirmed" ? "confirmed" : c.source === "code" ? "inferred" : "observed"]; return (
-                <Flex key={c.id} direction="column" gap="1" style={{ borderTop: "1px solid var(--sherpa-line)", paddingTop: "var(--space-3)" }}>
+                <Flex key={c.id} direction="column" gap="1" style={{ borderTop: "1px solid var(--pr-line)", paddingTop: "var(--space-3)" }}>
                   <Flex gap="2" align="center" wrap="wrap"><Eyebrow>{c.label}</Eyebrow><Badge variant="soft" color={c.source === "confirmed" ? "green" : c.source === "code" ? "amber" : "indigo"}><M.Icon aria-hidden /> {sourceLabel[c.source]}</Badge></Flex>
                   <Text size="3">{c.text}</Text></Flex>); })}
               <Text size="1" color="gray">Editing and adding context is not built in this prototype.</Text>
@@ -145,9 +145,9 @@ export function Setup() {
               <Heading as="h2" size="4">Scan readiness</Heading>
               <Text size="2" color="gray">A finished scan is not full coverage. Review what the customer will not see before publishing.</Text>
               <Flex direction="column" gap="2">{coverageChecks.map((c) => (
-                <Flex key={c.tool} justify="between" gap="3" wrap="wrap" style={{ borderTop: "1px solid var(--sherpa-line)", paddingTop: "var(--space-2)" }}>
+                <Flex key={c.tool} justify="between" gap="3" wrap="wrap" style={{ borderTop: "1px solid var(--pr-line)", paddingTop: "var(--space-2)" }}>
                   <Text size="2"><strong>{c.tool}</strong>: {c.detail}</Text><CoverageBadge state={c.state} prefix="" /></Flex>))}
-                <Flex justify="between" gap="3" wrap="wrap" style={{ borderTop: "1px solid var(--sherpa-line)", paddingTop: "var(--space-2)" }}>
+                <Flex justify="between" gap="3" wrap="wrap" style={{ borderTop: "1px solid var(--pr-line)", paddingTop: "var(--space-2)" }}>
                   <Text size="2"><strong>billing-legacy</strong>: clone failed, no current evidence</Text><CoverageBadge state="failed" prefix="" /></Flex></Flex>
               <Checkbox isSelected={reviewed} onChange={setReviewed}>I reviewed these gaps. The customer will be told the scan is partial and that Billing is unknown, not clean.</Checkbox>
               {published && <Note tone="success" live>Demo only: nothing was sent. In the real product this would open the workspace to the invited people, with the coverage statement shown on every page.</Note>}

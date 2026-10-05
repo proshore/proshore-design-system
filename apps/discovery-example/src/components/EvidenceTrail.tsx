@@ -23,7 +23,7 @@ export function EvidenceTrail({ steps = evidenceTrail, bare = false }: { steps?:
   const list = (
     <ol className="sherpa-trail" aria-label="Evidence trail from finding to potential impact">
       {steps.map((s) => (
-        <li key={s.step} className="sherpa-trail__item" data-status={s.state} style={{ color: `var(--sherpa-${s.state}-fg)` }}>
+        <li key={s.step} className="sherpa-trail__item" data-status={s.state} style={{ color: `var(--pr-${s.state}-fg)` }}>
           <span className="sherpa-trail__dot" aria-hidden />
           <Flex direction="column" gap="1" style={{ color: "var(--gray-12)" }}>
             <Flex gap="2" align="center" wrap="wrap"><Text size="1" weight="bold">{s.step}</Text><EvidenceBadge state={s.state} /></Flex>

@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from "react";
-import { AppHeader, PortalHost, SherpaTheme, ToastHost, UserMenu, toast } from "@proshore/ui";
+import { AppHeader, PortalHost, ProshoreTheme, ToastHost, UserMenu, toast } from "@proshore/ui";
 import type { Appearance, HeaderUser, ThemePreference } from "@proshore/ui";
 import { pages, useRoute } from "./router";
 import { Foundations } from "./pages/Foundations";
@@ -38,7 +38,7 @@ export function App() {
 
   const fullPage = path === "/sign-in" || path === "/shell" || !signedIn;
   return (
-    <SherpaTheme appearance={appearance}>
+    <ProshoreTheme appearance={appearance}>
       <div ref={setHost} style={{ display: "contents" }} />
       <PortalHost.Provider value={host}>
         {path === "/shell" && signedIn ? (
@@ -75,6 +75,6 @@ export function App() {
         )}
         <ToastHost />
       </PortalHost.Provider>
-    </SherpaTheme>
+    </ProshoreTheme>
   );
 }

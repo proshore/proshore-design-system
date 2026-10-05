@@ -1,7 +1,7 @@
 /* Sign-in screen. Tokens for everything except the Google button, which follows Google's guidelines. */
-.pr-signin { position: relative; min-height: 100vh; display: grid; place-items: center; padding: 32px 16px; background: var(--sherpa-canvas); color: var(--gray-12); overflow: hidden; }
+.pr-signin { position: relative; min-height: 100vh; display: grid; place-items: center; padding: 32px 16px; background: var(--pr-canvas); color: var(--gray-12); overflow: hidden; }
 .pr-signin__ridge { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: min(34vh, 260px); color: var(--gray-8); opacity: .5; pointer-events: none; }
-.pr-signin__card { position: relative; width: min(100%, 420px); display: grid; gap: 16px; padding: 36px 32px 28px; background: var(--sherpa-surface); border: 1px solid var(--sherpa-line); border-radius: 20px; box-shadow: var(--sherpa-card-shadow); }
+.pr-signin__card { position: relative; width: min(100%, 420px); display: grid; gap: 16px; padding: 36px 32px 28px; background: var(--pr-surface); border: 1px solid var(--pr-line); border-radius: 20px; box-shadow: var(--pr-card-shadow); }
 .pr-signin__brand { display: flex; align-items: center; gap: 12px; color: var(--gray-12); }
 .pr-signin__mark { display: flex; }
 .pr-signin__title { margin: 8px 0 0; font-size: clamp(1.5rem, 1.2rem + 1vw, 1.875rem); line-height: 1.15; letter-spacing: -.02em; font-weight: 650; }

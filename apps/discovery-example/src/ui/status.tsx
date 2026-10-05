@@ -33,8 +33,8 @@ export function EvidenceBadge({ state }: { state: EvidenceState }) {
       title={evidenceMeta[state].hint}
       style={{
         ...pill,
-        color: `var(--sherpa-${state}-fg)`, background: `var(--sherpa-${state}-bg)`,
-        border: `1px ${state === "unknown" ? "dashed" : "solid"} var(--sherpa-${state}-border)`,
+        color: `var(--pr-${state}-fg)`, background: `var(--pr-${state}-bg)`,
+        border: `1px ${state === "unknown" ? "dashed" : "solid"} var(--pr-${state}-border)`,
       }}
     >
       <Icon aria-hidden /> {label}
@@ -43,7 +43,7 @@ export function EvidenceBadge({ state }: { state: EvidenceState }) {
 }
 
 const coverageVar: Record<CoverageState, string> = {
-  complete: "var(--sherpa-coverage-complete)", partial: "var(--sherpa-coverage-partial)", failed: "var(--sherpa-coverage-failed)",
+  complete: "var(--pr-coverage-complete)", partial: "var(--pr-coverage-partial)", failed: "var(--pr-coverage-failed)",
 };
 
 export function CoverageBadge({ state, prefix = "Scan" }: { state: CoverageState; prefix?: string }) {
@@ -72,7 +72,7 @@ export function SeverityBadge({ severity, compact = false }: { severity: keyof t
   const Icon = strong ? ExclamationTriangleIcon : EyeOpenIcon;
   return (
     <span style={{ ...pill, ...(strong
-      ? { color: "var(--sherpa-danger-fg)", background: "var(--sherpa-danger-bg)", border: "1px solid var(--sherpa-danger-border)" }
+      ? { color: "var(--pr-danger-fg)", background: "var(--pr-danger-bg)", border: "1px solid var(--pr-danger-border)" }
       : { color: "var(--gray-11)", border: "1px solid var(--gray-7)" }) }}>
       <Icon aria-hidden /> {severityLabel[severity]}
     </span>
