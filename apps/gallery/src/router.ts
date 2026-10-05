@@ -19,6 +19,5 @@ export const pages = [
   { path: "/dialogs", label: "Dialogs and boards" },
   { path: "/brand", label: "Brand and icons" },
   { path: "/shell", label: "App shell" },
-  { path: "/examples", label: "Examples" },
   { path: "/sign-in", label: "Sign in" },
 ] as const;

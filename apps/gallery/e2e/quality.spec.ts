@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/actions", "/overlays", "/dialogs", "/brand", "/examples", "/shell", "/sign-in"];
+const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/actions", "/overlays", "/dialogs", "/brand", "/shell", "/sign-in"];
 const themes = ["light", "dark"] as const;
 const WCAG = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa", "best-practice"];
 
@@ -57,9 +57,9 @@ test("sign-in: button signs in, account menu signs out and back", async ({ page 
 });
 
 for (const theme of themes) {
-  test(`overlays and example flows are accessible (${theme})`, async ({ page }) => {
-    await open(page, "/examples", theme);
-    await page.getByRole("row", { name: /alex voorbeeld/i }).first().click();
+  test(`slide-over and account menu are accessible (${theme})`, async ({ page }) => {
+    await open(page, "/overlays", theme);
+    await page.getByRole("button", { name: "Open slide-over" }).click();
     await expect(page.getByRole("dialog")).toBeVisible();
     expect(await violations(page)).toEqual([]);
     await page.keyboard.press("Escape");
@@ -71,18 +71,10 @@ for (const theme of themes) {
 }
 
 test("kanban: a card moves with the keyboard-accessible select", async ({ page }) => {
-  await open(page, "/examples", "light");
-  await page.getByRole("tab", { name: /kanban/i }).click();
-  await page.getByRole("button", { name: /move collect q3 vendor contracts/i }).click();
+  await open(page, "/dialogs", "light");
+  await page.getByRole("button", { name: /move review access list/i }).click();
   await page.getByRole("option", { name: "Done" }).click();
-  await expect(page.getByRole("region", { name: /^done/i }).getByText("Collect Q3 vendor contracts", { exact: true })).toBeVisible();
-});
-
-test("bug report: empty title shows the error next to the field", async ({ page }) => {
-  await open(page, "/examples", "light");
-  await page.getByRole("tab", { name: /bug reporting/i }).click();
-  await page.getByRole("button", { name: /send report/i }).click();
-  await expect(page.getByText("Give the bug a short title.")).toBeVisible();
+  await expect(page.getByRole("region", { name: /^done/i }).getByText("Review access list", { exact: true })).toBeVisible();
 });
 
 test("app shell: palette and assistant open, labelled, accessible", async ({ page }) => {

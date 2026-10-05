@@ -5,7 +5,7 @@ import { expect, test, type Page } from "@playwright/test";
  * committed baseline. A failing test means the page looks different: look at the diff in test-results, and if the change is
  * intended run `npm run test:visual:update` and review the changed images in the pull request.
  */
-const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/actions", "/overlays", "/dialogs", "/brand", "/examples", "/shell", "/sign-in"];
+const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/actions", "/overlays", "/dialogs", "/brand", "/shell", "/sign-in"];
 const sizes = { desktop: { width: 1280, height: 800 }, phone: { width: 390, height: 844 } } as const;
 const themes = ["light", "dark"] as const;
 
@@ -47,7 +47,7 @@ for (const [size, viewport] of Object.entries(sizes)) {
   });
   test(`@visual slide-over ${size}`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await open(page, "/examples", "light");
+    await open(page, "light");
     await page.getByRole("row", { name: /alex voorbeeld/i }).first().click();
     await expect(page.getByRole("dialog")).toBeVisible();
     await expect(page).toHaveScreenshot(`state-slide-over-${size}.png`);
