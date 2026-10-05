@@ -10,6 +10,9 @@ const stateText: Record<StepState, string> = { complete: "Complete", current: "C
  * Stepper: ordered steps of ONE task (setup, review, publish). Use for progress through a task;
  * use ProcessFlow for how a business process runs. State is shown by icon, label and shape, never colour alone.
  * Steps are real buttons when `onSelect` is given (keyboard reachable), plain text otherwise.
+ *
+ * @example
+ * <Stepper steps={[{ id: "scope", label: "Scope", state: "complete" }, { id: "scan", label: "Scan", state: "current" }, { id: "review", label: "Review", state: "upcoming" }]} />
  */
 export function Stepper({ steps, orientation = "horizontal", onSelect, label = "Progress" }: {
   steps: StepItem[]; orientation?: "horizontal" | "vertical"; onSelect?: (id: string) => void; label?: string;

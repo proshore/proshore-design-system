@@ -18,7 +18,8 @@
     "dev:discovery": "npm run dev -w discovery-example",
     "test:auth": "npm test -w @proshore/auth",
     "test:visual": "npm run test:visual -w gallery && npm run test:visual -w discovery-example",
-    "test:visual:update": "npm run test:visual:update -w gallery && npm run test:visual:update -w discovery-example"
+    "test:visual:update": "npm run test:visual:update -w gallery && npm run test:visual:update -w discovery-example",
+    "api": "npm run gen:api -w gallery"
   },
   "devDependencies": {
     "knip": "^6.38.0"

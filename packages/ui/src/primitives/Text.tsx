@@ -24,6 +24,9 @@ export function Heading({ as: As = "h2", size = "5", weight, className, style, c
   );
 }
 
+/**
+ * Inline monospace code.
+ */
 export function Code({ children, className, style }: { children: ReactNode; className?: string; style?: CSSProperties }) {
   return <code className={`pr-code${className ? " " + className : ""}`} style={style}>{children}</code>;
 }

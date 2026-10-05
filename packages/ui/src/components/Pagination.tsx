@@ -8,6 +8,9 @@ import { Text } from "../primitives/Text";
  * Pagination: previous and next, with first and last when there are more than five pages. `range` is the sentence about
  * what is shown ("1-10 of 37"). The buttons stay in place and are marked disabled at the ends, so the layout never jumps.
  * DataTable uses this; use it directly for lists and card grids.
+ *
+ * @example
+ * <Pagination page={page} pageCount={8} onPageChange={setPage} range="1-10 of 73" />
  */
 export function Pagination({ page, pageCount, onPageChange, range, label = "Pagination" }: {
   /** Zero-based current page. */ page: number; pageCount: number; onPageChange: (p: number) => void; range?: string; label?: string;

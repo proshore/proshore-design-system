@@ -6,6 +6,9 @@ import { Text } from "../primitives/Text";
  * FileDropzone: choose files by dragging them in or with a button, so it works without a mouse. The app decides what to do
  * with the files (`onFiles`); this only collects them. State what is allowed up front (`accept`, `description`), and show
  * progress and errors in the app next to the file name. Never rely on the file type alone: check on the server.
+ *
+ * @example
+ * <FileDropzone label="Upload a scan report" accept={["application/json"]} onFiles={(files) => upload(files)} />
  */
 export function FileDropzone({ label, description, accept, multiple = true, onFiles, error, children }: {
   label: string; description?: ReactNode; /** MIME types or extensions, for example [".csv", "image/png"]. */ accept?: string[];

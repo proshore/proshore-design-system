@@ -16,6 +16,9 @@ const copy: Record<StatusKind, { code: string; title: string; text: string }> = 
  * session expired (401), offline. Plain language first: say what happened, whether it is the person's doing, and what to do next.
  * Use inside the page area of the shell (it renders a section, the page's h1). `actions` holds the one or two ways out
  * (go back, sign in again, try again); `reference` is a support code to quote, if the app has one.
+ *
+ * @example
+ * <StatusPage kind="not-found" actions={<Button href="#/">Back to start</Button>} />
  */
 export function StatusPage({ kind, title, description, actions, reference }: {
   kind: StatusKind; title?: string; description?: ReactNode; actions?: ReactNode; reference?: string;

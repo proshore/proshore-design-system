@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/actions", "/overlays", "/dialogs", "/brand", "/shell", "/sign-in"];
+const routes = ["/foundations", "/layout", "/forms", "/tables", "/charts", "/actions", "/overlays", "/dialogs", "/brand", "/shell", "/sign-in", "/api"];
 const themes = ["light", "dark"] as const;
 const WCAG = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa", "best-practice"];
 
@@ -16,6 +16,7 @@ const violations = async (page: Page) => (await new AxeBuilder({ page }).withTag
 for (const theme of themes) {
   for (const route of routes) {
     test(`accessibility: ${route} (${theme})`, async ({ page }) => {
+      if (route === "/api") test.slow(); // about 180 generated cards: axe needs far longer than on the other pages, more so with parallel workers
       await open(page, route, theme);
       expect(await violations(page)).toEqual([]);
     });
@@ -120,4 +121,17 @@ test("status pages render each kind with one h1", async ({ page }) => {
     await page.getByRole("button", { name: label }).click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(2); // the page title and the status page
   }
+});
+
+test("api reference: searching shows a card with its props table", async ({ page }) => {
+  await open(page, "/api", "light");
+  await page.getByRole("searchbox", { name: "Search the API" }).fill("Pagination");
+  const card = page.getByRole("article", { name: "Pagination" });
+  await expect(card).toBeVisible();
+  const props = card.getByRole("table", { name: "Pagination props" });
+  await expect(props.getByRole("rowheader", { name: /^page\b/ })).toBeVisible();
+  await expect(props.getByRole("rowheader", { name: /^pageCount\b/ })).toBeVisible();
+  await expect(card.getByRole("link", { name: /demo/i })).toHaveAttribute("href", "#/dialogs");
+  await expect(card.getByText("<Pagination page={page}")).toBeVisible();
+  expect(await violations(page)).toEqual([]);
 });

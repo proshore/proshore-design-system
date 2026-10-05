@@ -12,6 +12,10 @@ type Common = {
  * Button (React Aria). One primary (solid) per view; outline for alternatives; soft and ghost for quiet actions.
  * With `href` it renders a real link that looks like a button (navigation), otherwise a button (action).
  * Keyboard, press and focus behaviour come from React Aria; state is exposed as data attributes for CSS.
+ *
+ * @example
+ * <Button variant="solid" onClick={() => save()}>Save changes</Button>
+ * <Button variant="outline" href="#/settings">Open settings</Button>
  */
 export function Button({ variant = "solid", size = "2", color, disabled, className, style, children, href, onClick, type = "button", ...aria }: Common & { href?: string; onClick?: () => void; type?: "button" | "submit" | "reset" }) {
   const cls = `pr-btn${className ? " " + className : ""}`;

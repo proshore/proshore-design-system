@@ -6,7 +6,7 @@
 | --- | --- |
 | `packages/ui` | The package `@proshore/ui` (source, build, Claude skill, token export) |
 | `packages/auth` | The package `@proshore/auth`: server-side Google Workspace sign-in (proshore.nl only), see [`docs/google-sign-in.md`](docs/google-sign-in.md). Not yet verified against real Google. |
-| `apps/gallery` | Component gallery: foundations, components, the app shell and the sign-in screen. Also the test bench: axe in light and dark, phone width, console errors. |
+| `apps/gallery` | Component gallery: foundations, components, the app shell and the sign-in screen. Also the test bench: axe in light and dark, phone width, console errors. The **API reference** page (`#/api`) lists every export with props, defaults, types, descriptions and a usage snippet, generated from the source and its JSDoc (`npm run api`; also runs on dev, build and typecheck). |
 | `apps/discovery-example` | Sherpa Discovery on this package: app shell, client switcher, assistant, evidence components. The reference for building a Sherpa app. Uses real example customers, see CONTRIBUTING. |
 | `docs/` | Decisions and background (see the note in `docs/README.md`) |
 
@@ -26,6 +26,7 @@ More in [`packages/ui/README.pack.md`](packages/ui/README.pack.md). In CI of a c
 npm install
 npm run dev       # gallery (port 5180)
 npm run dev:discovery   # the Discovery example (port 5181)
+npm run api       # regenerates the API reference data (apps/gallery/src/generated/api.json, not committed)
 npm run check     # the quality gate, same as CI
 npm run pack      # builds release/proshore-ui-<version>.tgz
 ```

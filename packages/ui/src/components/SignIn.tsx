@@ -35,6 +35,9 @@ export function GoogleSignInButton({ onPress, busy = false, label = "Sign in wit
  * UI only: the application provides `onSignIn` (start the Google flow) and decides who may enter. Google proves who someone is;
  * it does not say what they may see: customer access and roles are separate, per project.
  * Renders <main> with the page's h1. Use `notice` for "You have been signed out." and similar short messages.
+ *
+ * @example
+ * <SignInScreen product="Design system" onSignIn={() => (location.href = "/auth/login")} />
  */
 export function SignInScreen({ product, productMark, onSignIn, busy = false, domain = "proshore.nl", notice, footer }: {
   /** Product name, for example "Sherpa Discovery". */ product: string;

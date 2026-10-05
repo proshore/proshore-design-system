@@ -27,6 +27,11 @@ export function ShellNav({ items, label, trailing }: { items: ShellNavItem[]; la
  * current app takes the accent), a top bar that says where you are, and the page. On phones the left bar becomes a bottom bar.
  * Slots: `client` (usually WorkspaceSwitcher), `nav` (ShellNav), `actions` (for example an assistant button), `theme`, `user`.
  * Landmarks: <aside> "apps", <header> banner, <main id="main">. Put overlays (toasts, drawers) as `overlays`, after the page.
+ *
+ * @example
+ * <AppShell appName="Discovery" currentApp="workspace" apps={[{ id: "workspace", name: "Discovery", href: "#/", glyph: "workspace" }]} user={<UserMenu user={user} theme="system" onTheme={setTheme} onSignOut={signOut} />}>
+ *   <Page>…</Page>
+ * </AppShell>
  */
 export function AppShell({
   apps, currentApp, appName, homeHref = "#/", appsLabel = "Apps", client, nav, actions, onSearch, searchLabel = "Search or jump to", theme, user, proshoreOnly = false, overlays, children,

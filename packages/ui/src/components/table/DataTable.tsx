@@ -70,6 +70,22 @@ function useRowMotion(bodyRef: React.RefObject<HTMLTableSectionElement | null>, 
   }, [bodyRef, orderKey]);
 }
 
+/**
+ * DataTable: the full data grid. Sorting, search, filters, column visibility, density, pagination, CSV export, row selection and loading, error and empty states in one component. Columns describe how to read, show, sort and export each row.
+ *
+ * @example
+ * <DataTable
+ *   caption="Applications"
+ *   noun="applications"
+ *   rows={apps}
+ *   getRowId={(a) => a.id}
+ *   columns={[
+ *     { id: "name", header: "Name", accessor: (a) => a.name },
+ *     { id: "owner", header: "Owner", accessor: (a) => a.owner },
+ *   ]}
+ *   onRowOpen={(a) => setOpen(a.id)}
+ * />
+ */
 export function DataTable<T>(props: DataTableProps<T>) {
   const { columns, rows, getRowId, caption, noun = "items", status = "ready", onRowOpen, selectable = false, features = {} } = props;
   const f = { search: true, filters: true, density: true, columns: true, export: true, pagination: true, ...features };
