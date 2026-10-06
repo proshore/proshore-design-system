@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Checkbox, Cluster, Heading, Page, PageHeader, Panel, Section, Stack, Text } from "@proshore/ui";
 import { Demo, Swatch } from "../doc/Doc";
 
@@ -66,7 +66,7 @@ export function Foundations() {
       <Section id="type" title="Type" description="Geist for text, Geist Mono for labels, codes and numbers that must align. Sizes are a fixed scale; never set a pixel size in a screen.">
         <Panel>
           <div className="g-type">
-            {sizes.map(([n, name]) => (<><code key={`c${n}`}>--font-size-{n}</code><Text key={`t${n}`} size={String(n) as "1"} weight={n >= 5 ? "bold" : "regular"}>{name}: plain language first, technical detail on demand</Text></>))}
+            {sizes.map(([n, name]) => (<Fragment key={n}><code>--font-size-{n}</code><Text size={String(n) as "1"} weight={n >= 5 ? "bold" : "regular"}>{name}: plain language first, technical detail on demand</Text></Fragment>))}
             <code>mono</code><Text size="2" mono>INV-1042 · 2026-10-05 · 12,480</Text>
           </div>
         </Panel>
