@@ -20,7 +20,7 @@ export default function Findings({ openFinding, params }: PageProps) {
         rowLabel={(f) => `${f.title} (${f.id})`} noResultsHint initialPageSize={25} initialSort={[{ id: "severity", dir: "asc" }]}
         onRowOpen={(f, visible) => openFinding(f, visible)}
         partialNotice={<PartialBanner>Scan S-104 is partial: Semgrep returned nothing, Gitleaks results were not recorded and Billing was not scanned. This list is incomplete, and a review item is not a confirmed vulnerability.</PartialBanner>}
-        features={{ density: false, columns: false, export: false }}
+        features={{ columns: false, export: false }}
       /></div>
     </Page>
   );

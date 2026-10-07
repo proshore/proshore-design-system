@@ -48,6 +48,13 @@ export type DataTableProps<T> = {
   maxHeight?: string;
 };
 
+/** Single-line cells are cut with an ellipsis; on hover a cut cell gets its full text as tooltip. Keyboard and screen reader users get the full text from the row detail and the DOM. */
+function cellTooltip(e: MouseEvent<HTMLElement>) {
+  const el = e.currentTarget;
+  if (el.scrollWidth > el.clientWidth + 1) { if (!el.title) { el.title = el.textContent ?? ""; el.dataset.tip = ""; } }
+  else if (el.dataset.tip !== undefined) { el.removeAttribute("title"); delete el.dataset.tip; }
+}
+
 const AlignCls = { start: "", end: " dt-end", center: " dt-center" } as const;
 
 /**
@@ -226,7 +233,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
                         const content = c.cell ? c.cell(row, ctx) : raw instanceof Date ? raw.toLocaleDateString() : raw === null || raw === undefined || raw === "" ? <span className="dt-muted">{t("table.notRecorded")}</span> : ctx.highlight(String(raw));
                         const asBtn = onRowOpen && i === 0;
                         return (
-                          <td key={c.id} className={`dt-td${AlignCls[c.align ?? "start"]}${i === stickyIdx ? " dt-stickyc" : ""}`} style={colStyle(c, i)}>
+                          <td key={c.id} className={`dt-td${AlignCls[c.align ?? "start"]}${i === stickyIdx ? " dt-stickyc" : ""}`} style={colStyle(c, i)} onMouseEnter={cellTooltip}>
                             {asBtn ? <button type="button" className="dt-rowbtn" aria-label={props.rowLabel ? t("table.openRow", { label: props.rowLabel(row) }) : undefined} onClick={() => onRowOpen(row, s.sorted)}>{content}</button> : content}
                           </td>
                         );

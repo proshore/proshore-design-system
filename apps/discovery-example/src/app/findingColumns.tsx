@@ -1,5 +1,5 @@
 import { SeverityBadge, evidenceMeta } from "../ui";
-import type { ColumnDef } from "@proshore/ui";
+import { CellSub, type ColumnDef } from "@proshore/ui";
 import { applications } from "../fixtures/brightfield";
 import type { FindingRecord, ReviewState, Severity } from "../fixtures/brightfield";
 
@@ -11,7 +11,7 @@ const appName = (id: string) => applications.find((a) => a.id === id)?.name ?? i
 /** Column definitions for the findings table. Search, sort, filters and CSV all come from these. */
 export const findingColumns: ColumnDef<FindingRecord>[] = [
   { id: "finding", header: "Finding", sticky: true, width: 320, accessor: (f) => f.title, searchText: (f) => `${f.title} ${f.id} ${f.category}`,
-    cell: (f, { highlight }) => (<><span className="dt-title" title={f.title}>{highlight(f.title)}</span><span className="dt-sub">{highlight(f.id)} · {highlight(f.category)}</span></>) },
+    cell: (f, { highlight }) => (<><span className="dt-title">{highlight(f.title)}</span><CellSub>{highlight(f.id)} · {highlight(f.category)}</CellSub></>) },
   { id: "app", header: "Application", accessor: (f) => appName(f.appId), filter: { kind: "multi", value: (f) => f.appId, options: applications.filter((a) => a.id !== "billing").map((a) => ({ value: a.id, label: a.name })) }, cell: (f) => appName(f.appId) },
   { id: "step", header: "Journey step", hideBelow: 1000, accessor: (f) => f.capability, searchText: (f) => f.capability },
   { id: "evidence", header: "Evidence", accessor: (f) => evidenceMeta[f.state].label, searchText: false,
@@ -21,5 +21,5 @@ export const findingColumns: ColumnDef<FindingRecord>[] = [
     cell: (f) => <SeverityBadge severity={f.severity} compact /> },
   { id: "review", header: "Review status", accessor: (f) => reviewLabel[f.reviewState], searchText: (f) => `${reviewLabel[f.reviewState]} ${f.reviewNote}`,
     filter: { kind: "select", value: (f) => f.reviewState, options: (Object.keys(reviewLabel) as ReviewState[]).map((v) => ({ value: v, label: reviewLabel[v] })) },
-    cell: (f) => (<><span className="dt-status" data-state={f.reviewState}>{reviewLabel[f.reviewState]}</span><span className="dt-sub">{f.reviewNote}</span></>), csv: (f) => `${reviewLabel[f.reviewState]}: ${f.reviewNote}` },
+    cell: (f) => (<><span className="dt-status" data-state={f.reviewState}>{reviewLabel[f.reviewState]}</span><CellSub>{f.reviewNote}</CellSub></>), csv: (f) => `${reviewLabel[f.reviewState]}: ${f.reviewNote}` },
 ];

@@ -6,7 +6,7 @@ import { allFindings } from "../fixtures/moreFindings";
 import { DemoTag } from "@proshore/ui";
 import { Cluster, Grid, Page, PageHeader, Panel, Section, Stack } from "@proshore/ui";
 import { EvidenceBadge, SeverityBadge, evidenceMeta } from "../ui";
-import { DataTable, EmptyState, ErrorState, NoResults, PartialBanner, TableSkeleton, type ColumnDef } from "@proshore/ui";
+import { CellSub, DataTable, EmptyState, ErrorState, NoResults, PartialBanner, TableSkeleton, type ColumnDef } from "@proshore/ui";
 
 const severityRank: Record<Severity, number> = { critical: 0, high: 1, medium: 2, low: 3, review: 4 };
 const severityLabel: Record<Severity, string> = { critical: "Critical", high: "High", medium: "Medium", low: "Low", review: "Review item" };
@@ -15,7 +15,7 @@ const appName = (id: string) => applications.find((a) => a.id === id)?.name ?? i
 
 const findingColumns: ColumnDef<FindingRecord>[] = [
   { id: "finding", header: "Finding", sticky: true, width: 320, accessor: (f) => f.title, searchText: (f) => `${f.title} ${f.id} ${f.category}`,
-    cell: (f, { highlight }) => (<><span className="dt-title">{highlight(f.title)}</span><span className="dt-sub">{highlight(f.id)} · {highlight(f.category)}</span></>) },
+    cell: (f, { highlight }) => (<><span className="dt-title">{highlight(f.title)}</span><CellSub>{highlight(f.id)} · {highlight(f.category)}</CellSub></>) },
   { id: "app", header: "Application", accessor: (f) => appName(f.appId), filter: { kind: "multi", value: (f) => f.appId, options: applications.map((a) => ({ value: a.id, label: a.name })) },
     cell: (f) => appName(f.appId) },
   { id: "step", header: "Journey step", accessor: (f) => f.capability, searchText: (f) => f.capability },
@@ -27,7 +27,7 @@ const findingColumns: ColumnDef<FindingRecord>[] = [
     cell: (f) => <SeverityBadge severity={f.severity} /> },
   { id: "review", header: "Review status", accessor: (f) => reviewLabel[f.reviewState], searchText: (f) => `${reviewLabel[f.reviewState]} ${f.reviewNote}`,
     filter: { kind: "select", value: (f) => f.reviewState, options: (Object.keys(reviewLabel) as ReviewState[]).map((v) => ({ value: v, label: reviewLabel[v] })) },
-    cell: (f, { highlight }) => (<><span>{reviewLabel[f.reviewState]}</span><span className="dt-sub">{highlight(f.reviewNote)}</span></>), csv: (f) => `${reviewLabel[f.reviewState]}: ${f.reviewNote}` },
+    cell: (f, { highlight }) => (<><span>{reviewLabel[f.reviewState]}</span><CellSub>{highlight(f.reviewNote)}</CellSub></>), csv: (f) => `${reviewLabel[f.reviewState]}: ${f.reviewNote}` },
   { id: "tools", header: "Tools", align: "end", sortValue: (f) => f.security.tools.length, accessor: (f) => f.security.tools.length, searchText: false },
 ];
 
