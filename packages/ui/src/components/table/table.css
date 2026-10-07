@@ -144,12 +144,15 @@
    The secondary text of a cell (<CellSub>) sits inline after the primary text, muted, and is cut first. */
 .dt { --dt-cell-max: 28rem; }
 .dt[data-density="compact"] .dt-td { padding-block: var(--space-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dt[data-density="compact"] .dt-td:not(:first-child) { max-width: var(--dt-cell-max); }
+/* max-width: 0 lets a cell shrink below its text width, so columns share the table width and long text is cut with an ellipsis instead of pushing the table wider than its container. */
+.dt[data-density="compact"] .dt-td:not(:first-child) { max-width: 0; min-width: 4.5rem; }
 .dt[data-density="compact"] .dt-title, .dt[data-density="compact"] .dt-status { display: inline; }
 .dt[data-density="compact"] .dt-sub { display: inline; margin-top: 0; margin-inline-start: var(--space-2); overflow: visible; }
 .dt[data-density="compact"] .dt-rowbtn { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-height: 0; }
 .dt[data-density="compact"] .dt-check { min-height: 24px; }
 .dt[data-density="comfortable"] .dt-sub { display: block; }
+/* In the narrow columns after the first, only the primary text shows; the secondary text is in the tooltip and in the row detail. */
+.dt[data-density="compact"] .dt-td:not(:first-child) .dt-sub { display: none; }
 
 /* ---- One-row toolbar: search, facets, count and the right controls on one line; chips only when something is applied ---- */
 .dt-filterbar__count { margin-inline-start: auto; }

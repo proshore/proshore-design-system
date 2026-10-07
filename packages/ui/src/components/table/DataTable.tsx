@@ -52,7 +52,10 @@ export type DataTableProps<T> = {
 function cellTooltip(e: MouseEvent<HTMLElement>) {
   const el = e.currentTarget;
   const inner = el.querySelector<HTMLElement>(".dt-rowbtn"); // the first cell's text sits in the row button, which does the clipping
-  const cut = el.scrollWidth > el.clientWidth + 1 || (inner !== null && inner.scrollWidth > inner.clientWidth + 1);
+  // a secondary text that the density hides in a narrow column counts as cut: the tooltip then carries the full text
+  const sub = el.querySelector<HTMLElement>(".dt-sub");
+  const hiddenSub = sub !== null && getComputedStyle(sub).display === "none";
+  const cut = hiddenSub || el.scrollWidth > el.clientWidth + 1 || (inner !== null && inner.scrollWidth > inner.clientWidth + 1);
   if (cut) { if (!el.title) { el.title = el.textContent ?? ""; el.dataset.tip = ""; } }
   else if (el.dataset.tip !== undefined) { el.removeAttribute("title"); delete el.dataset.tip; }
 }

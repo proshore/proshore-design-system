@@ -340,6 +340,8 @@ for (const theme of themes) {
     await page.getByRole("button", { name: "Open docked panel" }).click();
     await expect(page.getByRole("dialog", { name: "Docked detail panel" })).toBeVisible();
     expect(await violations(page)).toEqual([]);
+  });
+}
 
 /** Dense tables: single-line rows, one-row toolbar, Note with summary (added with the density change). */
 const noWrap = (page: Page) => page.evaluate(() => {

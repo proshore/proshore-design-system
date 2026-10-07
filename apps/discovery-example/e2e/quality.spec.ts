@@ -172,6 +172,9 @@ for (const theme of themes) {
     await open(page, "/findings", theme);
     await page.locator(".dt-rowbtn").first().click();
     await expect(page.getByRole("dialog")).toBeVisible();
+    expect(await violations(page)).toEqual([]);
+  });
+}
 
 /** Dense tables: single-line rows, one-row toolbar, Note with summary (added with the density change). */
 const noWrap = (page: Page) => page.evaluate(() => {
