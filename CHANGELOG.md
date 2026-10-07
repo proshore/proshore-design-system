@@ -2,7 +2,7 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
-## Unreleased
+## 0.7.0
 - **One intro per page, no double headings.** The rule is in the Claude skill and enforced by a test (no heading repeats the one right above it; a page with a single section has no section title). Cleaned the Discovery example (Landscape, Evidence, Setup, Overview) and the gallery (Forms, Overlays, Layout, Charts). `EvidenceTrail` takes `heading={false}` when a titled section already names it (example app).
 - `Panel` and `ChartCard` take `headingLevel` (2 or 3, default 3): use 2 when the page has no titled section above them, so the heading order stays correct.
 - The page header now has a little more air under the top bar (20px instead of 12px; 22px inside the shell). Collapsing-title wrapper keeps the old layout (`display: contents`).
