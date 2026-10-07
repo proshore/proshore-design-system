@@ -4,8 +4,8 @@ import { Badge, Breadcrumbs, Button, Cluster, Disclosure, Grid, KeyValue, Note, 
 export function LayoutPage() {
   return (
     <Page>
-      <PageHeader eyebrow="Components" title="Layout and feedback" description="Page frame, panels, stats, steps, tabs and the messages that tell people what happened." breadcrumbs={[{ label: "Gallery", href: "#/foundations" }, { label: "Layout" }]} actions={<Button onClick={() => toast.show("Saved (demo)", { tone: "success" })}>Show a toast</Button>} />
-      <Section title="Layout" description="Page, PageHeader, Section, Grid, WithAside, Stack, Cluster, Panel, KeyValue, StatCard. Set no margins or widths on a screen: place things in these.">
+      <PageHeader eyebrow="Components" title="Layout and feedback" description="Page frame, panels, stats, steps, tabs and the messages that tell people what happened. Built from Page, PageHeader, Section, Grid, WithAside, Stack, Cluster, Panel, KeyValue and StatCard: set no margins or widths on a screen, place things in these." breadcrumbs={[{ label: "Gallery", href: "#/foundations" }, { label: "Layout" }]} actions={<Button onClick={() => toast.show("Saved (demo)", { tone: "success" })}>Show a toast</Button>} />
+      <Section>
         <Rules dos={["Put cards in a Grid so columns and gaps come from one place.", "Keep title left and actions right in headers and panels.", "Use KeyValue for label and value pairs so values align."]} donts={["Do not set margin or width on a card.", "Do not nest more than one level of cards.", "Do not show a bare number without scope: use StatCard with a caveat."]} />
       </Section>
       <Section title="Stats">

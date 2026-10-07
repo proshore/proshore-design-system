@@ -42,13 +42,14 @@ export function ShellNav({ items, label, trailing }: { items: ShellNavItem[]; la
  * </AppShell>
  */
 export function AppShell({
-  apps, currentApp, appName, homeHref = "#/", appsLabel, client, nav, actions, onSearch, searchLabel, theme, user, proshoreOnly = false, autoHide = "scroll", overlays, children,
+  apps, currentApp, appName, homeHref = "#/", appsLabel, client, nav, actions, onSearch, searchLabel, theme, user, proshoreOnly = false, autoHide = "scroll", collapseTitle = true, overlays, children,
 }: {
   apps: ShellApp[]; currentApp: string; appName: string; homeHref?: string; appsLabel?: string;
   client?: ReactNode; nav?: ReactNode; actions?: ReactNode;
   /** Opens the command palette. The search button shows only when provided. */ onSearch?: () => void; searchLabel?: string;
   theme?: ReactNode; user: ReactNode;
   /** Marks the page as Proshore-only with an accent line on the top bar. */ proshoreOnly?: boolean;
+  /** When the page title (a PageHeader with a text title) has scrolled out of view, the bar shows it in place of the app name and client; hover or focus on that area brings them back. Set false to keep the app name and client always. */ collapseTitle?: boolean;
   /** The top bar slides away while scrolling down and returns on scrolling up, on focus, or when a menu from it is open. "phone": only on phones. "off": always visible. */ autoHide?: AutoHide;
   overlays?: ReactNode; children: ReactNode;
 }) {
@@ -58,7 +59,10 @@ export function AppShell({
   const [navLabel, setNavLabel] = useState("");
   const [dockSlot, setDockSlot] = useState<HTMLElement | null>(null);
   const [docked, setDocked] = useState(false);
-  const ctx = useMemo(() => ({ navLabel, setNavLabel, dockSlot, docked, setDocked }), [navLabel, dockSlot, docked]);
+  const [pageTitle, setPageTitle] = useState("");
+  const [titleOut, setTitleOut] = useState(false);
+  const ctx = useMemo(() => ({ navLabel, setNavLabel, dockSlot, docked, setDocked, pageTitle, setPageTitle, titleOut, setTitleOut }), [navLabel, dockSlot, docked, pageTitle, titleOut]);
+  const showTitle = collapseTitle && titleOut && pageTitle !== "";
   // Publish the height of the sticky top bar, so sticky toolbars in the page (table filters) stop right under it.
   // While the bar is hidden they pin to the top edge (0px); the registered custom property animates with the bar.
   useEffect(() => {
@@ -88,8 +92,11 @@ export function AppShell({
       <div className="pr-shell__frame" data-docked={docked || undefined}>
       <header ref={barRef} className="pr-bar" data-proshore={proshoreOnly || undefined} data-hidden={hidden || undefined}>
         <div className="pr-bar__row">
-          <span className="pr-bar__appname">{appName}</span>
-          {client && (<><span className="pr-bar__sep" aria-hidden>/</span>{client}</>)}
+          <div className="pr-bar__lead" data-collapsed={showTitle || undefined}>
+            <span className="pr-bar__appname">{appName}</span>
+            {client && (<><span className="pr-bar__sep" aria-hidden>/</span>{client}</>)}
+            <span className="pr-bar__page" aria-hidden="true">{pageTitle}</span>
+          </div>
           {nav}
           <span className="pr-bar__grow" />
           {onSearch && <button type="button" className="pr-bar__iconbtn" onClick={onSearch} aria-label={t("shell.opensPalette", { label: searchLabel ?? t("shell.search") })}><MagnifyingGlassIcon aria-hidden /></button>}

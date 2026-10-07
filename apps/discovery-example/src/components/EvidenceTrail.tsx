@@ -19,7 +19,7 @@ export function trailOf(f: FindingRecord): TrailStep[] {
 }
 
 /** Source finding to application, capability and impact. Each link has state and reviewer. */
-export function EvidenceTrail({ steps = evidenceTrail, bare = false }: { steps?: TrailStep[]; bare?: boolean }) {
+export function EvidenceTrail({ steps = evidenceTrail, bare = false, heading = true }: { steps?: TrailStep[]; bare?: boolean; /** false when a titled Section already names it, so the page does not show two headings */ heading?: boolean }) {
   const list = (
     <ol className="sherpa-trail" aria-label="Evidence trail from finding to potential impact">
       {steps.map((s) => (
@@ -35,5 +35,5 @@ export function EvidenceTrail({ steps = evidenceTrail, bare = false }: { steps?:
     </ol>
   );
   if (bare) return list;
-  return (<Card><Heading as="h3" size="2" mb="3">Evidence trail</Heading>{list}</Card>);
+  return (<Card>{heading && <Heading as="h3" size="2" mb="3">Evidence trail</Heading>}{list}</Card>);
 }

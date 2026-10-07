@@ -77,7 +77,7 @@ export function Setup() {
 
           {step === "scope" && (
             <Card><Flex direction="column" gap="4">
-              <Heading as="h2" size="4">Question and scope</Heading>
+              <Heading as="h2" size="4" className="pr-sr">Question and scope</Heading>
               <TextArea label="What does the customer want to know?" description="One concrete business question. It is the first thing every stakeholder sees." value={question} onChange={setQuestion} rows={3} />
               <Flex direction="column" gap="2"><Text size="2" weight="medium">In scope</Text>
                 <Flex gap="2" wrap="wrap">{applications.map((a) => <Badge key={a.id} size="2" variant="soft">{a.name}</Badge>)}</Flex></Flex>
@@ -88,7 +88,7 @@ export function Setup() {
 
           {step === "sources" && (
             <Card><Flex direction="column" gap="4">
-              <Heading as="h2" size="4">Sources</Heading>
+              <Heading as="h2" size="4" className="pr-sr">Sources</Heading>
               <Note tone="info">Repository access tokens are used only to clone and are never stored or shown. The prototype does not accept tokens.</Note>
               <SimpleTable caption="Connected repositories" rows={repos} getRowId={(r) => r.id} columns={[
                 { id: "repo", header: "Repository", cell: (r) => r.name }, { id: "branch", header: "Branch", cell: (r) => r.branch },
@@ -103,7 +103,7 @@ export function Setup() {
 
           {step === "apps" && (
             <Card><Flex direction="column" gap="4">
-              <Heading as="h2" size="4">Applications</Heading>
+              <Heading as="h2" size="4" className="pr-sr">Applications</Heading>
               <Text size="2" color="gray">A repository is not an application. One application can span several repositories, and one repository can hold several deployable parts. These groupings are <strong>proposals</strong> until the customer's Technical lead confirms them.</Text>
               {repos.map((r) => (
                 <Flex key={r.id} justify="between" align="center" gap="3" wrap="wrap" style={{ borderTop: "1px solid var(--pr-line)", paddingTop: "var(--space-3)" }}>
@@ -119,7 +119,7 @@ export function Setup() {
 
           {step === "context" && (
             <Card><Flex direction="column" gap="4">
-              <Heading as="h2" size="4">Business context</Heading>
+              <Heading as="h2" size="4" className="pr-sr">Business context</Heading>
               <Text size="2" color="gray">Goals, processes and constraints the evidence will be read against. Each item keeps its source, so a guess is never shown as a fact.</Text>
               {setupContext.map((c) => { const M = evidenceMeta[c.source === "confirmed" ? "confirmed" : c.source === "code" ? "inferred" : "observed"]; return (
                 <Flex key={c.id} direction="column" gap="1" style={{ borderTop: "1px solid var(--pr-line)", paddingTop: "var(--space-3)" }}>
@@ -131,7 +131,7 @@ export function Setup() {
 
           {step === "people" && (
             <Card><Flex direction="column" gap="4">
-              <Heading as="h2" size="4">People and access</Heading>
+              <Heading as="h2" size="4" className="pr-sr">People and access</Heading>
               <Note tone="info">Invitations are not sent in this prototype. In the real product, access must be enforced by the backend per engagement, not by hiding screens.</Note>
               <SimpleTable caption="People and access" rows={setupPeople} getRowId={(p) => p.id} columns={[
                 { id: "person", header: "Person", cell: (p) => <>{p.name}<br /><Text size="1" color="gray">{p.org}</Text></> }, { id: "role", header: "Role", cell: (p) => p.role },
@@ -142,7 +142,7 @@ export function Setup() {
 
           {step === "ready" && (
             <Card><Flex direction="column" gap="4">
-              <Heading as="h2" size="4">Scan readiness</Heading>
+              <Heading as="h2" size="4" className="pr-sr">Scan readiness</Heading>
               <Text size="2" color="gray">A finished scan is not full coverage. Review what the customer will not see before publishing.</Text>
               <Flex direction="column" gap="2">{coverageChecks.map((c) => (
                 <Flex key={c.tool} justify="between" gap="3" wrap="wrap" style={{ borderTop: "1px solid var(--pr-line)", paddingTop: "var(--space-2)" }}>

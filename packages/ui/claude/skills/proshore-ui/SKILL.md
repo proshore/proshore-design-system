@@ -93,3 +93,13 @@ Do not invent a one-off look. In order: (1) compose it from existing primitives;
 
 ## 8. Naming note
 Tokens start with `--pr-` (semantic: canvas, surface, line, status) because the design system grew inside the Sherpa product family. They are generic; use them as listed.
+
+`AppShell` shows the page title in the top bar once the `PageHeader` title has scrolled out of view (prop `collapseTitle`, default on; set `collapseTitle={false}` to keep the app name and client always). Only a text `title` is used.
+
+## One intro per page, no double headings
+- The `PageHeader` holds the page's one intro. A `Section` gets a title only when the page has several sections; a page with a single section shows no section title.
+- Add a section description only when it says something the title and the page intro do not (a caveat, how to read it). Otherwise leave it out.
+- Never show two headings for one thing: a titled section around a card whose own title says the same (for example a chart section "Bar chart" above a chart titled with its finding), or a heading repeated one line below. If a component carries its own heading, hide or omit the section title, or the other way round.
+- Screen-reader-only headings (`className="pr-sr"`) are fine where a visible control already names the thing, for example the current step in a Stepper.
+- The test "headings: no heading repeats the one above it, and a lone section has no title" in the gallery and the Discovery example enforces the two mechanical parts.
+

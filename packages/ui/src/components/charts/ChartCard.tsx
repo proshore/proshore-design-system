@@ -14,6 +14,8 @@ import type { Coverage, TableData } from "./shared";
 export interface ChartCardProps {
   /** Takeaway as a plain-language title. */
   title: string;
+  /** The real heading level of the title: 3 under a titled Section (default), 2 when the page has no section title above it. */
+  headingLevel?: 2 | 3;
   /** One sentence: what this shows. */
   description: string;
   /** Data-quality caveat, e.g. values are "at least" because the data is incomplete. Shown whenever coverage is not complete. */
@@ -27,12 +29,13 @@ export interface ChartCardProps {
   children: ReactNode;
 }
 
-export function ChartCard({ title, description, caveat, coverage, legend, source, table, children }: ChartCardProps) {
+export function ChartCard({ title, description, caveat, coverage, legend, source, table, headingLevel, children }: ChartCardProps) {
   const { t, tn } = useMessages();
   const [asTable, setAsTable] = useState(false);
   return (
     <Panel
       title={title}
+      headingLevel={headingLevel}
       actions={<Button size="1" variant="soft" className="ch-card__toggle" aria-pressed={asTable} onClick={() => setAsTable((v) => !v)}>{asTable ? t("charts.viewAsChart") : t("charts.viewAsTable")}</Button>}
       footer={<span className="ch-card__foot">{tn("charts.source", { source })}</span>}
     >

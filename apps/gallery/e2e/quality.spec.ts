@@ -403,3 +403,39 @@ for (const theme of themes) {
     await expect(page.getByRole("button", { name: "Details" })).toHaveAttribute("aria-expanded", "false");
   });
 }
+
+// ---- Collapsing title: the bar shows the page title once the header is out of view ----
+test("collapsing title: the bar shows the page title when the header is out of view; the app name returns on hover", async ({ page }) => {
+  await open(page, "/shell", "light");
+  const lead = page.locator(".pr-bar__lead");
+  await expect(lead).not.toHaveAttribute("data-collapsed");
+  await page.mouse.move(640, 500);
+  await page.mouse.wheel(0, 1200); await page.waitForTimeout(300);
+  await page.mouse.wheel(0, -100); await page.waitForTimeout(500);
+  await expect(page.locator(".pr-bar")).not.toHaveAttribute("data-hidden");
+  await expect(lead).toHaveAttribute("data-collapsed");
+  await expect(page.locator(".pr-bar__page")).toHaveText("The frame around every Sherpa app");
+  expect(await violations(page)).toEqual([]);
+  await page.locator(".pr-bar__appname").hover();
+  await expect(page.locator(".pr-bar__appname")).toHaveCSS("opacity", "1");
+  await page.mouse.move(640, 500);
+  await page.mouse.wheel(0, -5000); await page.waitForTimeout(500);
+  await expect(lead).not.toHaveAttribute("data-collapsed");
+});
+
+// ---- One intro per page: no heading repeats the one right above it, and a page with a single section shows no section title ----
+test("headings: no heading repeats the one above it, and a lone section has no title", async ({ page }) => {
+  test.setTimeout(120_000);
+  const problems: string[] = [];
+  for (const route of routes.filter((r) => !["/sign-in", "/api"].includes(r))) {
+    await open(page, route, "light");
+    const info = await page.evaluate(() => {
+      const hs = [...document.querySelectorAll("main h1, main h2, main h3, main h4")].filter((h) => h.getBoundingClientRect().width > 2);
+      const texts = hs.map((h) => (h.textContent ?? "").trim().toLowerCase());
+      return { dup: texts.filter((t, i) => i > 0 && t === texts[i - 1]), sectionTitles: document.querySelectorAll("main .l-section__title").length };
+    });
+    if (info.dup.length) problems.push(`${route}: repeated heading ${info.dup.join(", ")}`);
+    if (info.sectionTitles === 1) problems.push(`${route}: one section, and it has a title`);
+  }
+  expect(problems).toEqual([]);
+});

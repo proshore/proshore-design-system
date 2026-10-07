@@ -128,3 +128,17 @@ button.pr-assist__source:hover { border-color: var(--accent-8); }
 .pr-dock > .so { height: 100%; }
 .app > .pr-header { transition: transform 180ms ease, box-shadow .35s var(--ease-out), background-color .35s; }
 @media (prefers-reduced-motion: reduce) { .app > .pr-header { transition: none; } }
+
+/* Collapsing title: when the page title has scrolled out of view the bar shows it where the app name and client are.
+   The wrapper has no box of its own (display: contents), so the app name and client lay out exactly as direct children of the bar row.
+   They come back on hover or keyboard focus, so the client switcher stays reachable. */
+.pr-bar__lead { display: contents; }
+.pr-bar__row { position: relative; }
+.pr-bar__page { position: absolute; top: 0; bottom: 0; left: var(--page-x, 24px); max-width: min(290px, 34vw); display: flex; align-items: center; font-weight: 600; font-size: var(--font-size-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; pointer-events: none; transition: opacity .15s; }
+.pr-bar__lead > :not(.pr-bar__page) { transition: opacity .15s; }
+.pr-bar__lead[data-collapsed] > :not(.pr-bar__page) { opacity: 0; }
+.pr-bar__lead[data-collapsed] .pr-bar__page { opacity: 1; }
+.pr-bar__lead[data-collapsed]:hover > :not(.pr-bar__page), .pr-bar__lead[data-collapsed]:focus-within > :not(.pr-bar__page) { opacity: 1; }
+.pr-bar__lead[data-collapsed]:hover .pr-bar__page, .pr-bar__lead[data-collapsed]:focus-within .pr-bar__page { opacity: 0; }
+@media (max-width: 720px) { .pr-bar__page { left: 12px; max-width: 44vw; } }
+@media (prefers-reduced-motion: reduce) { .pr-bar__page, .pr-bar__lead > :not(.pr-bar__page) { transition: none; } }

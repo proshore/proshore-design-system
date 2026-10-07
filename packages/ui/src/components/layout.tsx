@@ -71,7 +71,20 @@ function PageDescription({ children }: { children: ReactNode }) {
 export function PageHeader({ eyebrow, title, description, actions, meta, breadcrumbs, motif = false, keepEyebrow = false }: {
   eyebrow?: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; meta?: ReactNode; breadcrumbs?: { label: string; href?: string }[]; motif?: boolean; keepEyebrow?: boolean;
 }) {
-  const navLabel = useShell()?.navLabel;
+  const shell = useShell();
+  const navLabel = shell?.navLabel;
+  const h1Ref = useRef<HTMLHeadingElement>(null);
+  const plainTitle = typeof title === "string" ? title : "";
+  const setPageTitle = shell?.setPageTitle, setTitleOut = shell?.setTitleOut;
+  // Tell the shell the page title, and when it has scrolled up behind the top bar, so the bar can show it.
+  useEffect(() => {
+    if (!setPageTitle || !setTitleOut || !plainTitle) return;
+    const el = h1Ref.current; if (!el) return;
+    setPageTitle(plainTitle);
+    const io = new IntersectionObserver(([e]) => setTitleOut(!e.isIntersecting && e.boundingClientRect.bottom < 64), { rootMargin: "-64px 0px 0px 0px", threshold: 0 });
+    io.observe(el);
+    return () => { io.disconnect(); setPageTitle(""); setTitleOut(false); };
+  }, [plainTitle, setPageTitle, setTitleOut]);
   const repeats = !keepEyebrow && typeof eyebrow === "string" && !!navLabel && eyebrow.trim().toLowerCase() === navLabel.trim().toLowerCase();
   if (repeats) eyebrow = undefined;
   return (
@@ -82,7 +95,7 @@ export function PageHeader({ eyebrow, title, description, actions, meta, breadcr
           <div className="l-pageheader__text">
             {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
             {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-            <h1 className="pr-hero__title">{title}</h1>
+            <h1 ref={h1Ref} className="pr-hero__title">{title}</h1>
             {description && <PageDescription>{description}</PageDescription>}
             {meta && <div className="l-cluster">{meta}</div>}
           </div>
@@ -145,14 +158,15 @@ export function Cluster({ children, gap = 2, justify = "start", align = "center"
 }
 
 /** Card with a fixed header/footer structure so every card lines up the same way. */
-export function Panel({ title, eyebrow, actions, footer, children, tone, tight = false }: {
+export function Panel({ title, eyebrow, actions, footer, children, tone, tight = false, headingLevel = 3 }: {
   title?: ReactNode; eyebrow?: ReactNode; actions?: ReactNode; footer?: ReactNode; children?: ReactNode; tone?: "review" | "warning"; tight?: boolean;
+  /** The real heading level of the title: 3 under a titled Section (default), 2 when the page has no section title above it. */ headingLevel?: 2 | 3;
 }) {
   return (
     <Card className="l-panel" data-tone={tone} data-tight={tight || undefined}>
       {(title || eyebrow || actions) && (
         <div className="l-panel__head">
-          <div>{eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}{title && <Heading as="h3" size="3">{title}</Heading>}</div>
+          <div>{eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}{title && <Heading as={headingLevel === 2 ? "h2" : "h3"} size="3">{title}</Heading>}</div>
           {actions && <div className="l-cluster">{actions}</div>}
         </div>
       )}

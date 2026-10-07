@@ -42,7 +42,7 @@ export function Overview({ openAsk, persona }: PageProps) {
         <StatCard label="Not seen" value={<CountUp value={1} />} caveat={<>application: Billing was not scanned. Unknown, not clean. <a href="#/evidence">Coverage</a></>} />
       </Grid>
 
-      <Section id="map" title="Where it stands" description="Your applications in the order a customer meets them. Each step shows how well we can evidence it. Open a step to see its findings.">
+      <Section id="map" title="Where it stands" description="In the order a customer meets them. Open a step to see its findings.">
         <div><LandscapeMap /><MapKey /></div>
       </Section>
 
@@ -70,7 +70,7 @@ export function Landscape({ params }: PageProps) {
     <Page>
       <PageHeader eyebrow="Landscape" title="One customer journey, three applications"
         description="How an order travels through your software, and where the evidence is strong, weak or missing." />
-      <Section id="apps" title="Applications and how they depend on each other" description="What each application is for, what it is built with, where its evidence comes from and how well we could see it. An application is not a repository: repositories are its evidence sources.">
+      <Section id="apps" title="Applications and how they depend on each other">
         <div className="lsc">
           <Panel><DependencyGraph /><Text size="1" color="gray" as="p" style={{ margin: "var(--space-2) 0 0" }}>Arrows show which application calls which. Code-derived, so a proposal until your Technical lead confirms it.</Text></Panel>
           <Panel tight>
@@ -80,10 +80,11 @@ export function Landscape({ params }: PageProps) {
                 <tr key={a.id}><th scope="row"><strong>{a.name}</strong><small>{a.role}</small></th><td>{a.stack}</td><td>{a.repos.join(", ")}</td><td><CoverageBadge state={a.coverage} prefix="" /></td><td>{a.review}</td></tr>
               ))}</tbody>
             </table></div>
+            <Text size="1" color="gray" as="p" style={{ margin: "var(--space-2) var(--space-3) 0" }}>An application is not a repository: repositories are its evidence sources.</Text>
           </Panel>
         </div>
       </Section>
-      <Section id="journey" title="Place and fulfil an order" description="Each column is a step. Each row is the application that carries it.">
+      <Section id="journey" title="Place and fulfil an order">
         <Panel tight><ProcessFlow steps={steps} lanes={lanes} label="Place and fulfil an order" /></Panel>
       </Section>
     </Page>
@@ -94,8 +95,8 @@ export function Evidence() {
   return (
     <Page>
       <PageHeader eyebrow="Evidence and coverage" title="What we looked at, and what we could not see"
-        description="A finished scan is not the same as full coverage. Each check is listed with what it actually returned." />
-      <Section id="cov" title="Scan coverage" description="Some checks are missing or not trusted, so counts are at least what is shown. Absence of results is not a clean bill.">
+        description="A finished scan is not the same as full coverage: some checks are missing or not trusted, so counts are at least what is shown, and absence of results is not a clean bill. Each check is listed with what it actually returned." />
+      <Section id="cov" title="Scan coverage">
         <Panel tight>
           <ul className="cov">
             {coverageChecks.map((c) => (
@@ -106,7 +107,7 @@ export function Evidence() {
         </Panel>
       </Section>
       <Section id="per" title="Per application"><Grid min={280}>{applications.map((a) => <ApplicationCard key={a.id} app={a} />)}</Grid></Section>
-      <Section id="trail" title="Evidence trail for the open finding"><EvidenceTrail /></Section>
+      <Section id="trail" title="Evidence trail for the open finding"><EvidenceTrail heading={false} /></Section>
       <Panel eyebrow="Scan record (demo)" tight>
         <Text as="p" size="2" style={{ margin: 0 }}>Scan S-104 · Source revision: <strong>not recorded</strong> (the scanner does not store a commit SHA yet). Later scans can only be compared reliably once it does.</Text>
       </Panel>
