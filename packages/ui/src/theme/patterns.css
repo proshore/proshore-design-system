@@ -107,6 +107,17 @@ button.stepper__btn:hover { background: var(--accent-a3); }
 /* ---- Note ---- */
 .pr-note { display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3) var(--space-4); border-radius: var(--radius-3); border: 1px solid var(--n-border); background: var(--n-bg); color: var(--n-fg); font-size: var(--font-size-2); line-height: 1.5; }
 .pr-note > svg { flex: none; margin-top: 3px; }
+.pr-note__body { flex: 1; min-width: 0; position: relative; }
+.pr-note__line { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); }
+.pr-note__summary { flex: 1 1 auto; min-width: 0; }
+.pr-note__toggle { all: unset; box-sizing: border-box; cursor: pointer; min-height: 24px; display: inline-flex; align-items: center; padding-inline: var(--space-1); font-weight: 560; text-decoration: underline; text-underline-offset: 2px; border-radius: var(--radius-1); }
+.pr-note__toggle:focus-visible { outline: 2px solid var(--focus-8); outline-offset: 1px; }
+.pr-note:has(.pr-note__body) { padding-block: var(--space-1); }
+.pr-note:has(.pr-note__body) > svg { margin-top: var(--space-2); }
+.pr-note__summary { padding-block: 2px; }
+.pr-note__more { margin-top: var(--space-2); }
+/* Collapsed: visually hidden, still in the page for screen readers. */
+.pr-note:not([data-open]) .pr-note__more { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: -1px; padding: 0; }
 .pr-note[data-tone="info"] { --n-bg: var(--accent-a3); --n-fg: var(--gray-12); --n-border: var(--accent-a6); }
 .pr-note[data-tone="info"] > svg { color: var(--accent-11); }
 .pr-note[data-tone="warning"] { --n-bg: var(--pr-inferred-bg); --n-fg: var(--pr-inferred-fg); --n-border: var(--pr-inferred-border); }

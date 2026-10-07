@@ -8,6 +8,10 @@ const en = {
     scrollable: "{caption}, scrollable",
     demoData: "Demo data",
   },
+  note: {
+    details: "Details",
+    lessDetails: "Less details",
+  },
   pageHeader: {
     more: "More",
     less: "Less",
@@ -236,6 +240,10 @@ const nl: Messages = {
   common: {
     scrollable: "{caption}, scrollbaar",
     demoData: "Demodata",
+  },
+  note: {
+    details: "Meer details",
+    lessDetails: "Minder details",
   },
   pageHeader: {
     more: "Meer",

@@ -31,7 +31,7 @@ export type DataTableProps<T> = {
   emptyState?: ReactNode;
   /** Adds the coverage warning to the no-results state. Set it whenever a zero result could be mistaken for a clean result. */
   noResultsHint?: boolean;
-  /** Banner above the table, e.g. a Note that the scan is partial. */
+  /** Banner above the table, e.g. a Note that the scan is partial. Recommended: `<PartialBanner summary="...">` or a `<Note summary="...">`, one line with the full text behind Details. */
   partialNotice?: ReactNode;
   /** Called with the row and the full filtered and sorted list (all pages), so a detail panel can step through what is on screen. */
   onRowOpen?: (row: T, visibleRows: T[]) => void;
@@ -261,9 +261,9 @@ export function DataTable<T>(props: DataTableProps<T>) {
   );
 }
 
-/** Convenience banner for "the list is incomplete". */
-export function PartialBanner({ children }: { children: ReactNode }) {
+/** Convenience banner for "the list is incomplete". Give it a `summary` for the one-line version with a Details expander (recommended for `partialNotice`). */
+export function PartialBanner({ children, summary }: { children: ReactNode; summary?: ReactNode }) {
   return (
-    <div className="dt-partial"><Note tone="warning">{children}</Note></div>
+    <div className="dt-partial"><Note tone="warning" summary={summary}>{children}</Note></div>
   );
 }

@@ -15,6 +15,7 @@ export function TablesPage() {
         <TableSkeleton columns={4} rows={3} />
         <EmptyState title="No requests yet" description="Create the first request to see it here." />
         <ErrorState message="The server did not answer." onRetry={() => undefined} />
+        <Note tone="warning" summary="Partial scan: results are incomplete">The scanner returned nothing for two repositories and one was not scanned. This list is incomplete. A review item is not a confirmed problem.</Note>
         <Note tone="info">An empty result is not the same as nothing wrong. Say what was and was not covered.</Note>
       </Section>
     </Page>
