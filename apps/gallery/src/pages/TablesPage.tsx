@@ -5,7 +5,7 @@ export function TablesPage() {
   return (
     <Page>
       <PageHeader eyebrow="Components" title="Tables" description="DataTable sorts, filters, searches, pages and exports. SimpleTable is for short static lists." />
-      <Section title="DataTable" description="Click a row or press Enter on it to open the detail. Try sorting, filters and density.">
+      <Section>
         <DataTable caption="Requests" noun="requests" columns={requestColumns} rows={requests} getRowId={(r) => r.id} rowLabel={(r) => r.id} />
       </Section>
       <Section title="SimpleTable">
