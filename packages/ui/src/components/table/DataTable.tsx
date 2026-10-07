@@ -51,7 +51,9 @@ export type DataTableProps<T> = {
 /** Single-line cells are cut with an ellipsis; on hover a cut cell gets its full text as tooltip. Keyboard and screen reader users get the full text from the row detail and the DOM. */
 function cellTooltip(e: MouseEvent<HTMLElement>) {
   const el = e.currentTarget;
-  if (el.scrollWidth > el.clientWidth + 1) { if (!el.title) { el.title = el.textContent ?? ""; el.dataset.tip = ""; } }
+  const inner = el.querySelector<HTMLElement>(".dt-rowbtn"); // the first cell's text sits in the row button, which does the clipping
+  const cut = el.scrollWidth > el.clientWidth + 1 || (inner !== null && inner.scrollWidth > inner.clientWidth + 1);
+  if (cut) { if (!el.title) { el.title = el.textContent ?? ""; el.dataset.tip = ""; } }
   else if (el.dataset.tip !== undefined) { el.removeAttribute("title"); delete el.dataset.tip; }
 }
 

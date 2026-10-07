@@ -1,4 +1,4 @@
-import { DataTable, Page, PageHeader, Section, TableSkeleton, EmptyState, ErrorState, Note, SimpleTable } from "@proshore/ui";
+import { CellSub, DataTable, Page, PageHeader, Section, TableSkeleton, EmptyState, ErrorState, Note, SimpleTable } from "@proshore/ui";
 import { requestColumns, requests } from "../data";
 
 export function TablesPage() {
@@ -7,6 +7,10 @@ export function TablesPage() {
       <PageHeader eyebrow="Components" title="Tables" description="DataTable sorts, filters, searches, pages and exports. SimpleTable is for short static lists." />
       <Section>
         <DataTable caption="Requests" noun="requests" columns={requestColumns} rows={requests} getRowId={(r) => r.id} rowLabel={(r) => r.id} />
+      </Section>
+      <Section title="Secondary text in a cell" description="Rows are one line. Put the id or note in CellSub: inline and muted here, stacked in the comfortable density. Turn on Compact rows to compare.">
+        <DataTable caption="Requests with secondary text" noun="requests" rows={requests.slice(0, 3)} getRowId={(r) => r.id} features={{ search: false, filters: false, density: true, columns: false, export: false, pagination: false }}
+          columns={[{ id: "title", header: "Request", accessor: (r) => r.title, cell: (r) => <><span className="dt-title">{r.title}</span><CellSub>{r.id} · {r.team}</CellSub></> }, { id: "status", header: "Status", accessor: (r) => r.status }]} />
       </Section>
       <Section title="SimpleTable">
         <SimpleTable caption="Plan" getRowId={(r) => r.plan} rows={[{ plan: "Team", seats: "10", price: "90" }, { plan: "Business", seats: "50", price: "400" }]} columns={[{ id: "plan", header: "Plan", cell: (r) => r.plan }, { id: "seats", header: "Seats", cell: (r) => r.seats }, { id: "price", header: "Price", cell: (r) => r.price }]} />
