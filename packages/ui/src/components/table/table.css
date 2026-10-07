@@ -150,3 +150,15 @@
 .dt[data-density="compact"] .dt-rowbtn { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-height: 0; }
 .dt[data-density="compact"] .dt-check { min-height: 24px; }
 .dt[data-density="comfortable"] .dt-sub { display: block; }
+
+/* ---- One-row toolbar: search, facets, count and the right controls on one line; chips only when something is applied ---- */
+.dt-filterbar__count { margin-inline-start: auto; }
+.dt-filterbar__right { margin-inline-start: 0; }
+.dt-filterbar__row--meta { min-height: 0; }
+.dt-allfacets { display: flex; flex-direction: column; gap: var(--space-4); max-height: 70vh; overflow: auto; }
+.dt-allfacets .dt-facet { max-height: none; }
+.dt-filterbar[data-narrow] { gap: var(--space-1); }
+.dt-filterbar[data-narrow] .dt-filterbar__count { margin-inline-start: 0; }
+.dt-filterbar[data-narrow] .dt-search { flex: 1 1 100%; min-width: 0; }
+.dt-filterbar__row--tools { flex: 1 1 100%; }
+.dt-filterbar[data-narrow] .dt-filterbar__right { margin-inline-start: auto; }
