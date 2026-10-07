@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { ProshoreIcon } from "../components/Brand";
 import { MagnifyingGlassIcon } from "../icons";
 import { AppIcon, type AppGlyph } from "./AppIcons";
@@ -45,6 +45,13 @@ export function AppShell({
   overlays?: ReactNode; children: ReactNode;
 }) {
   const { t } = useMessages();
+  const barRef = useRef<HTMLElement>(null);
+  // Publish the height of the sticky top bar, so sticky toolbars in the page (table filters) stop right under it.
+  useEffect(() => {
+    const el = barRef.current; if (!el) return;
+    const measure = () => document.documentElement.style.setProperty("--pr-sticky-top", `${Math.round(el.getBoundingClientRect().height)}px`);
+    measure(); const ro = new ResizeObserver(measure); ro.observe(el); return () => ro.disconnect();
+  }, []);
   return (
     <div className="app pr-shell">
       <a className="skip" href="#main">{t("shell.skipToContent")}</a>
@@ -63,7 +70,7 @@ export function AppShell({
         <span className="pr-bar__grow" />
         <div className="pr-rail__foot">{theme}{user}</div>
       </aside>
-      <header className="pr-bar" data-proshore={proshoreOnly || undefined}>
+      <header ref={barRef} className="pr-bar" data-proshore={proshoreOnly || undefined}>
         <div className="pr-bar__row">
           <span className="pr-bar__appname">{appName}</span>
           {client && (<><span className="pr-bar__sep" aria-hidden>/</span>{client}</>)}

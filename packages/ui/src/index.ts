@@ -2,7 +2,7 @@
 // This package is product-neutral. Product-specific components (for example Sherpa Discovery's evidence badges) live in the product.
 export { Ridgeline, PrayerFlags } from "./components/Motifs";
 export { ProshoreTheme } from "./theme/theme";
-export type { Appearance } from "./theme/theme";
+export type { Appearance, Density } from "./theme/theme";
 export { PortalHost, usePortalHost } from "./theme/portal";
 export * from "./components/layout";
 export { Eyebrow, HandMark } from "./components/Bits";

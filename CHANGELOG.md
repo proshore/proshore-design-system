@@ -2,6 +2,11 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
+## Unreleased
+- **Less space in the heading area (visible change on every page).** Compact density is now the default: `ProshoreTheme` takes `density="compact"` (default) or `"comfortable"` (the previous layout). `PageHeader` is tighter: smaller title, less padding, and a one-line description with a **More** button (`aria-expanded`, translated) when the text is longer; the full text is always in the page. Page rhythm is tighter too: section gap 56 to 32px, card padding 24 to 16px, smaller stat figures. `PageHero` (the large landing hero) is unchanged. Measured at 1280×800 content now starts 50 to 77px higher on desktop (Discovery findings 230 to 153px) and 107 to 139px higher on a phone (findings 341 to 202px).
+- Table search and filters stay under the top bar while the table scrolls (sticky). `AppHeader` and `AppShell` publish the height of the top bar as `--pr-sticky-top`; `.pr-tablecard` uses `overflow: clip` instead of `hidden` so sticky works.
+- Tests: the More button and the sticky toolbar; all screenshot baselines regenerated.
+
 ## 0.6.0
 - **Breaking:** the deprecated names are removed, as announced in 0.5.0. The old `--sherpa-*` design tokens (40, via `theme/compat.css`), the `.sherpa-*` CSS classes (`.sherpa-theme`, `.sherpa-eyebrow`, `.sherpa-eyebrow--chip`, `.sherpa-display`, `.sherpa-mark`, `.sherpa-demo-tag`, `.sherpa-grid-2`) and `SherpaTheme` no longer exist. Migrate: replace `--sherpa-` with `--pr-`, `.sherpa-x` with `.pr-x`, and `SherpaTheme` with `ProshoreTheme`. Checked: Discovery, the gallery, the Discovery example and Billing have no remaining uses.
 

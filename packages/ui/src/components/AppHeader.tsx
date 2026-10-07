@@ -30,6 +30,7 @@ export function AppHeader({ product, homeHref = "#/", launcher, client, nav, pro
     const measure = () => {
       // Only a floating header (inside `.app`, pulled over the page) needs space reserved under it. A plain sticky header already takes its own room.
       const floats = parseFloat(getComputedStyle(el).marginBottom) < 0;
+      document.documentElement.style.setProperty("--pr-sticky-top", `${Math.round(el.getBoundingClientRect().height)}px`);
       document.documentElement.style.setProperty("--pr-header-h", floats ? `${Math.round(el.getBoundingClientRect().height) + 10}px` : "0px");
     };
     measure(); const ro = new ResizeObserver(measure); ro.observe(el);

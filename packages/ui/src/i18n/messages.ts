@@ -8,6 +8,10 @@ const en = {
     scrollable: "{caption}, scrollable",
     demoData: "Demo data",
   },
+  pageHeader: {
+    more: "More",
+    less: "Less",
+  },
   pagination: {
     label: "Pagination",
     first: "First page",
@@ -232,6 +236,10 @@ const nl: Messages = {
   common: {
     scrollable: "{caption}, scrollbaar",
     demoData: "Demodata",
+  },
+  pageHeader: {
+    more: "Meer",
+    less: "Minder",
   },
   pagination: {
     label: "Paginering",

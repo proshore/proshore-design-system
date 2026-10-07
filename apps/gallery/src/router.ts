@@ -17,6 +17,7 @@ export const pages = [
   { path: "/charts", label: "Charts" },
   { path: "/overlays", label: "Overlays and menus" },
   { path: "/dialogs", label: "Dialogs and boards" },
+  { path: "/header-options", label: "Heading options" },
   { path: "/brand", label: "Brand and icons" },
   { path: "/shell", label: "App shell" },
   { path: "/sign-in", label: "Sign in" },

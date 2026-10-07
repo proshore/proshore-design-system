@@ -85,7 +85,7 @@
 @media (prefers-reduced-motion: no-preference) { .dt-td { transition: background-color .1s; } }
 
 /* ---- Visual system v2: Concept A's table inside a soft card ---- */
-.pr-tablecard { background: var(--pr-surface); border-radius: 16px; box-shadow: var(--pr-card-shadow); overflow: hidden; }
+.pr-tablecard { background: var(--pr-surface); border-radius: 16px; box-shadow: var(--pr-card-shadow); overflow: clip; }
 .pr-tablecard .dt { gap: 0; }
 .pr-tablecard .dt-filterbar { padding: var(--space-4) var(--space-5) var(--space-3); }
 .dt-frame { border: 0; border-radius: 0; border-top: 1px solid var(--pr-line); }
@@ -133,3 +133,8 @@
 .dt-status[data-state="confirmed"] { color: var(--pr-confirmed-fg); }
 .dt-status[data-state="disputed"] { color: var(--pr-danger-fg); }
 @media (prefers-reduced-motion: reduce) { .dt-sortbtn__idle { transition: none; } }
+
+/* The search and filter row stays under the top bar while the table scrolls past it, so the heading never has to come back.
+   --pr-sticky-top is the height of the sticky top bar, published by AppHeader and AppShell. */
+.dt-filterbar { position: sticky; top: var(--pr-sticky-top, 0px); z-index: 4; background: var(--pr-canvas); padding-block: var(--space-2); }
+.pr-tablecard .dt-filterbar { background: var(--pr-surface); }

@@ -7,8 +7,10 @@ export type Appearance = "light" | "dark";
  * anything rendered into <body> (menus, popovers, dialogs, toasts) inherits the tokens. Nested themes
  * (`root={false}`) only scope their own subtree, for side-by-side previews.
  */
-export function ProshoreTheme({ appearance, children, root = true }: { appearance: Appearance; children: ReactNode; root?: boolean }) {
+export type Density = "compact" | "comfortable";
+
+export function ProshoreTheme({ appearance, children, root = true, density = "compact" }: { appearance: Appearance; children: ReactNode; root?: boolean; /** Spacing of headers and page rhythm. Compact (default) uses less vertical space; comfortable is the roomier layout of 0.6.x and earlier. */ density?: Density }) {
   useEffect(() => { if (root) document.documentElement.dataset.theme = appearance; }, [appearance, root]);
-  return <div className="pr-theme" data-theme={appearance} data-root={root || undefined}>{children}</div>;
+  return <div className="pr-theme" data-theme={appearance} data-root={root || undefined} data-density={density}>{children}</div>;
 }
 

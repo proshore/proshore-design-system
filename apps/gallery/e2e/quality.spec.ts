@@ -223,3 +223,23 @@ test("English stays the default and the Dutch strings do not leak into it", asyn
   await expect(page.getByText("Reference:")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.lang)).toBe("en");
 });
+
+test("page header: a long description is one line with a More button that shows the rest", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page, "/layout", "light");
+  const more = page.getByRole("button", { name: "More" });
+  await expect(more).toBeVisible();
+  await expect(more).toHaveAttribute("aria-expanded", "false");
+  await more.click();
+  await expect(page.getByRole("button", { name: "Less" })).toHaveAttribute("aria-expanded", "true");
+  expect(await violations(page)).toEqual([]);
+});
+
+test("table toolbar stays right under the top bar while the table scrolls", async ({ page }) => {
+  await open(page, "/tables", "light");
+  await page.mouse.wheel(0, 700);
+  await page.waitForTimeout(300);
+  const bar = await page.locator("header").first().evaluate((e) => e.getBoundingClientRect().bottom);
+  const tb = await page.locator(".dt-filterbar").first().evaluate((e) => e.getBoundingClientRect().top);
+  expect(Math.abs(tb - bar)).toBeLessThanOrEqual(2);
+});

@@ -2,7 +2,8 @@ import { Ridgeline } from "./Motifs";
 import { Card } from "../primitives/Card";
 import { Flex } from "../primitives/Flex";
 import { Heading, Text } from "../primitives/Text";
-import { Children, isValidElement, type CSSProperties, type ReactNode } from "react";
+import { Children, isValidElement, useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useMessages } from "../i18n/I18nProvider";
 import { Eyebrow } from "./Bits";
 import { Breadcrumbs } from "../primitives/Breadcrumbs";
 
@@ -38,6 +39,29 @@ export function PageHero({ eyebrow, children, size = "lg", motif = true }: { eye
   );
 }
 
+/**
+ * The description under a page title. In the compact density it shows one line; when the text is longer, a "More" button
+ * shows the rest (the full text is always in the page, so screen readers read all of it). In the comfortable density it is never clamped.
+ */
+function PageDescription({ children }: { children: ReactNode }) {
+  const { t } = useMessages();
+  const ref = useRef<HTMLParagraphElement>(null);
+  const id = useId();
+  const [open, setOpen] = useState(false);
+  const [over, setOver] = useState(false);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const measure = () => { if (!open) setOver(el.scrollHeight > el.clientHeight + 1); };
+    measure(); const ro = new ResizeObserver(measure); ro.observe(el); return () => ro.disconnect();
+  }, [open, children]);
+  return (
+    <div className="pr-hero__descwrap">
+      <p ref={ref} id={id} className="pr-hero__desc" data-open={open || undefined}>{children}</p>
+      {(over || open) && <button type="button" className="pr-hero__more" aria-expanded={open} aria-controls={id} onClick={() => setOpen((o) => !o)}>{open ? t("pageHeader.less") : t("pageHeader.more")}</button>}
+    </div>
+  );
+}
+
 /** Page title block. The mountain motif is off by default: turn it on (`motif`) only for key pages such as the dashboard or the home page. */
 export function PageHeader({ eyebrow, title, description, actions, meta, breadcrumbs, motif = false }: {
   eyebrow?: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; meta?: ReactNode; breadcrumbs?: { label: string; href?: string }[]; motif?: boolean;
@@ -51,7 +75,7 @@ export function PageHeader({ eyebrow, title, description, actions, meta, breadcr
             {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
             {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
             <h1 className="pr-hero__title">{title}</h1>
-            {description && <p className="pr-hero__desc">{description}</p>}
+            {description && <PageDescription>{description}</PageDescription>}
             {meta && <div className="l-cluster">{meta}</div>}
           </div>
           {actions && <div className="l-pageheader__actions">{actions}</div>}
