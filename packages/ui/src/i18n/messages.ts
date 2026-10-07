@@ -8,6 +8,10 @@ const en = {
     scrollable: "{caption}, scrollable",
     demoData: "Demo data",
   },
+  note: {
+    details: "Details",
+    lessDetails: "Less details",
+  },
   pageHeader: {
     more: "More",
     less: "Less",
@@ -86,6 +90,8 @@ const en = {
     searchChip: "Search: “{search}”",
     removeSearch: "Remove search “{search}”",
     removeFilter: "Remove filter {label}: {value}",
+    filters: "Filters",
+    filtersActive: "Filters, {count} active",
     filterBy: "Filter by {column}",
     filterBySelected: "Filter by {column}, {count} selected",
     clear: "Clear",
@@ -237,6 +243,10 @@ const nl: Messages = {
     scrollable: "{caption}, scrollbaar",
     demoData: "Demodata",
   },
+  note: {
+    details: "Meer details",
+    lessDetails: "Minder details",
+  },
   pageHeader: {
     more: "Meer",
     less: "Minder",
@@ -315,6 +325,8 @@ const nl: Messages = {
     searchChip: "Zoeken: “{search}”",
     removeSearch: "Zoekopdracht “{search}” verwijderen",
     removeFilter: "Filter {label}: {value} verwijderen",
+    filters: "Filteren",
+    filtersActive: "Filteren, {count} actief",
     filterBy: "Filter op {column}",
     filterBySelected: "Filter op {column}, {count} geselecteerd",
     clear: "Wissen",

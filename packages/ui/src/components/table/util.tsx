@@ -31,3 +31,15 @@ export function downloadCsv(filename: string, csv: string) {
   a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+
+/**
+ * CellSub: the secondary text of a table cell (an id, a category, a reviewer). Put it after the primary text in the same cell.
+ * In the default single-line density it sits inline after the primary text, muted, and is cut off first when the cell is too long.
+ * In the comfortable density it stacks as a second line. Do not put essential information only here: it can be truncated.
+ *
+ * @example
+ * cell: (f) => <><span className="dt-title">{f.title}</span><CellSub>{f.id} · {f.category}</CellSub></>
+ */
+export function CellSub({ children }: { children: ReactNode }) {
+  return <span className="dt-sub">{children}</span>;
+}

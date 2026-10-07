@@ -60,7 +60,7 @@ export function useTableState<T>(rows: T[], columns: ColumnDef<T>[], opts: UseTa
   const [filters, setFiltersRaw] = useState<Record<string, string[]>>(opts.initialFilters ?? {});
   const [pageIndex, setPage] = useState(0);
   const [pageSize, setPageSizeRaw] = useState<PageSize>(opts.initialPageSize ?? 10);
-  const [density, setDensity] = useState<Density>(opts.initialDensity ?? "comfortable");
+  const [density, setDensity] = useState<Density>(opts.initialDensity ?? "compact");
   const [hidden, setHidden] = useState<string[]>(opts.initialHidden ?? []);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 

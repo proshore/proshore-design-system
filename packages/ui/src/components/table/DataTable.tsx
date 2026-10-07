@@ -31,7 +31,7 @@ export type DataTableProps<T> = {
   emptyState?: ReactNode;
   /** Adds the coverage warning to the no-results state. Set it whenever a zero result could be mistaken for a clean result. */
   noResultsHint?: boolean;
-  /** Banner above the table, e.g. a Note that the scan is partial. */
+  /** Banner above the table, e.g. a Note that the scan is partial. Recommended: `<PartialBanner summary="...">` or a `<Note summary="...">`, one line with the full text behind Details. */
   partialNotice?: ReactNode;
   /** Called with the row and the full filtered and sorted list (all pages), so a detail panel can step through what is on screen. */
   onRowOpen?: (row: T, visibleRows: T[]) => void;
@@ -47,6 +47,15 @@ export type DataTableProps<T> = {
   onExported?: (info: { count: number; filename: string }) => void;
   maxHeight?: string;
 };
+
+/** Single-line cells are cut with an ellipsis; on hover a cut cell gets its full text as tooltip. Keyboard and screen reader users get the full text from the row detail and the DOM. */
+function cellTooltip(e: MouseEvent<HTMLElement>) {
+  const el = e.currentTarget;
+  const inner = el.querySelector<HTMLElement>(".dt-rowbtn"); // the first cell's text sits in the row button, which does the clipping
+  const cut = el.scrollWidth > el.clientWidth + 1 || (inner !== null && inner.scrollWidth > inner.clientWidth + 1);
+  if (cut) { if (!el.title) { el.title = el.textContent ?? ""; el.dataset.tip = ""; } }
+  else if (el.dataset.tip !== undefined) { el.removeAttribute("title"); delete el.dataset.tip; }
+}
 
 const AlignCls = { start: "", end: " dt-end", center: " dt-center" } as const;
 
@@ -226,7 +235,7 @@ export function DataTable<T>(props: DataTableProps<T>) {
                         const content = c.cell ? c.cell(row, ctx) : raw instanceof Date ? raw.toLocaleDateString() : raw === null || raw === undefined || raw === "" ? <span className="dt-muted">{t("table.notRecorded")}</span> : ctx.highlight(String(raw));
                         const asBtn = onRowOpen && i === 0;
                         return (
-                          <td key={c.id} className={`dt-td${AlignCls[c.align ?? "start"]}${i === stickyIdx ? " dt-stickyc" : ""}`} style={colStyle(c, i)}>
+                          <td key={c.id} className={`dt-td${AlignCls[c.align ?? "start"]}${i === stickyIdx ? " dt-stickyc" : ""}`} style={colStyle(c, i)} onMouseEnter={cellTooltip}>
                             {asBtn ? <button type="button" className="dt-rowbtn" aria-label={props.rowLabel ? t("table.openRow", { label: props.rowLabel(row) }) : undefined} onClick={() => onRowOpen(row, s.sorted)}>{content}</button> : content}
                           </td>
                         );
@@ -254,9 +263,9 @@ export function DataTable<T>(props: DataTableProps<T>) {
   );
 }
 
-/** Convenience banner for "the list is incomplete". */
-export function PartialBanner({ children }: { children: ReactNode }) {
+/** Convenience banner for "the list is incomplete". Give it a `summary` for the one-line version with a Details expander (recommended for `partialNotice`). */
+export function PartialBanner({ children, summary }: { children: ReactNode; summary?: ReactNode }) {
   return (
-    <div className="dt-partial"><Note tone="warning">{children}</Note></div>
+    <div className="dt-partial"><Note tone="warning" summary={summary}>{children}</Note></div>
   );
 }

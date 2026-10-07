@@ -4,9 +4,9 @@ Module: `src/components/table/`. Live preview: `#/lab/table`. Fixture data only.
 
 ## Anatomy
 
-1. Partial-data banner (optional): `partialNotice`, e.g. "scan is partial, list is incomplete".
-2. Filter bar: search field (`role="search"`), facet filter buttons (popover with checkboxes and counts), toolbar slot (density, columns, export, custom actions).
-3. Meta row: live result count ("12 of 40 findings", `aria-live`), removable filter chips, "Reset filters".
+1. Partial-data banner (optional): `partialNotice`, e.g. "scan is partial, list is incomplete". Recommended: `<PartialBanner summary="Partial scan S-104: results are incomplete">full text</PartialBanner>` or `<Note tone="warning" summary="...">`: one line with a Details button, the full text always in the page for screen readers.
+2. Toolbar, one row: search field (`role="search"`), facet filter buttons (popover with checkboxes and counts), live result count ("12 of 40 findings", `aria-live`), toolbar slot (density, columns, export, custom actions). Below 720px: search on its own row, one **Filters** button (badge with the number of active filters) that opens one popover with all facets, the count on the next line.
+3. Chips row, only when something is applied: removable filter chips, search chip, "Reset filters".
 4. Bulk-action bar (only while rows are selected).
 5. Table: sticky header, optional selection column, first column sticky on horizontal scroll, one row button in the first cell.
 6. Footer: rows per page (10/25/50), range ("1-10 of 40"), first/previous/next/last.
@@ -19,6 +19,18 @@ Module: `src/components/table/`. Live preview: `#/lab/table`. Fixture data only.
 Column (`ColumnDef<T>`): `id`, `header` (plain text), `accessor` (raw value, default for sort/search/filter/CSV), `cell(row, {highlight})`, `sortValue` (use for ranks, dates, numbers), `sortable`, `searchText` (or `false`), `csv`, `align`, `width`, `minWidth`, `filter: {kind: "select" | "multi" | "text", options?, value?}`, `hideable`, `sticky`.
 
 Table props: `status` (`ready | loading | error`), `emptyState`, `noResultsHint`, `partialNotice`, `onRowOpen`, `rowLabel`, `selectable`, `bulkActions`, `features` (turn off search, filters, density, columns, export, pagination), `toolbarRight`, `initialSort`, `initialPageSize`, `initialDensity`, `initialHidden`, `onExported`.
+
+## Density and secondary text
+
+`initialDensity` / `useTableState` density is `"compact"` (default) or `"comfortable"`; the toolbar toggle "Compact rows" switches. **Compact is single-line rows** (about 41px): cells never wrap, long text ends in an ellipsis, and on hover a cut cell shows its full text as a `title` tooltip. **Comfortable** keeps the roomy rows: secondary text stacked on a second line, wrapping allowed. Existing tables became single-line when the default changed; pass `initialDensity="comfortable"` to keep the old look.
+
+Put a primary and a secondary text in one cell with `CellSub`:
+
+```tsx
+cell: (f) => <><span className="dt-title">{f.title}</span><CellSub>{f.id} · {f.category}</CellSub></>
+```
+
+Compact: the secondary text sits inline after the primary text, muted, and is cut off first. Comfortable: it is a second line. Rules: nothing essential only in `CellSub` (it can be truncated; hover shows it, keyboard users get everything in the row detail drawer opened by the row button, and screen readers read the full DOM text); keep status words and severities in their own short column; give the detail view every value shown in the table.
 
 State is held in memory only. Nothing is persisted to storage or the URL.
 

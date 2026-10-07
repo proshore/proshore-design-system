@@ -237,7 +237,7 @@ test("page header: a long description is one line with a More button that shows 
 
 test("table toolbar stays right under the top bar while the table scrolls", async ({ page }) => {
   await open(page, "/tables", "light");
-  await page.mouse.wheel(0, 700);
+  await page.mouse.wheel(0, 200); // rows are one line now, so the table is short: stay inside it
   await page.waitForTimeout(300);
   const bar = await page.locator("header").first().evaluate((e) => e.getBoundingClientRect().bottom);
   const tb = await page.locator(".dt-filterbar").first().evaluate((e) => e.getBoundingClientRect().top);
@@ -340,5 +340,64 @@ for (const theme of themes) {
     await page.getByRole("button", { name: "Open docked panel" }).click();
     await expect(page.getByRole("dialog", { name: "Docked detail panel" })).toBeVisible();
     expect(await violations(page)).toEqual([]);
+
+/** Dense tables: single-line rows, one-row toolbar, Note with summary (added with the density change). */
+const noWrap = (page: Page) => page.evaluate(() => {
+  const rows = [...document.querySelectorAll<HTMLElement>(".dt-table tbody tr")];
+  const heights = rows.map((r) => r.getBoundingClientRect().height);
+  const wrapped = [...document.querySelectorAll<HTMLElement>(".dt-table tbody .dt-td")].filter((td) => {
+    const r = document.createRange(); r.selectNodeContents(td);
+    const rects = [...r.getClientRects()]; if (!rects.length) return false;
+    return Math.max(...rects.map((x) => x.bottom)) - Math.min(...rects.map((x) => x.top)) > parseFloat(getComputedStyle(td).lineHeight || "24") * 1.6 + 8;
+  }).length;
+  return { max: Math.max(...heights), wrapped, count: rows.length };
+});
+
+test("tables: default rows are single-line (<= 48px) and no cell wraps", async ({ page }) => {
+  await open(page, "/tables", "light");
+  const m = await noWrap(page);
+  expect(m.count).toBeGreaterThan(5);
+  expect(m.max).toBeLessThanOrEqual(48);
+  expect(m.wrapped).toBe(0);
+});
+
+test("tables: the toolbar is one row at 1280 and one Filters button at 390", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await open(page, "/tables", "light");
+  const bar = page.locator(".dt-filterbar").first();
+  await expect(bar.locator(".dt-filterbar__row--meta")).toHaveCount(0);
+  const tops = await bar.evaluate((el) => ["[role=search]", ".dt-facetbtn", ".dt-count", ".dt-filterbar__right"].map((s) => { const r = el.querySelector(s)!.getBoundingClientRect(); return r.top + r.height / 2; }));
+  expect(Math.max(...tops) - Math.min(...tops)).toBeLessThan(8);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page, "/tables", "light");
+  await expect(page.getByRole("button", { name: "Filters" })).toHaveCount(1);
+  await expect(page.getByRole("button", { name: /^Filter by/ })).toHaveCount(0);
+  await page.getByRole("button", { name: "Filters" }).click();
+  const dlg = page.getByRole("dialog", { name: "Filters" });
+  await expect(dlg.locator("p", { hasText: "Team" })).toBeVisible();
+  await expect(dlg.locator("p", { hasText: "Status" })).toBeVisible();
+  // the "region" rule is skipped: every PopoverPanel (also the per-facet one on desktop) is portalled outside the landmarks, a known gap of the primitive
+  expect((await new AxeBuilder({ page }).withTags(WCAG).disableRules(["region"]).analyze()).violations.map((v) => v.id)).toEqual([]);
+  await dlg.getByRole("checkbox").first().click({ force: true });
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "Filters, 1 active" })).toBeVisible();
+  await expect(page.locator(".dt-filterbar__row--meta")).toHaveCount(1);
+});
+
+for (const theme of themes) {
+  test(`note with summary expands and collapses, accessible in both states (${theme})`, async ({ page }) => {
+    await open(page, "/tables", theme);
+    const toggle = page.getByRole("button", { name: "Details" });
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    const note = page.getByRole("note").filter({ hasText: "Partial scan" });
+    expect((await note.boundingBox())!.height).toBeLessThanOrEqual(40);
+    await expect(note).toContainText("A review item is not a confirmed problem"); // the full text is in the page while collapsed
+    expect(await violations(page)).toEqual([]);
+    await toggle.click();
+    await expect(page.getByRole("button", { name: "Less details" })).toHaveAttribute("aria-expanded", "true");
+    await expect(page.getByText("A review item is not a confirmed problem.")).toBeVisible();
+    expect(await violations(page)).toEqual([]);
+    await page.getByRole("button", { name: "Less details" }).click();
+    await expect(page.getByRole("button", { name: "Details" })).toHaveAttribute("aria-expanded", "false");
   });
 }

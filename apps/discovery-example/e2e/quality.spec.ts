@@ -172,6 +172,70 @@ for (const theme of themes) {
     await open(page, "/findings", theme);
     await page.locator(".dt-rowbtn").first().click();
     await expect(page.getByRole("dialog")).toBeVisible();
+
+/** Dense tables: single-line rows, one-row toolbar, Note with summary (added with the density change). */
+const noWrap = (page: Page) => page.evaluate(() => {
+  const rows = [...document.querySelectorAll<HTMLElement>(".dt-table tbody tr")];
+  const heights = rows.map((r) => r.getBoundingClientRect().height);
+  const wrapped = [...document.querySelectorAll<HTMLElement>(".dt-table tbody .dt-td")].filter((td) => {
+    const r = document.createRange(); r.selectNodeContents(td);
+    const rects = [...r.getClientRects()]; if (!rects.length) return false;
+    return Math.max(...rects.map((x) => x.bottom)) - Math.min(...rects.map((x) => x.top)) > parseFloat(getComputedStyle(td).lineHeight || "24") * 1.6 + 8;
+  }).length;
+  return { max: Math.max(...heights), wrapped, count: rows.length };
+});
+
+test("findings: default rows are single-line (<= 48px), no cell wraps, a cut cell has its full text as tooltip", async ({ page }) => {
+  await open(page, "/findings", "light");
+  const m = await noWrap(page);
+  expect(m.max).toBeLessThanOrEqual(48);
+  expect(m.wrapped).toBe(0);
+  await page.setViewportSize({ width: 1100, height: 800 }); // narrow enough that the finding cell is cut
+  await page.waitForTimeout(200);
+  const cells = page.locator(".dt-table tbody .dt-td", { has: page.locator(".dt-sub") });
+  const idx = await cells.evaluateAll((els) => els.findIndex((e) => { const b = e.querySelector(".dt-rowbtn") ?? e; return b.scrollWidth > b.clientWidth + 1; }));
+  expect(idx).toBeGreaterThanOrEqual(0);
+  const cut = cells.nth(idx);
+  await cut.hover();
+  await expect(cut).toHaveAttribute("title", /F-\d+/);
+});
+
+test("findings: comfortable density stacks the secondary text again, and back", async ({ page }) => {
+  await open(page, "/findings", "light");
+  const toggle = page.getByRole("button", { name: "Compact rows" });
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  const stacked = await page.evaluate(() => { const t = document.querySelector(".dt-td .dt-title")!.getBoundingClientRect(); const s = document.querySelector(".dt-td .dt-sub")!.getBoundingClientRect(); return s.top >= t.bottom - 1; });
+  expect(stacked).toBe(true);
+  expect((await page.locator(".dt-table tbody tr").first().boundingBox())!.height).toBeGreaterThan(55);
+  await toggle.click();
+  expect((await page.locator(".dt-table tbody tr").first().boundingBox())!.height).toBeLessThanOrEqual(48);
+});
+
+test("findings: toolbar is one row at 1280 and one Filters button at 390", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await open(page, "/findings", "light");
+  const bar = page.locator(".dt-filterbar");
+  await expect(bar.locator(".dt-filterbar__row--meta")).toHaveCount(0);
+  const tops = await bar.evaluate((el) => ["[role=search]", ".dt-facetbtn", ".dt-count", ".dt-filterbar__right button"].map((s) => { const r = el.querySelector(s)!.getBoundingClientRect(); return r.top + r.height / 2; }));
+  expect(Math.max(...tops) - Math.min(...tops)).toBeLessThan(8);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page, "/findings", "light");
+  await expect(page.getByRole("button", { name: "Filters" })).toHaveCount(1);
+  await expect(page.getByRole("button", { name: /^Filter by/ })).toHaveCount(0);
+});
+
+for (const theme of themes) {
+  test(`findings: partial notice expands and collapses, accessible in both states (${theme})`, async ({ page }) => {
+    await open(page, "/findings", theme);
+    const toggle = page.getByRole("button", { name: "Details" });
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await expect(page.getByRole("note")).toContainText("a review item is not a confirmed vulnerability");
+    expect(await violations(page)).toEqual([]);
+    await toggle.click();
+    await expect(page.getByRole("button", { name: "Less details" })).toHaveAttribute("aria-expanded", "true");
+    await expect(page.getByText(/a review item is not a confirmed vulnerability/)).toBeVisible();
     expect(await violations(page)).toEqual([]);
   });
 }
