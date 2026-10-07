@@ -21,7 +21,7 @@ function historyOf(f: FindingRecord) {
   return h;
 }
 
-/** Finding detail as a slide-over. Header = identity and status; body = summary, three perspectives, trail, history; footer = actions. */
+/** Finding detail as a slide-over. On screens of 1440px or wider it docks beside the list (the table stays usable); below that it is modal. Header = identity and status; body = summary, three perspectives, trail, history; footer = actions. */
 export function FindingSlideOver({ list, index, onIndex, onClose, onAsk }: {
   list: FindingRecord[]; index: number | null; onIndex: (i: number) => void; onClose: () => void; onAsk: (f: FindingRecord) => void;
 }) {
@@ -31,7 +31,7 @@ export function FindingSlideOver({ list, index, onIndex, onClose, onAsk }: {
   useEffect(() => setTab("business"), [f?.id]);
   return (
     <SlideOver
-      open={!!f} onOpenChange={(o) => !o && onClose()}
+      dock open={!!f} onOpenChange={(o) => !o && onClose()}
       eyebrow={f ? `${f.id} · ${f.category}` : ""} title={f?.title ?? ""}
       chips={f && (<><SeverityBadge severity={f.severity} /><EvidenceBadge state={f.state} /><Badge variant="soft" color={reviewColor[done[f.id] ? "confirmed" : f.reviewState]} size="2">{reviewLabel[done[f.id] ? "confirmed" : f.reviewState]}</Badge></>)}
       nav={index === null ? undefined : { index, total: list.length, onPrev: () => onIndex(index - 1), onNext: () => onIndex(index + 1) }}

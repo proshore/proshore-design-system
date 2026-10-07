@@ -5,6 +5,7 @@ import { Avatar } from "./Avatar";
 import { ProshoreIcon, ProshoreWordmark } from "./Brand";
 import { ClientMark } from "./ClientMark";
 import { useMessages } from "../i18n/I18nProvider";
+import { useAutoHide, type AutoHide } from "../shell/useAutoHide";
 
 export type Client = { id: string; name: string; logo?: string; engagements: { id: string; name: string }[] };
 export type Workspace = { clientId: string; engagementId: string };
@@ -18,28 +19,31 @@ export type HeaderUser = { id: string; name: string; email: string; role: string
  *  2. Client layer (optional `client` slot): the client chip. Omit it for internal tools that are not client-scoped.
  * Landmark: renders <header> (banner). Keep the page's h1 in <main>.
  */
-export function AppHeader({ product, homeHref = "#/", launcher, client, nav, proshoreOnly = false, actions, user }: {
-  product: string; homeHref?: string; /** App launcher: replaces the plain product label. */ launcher?: ReactNode; client?: ReactNode; nav?: ReactNode; proshoreOnly?: boolean; actions?: ReactNode; user: ReactNode;
+export function AppHeader({ product, homeHref = "#/", launcher, client, nav, proshoreOnly = false, autoHide = "scroll", actions, user }: {
+  product: string; homeHref?: string; /** App launcher: replaces the plain product label. */ launcher?: ReactNode; client?: ReactNode; nav?: ReactNode; proshoreOnly?: boolean;
+  /** The header slides away while scrolling down and returns on scrolling up, on focus, or when a menu from it is open. "phone": only on phones. "off": always visible. */ autoHide?: AutoHide;
+  actions?: ReactNode; user: ReactNode;
 }) {
   const { t } = useMessages();
   const ref = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const hidden = useAutoHide(ref, autoHide);
   useEffect(() => {
     const el = ref.current; if (!el) return;
     // The header floats over the hero: publish its height so the hero can reserve the space beneath it.
     const measure = () => {
       // Only a floating header (inside `.app`, pulled over the page) needs space reserved under it. A plain sticky header already takes its own room.
       const floats = parseFloat(getComputedStyle(el).marginBottom) < 0;
-      document.documentElement.style.setProperty("--pr-sticky-top", `${Math.round(el.getBoundingClientRect().height)}px`);
+      document.documentElement.style.setProperty("--pr-sticky-top", hidden ? "0px" : `${Math.round(el.getBoundingClientRect().height)}px`);
       document.documentElement.style.setProperty("--pr-header-h", floats ? `${Math.round(el.getBoundingClientRect().height) + 10}px` : "0px");
     };
     measure(); const ro = new ResizeObserver(measure); ro.observe(el);
     let raf = 0; const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => setScrolled(window.scrollY > 8)); };
     onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
     return () => { ro.disconnect(); window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
-  }, []);
+  }, [hidden]);
   return (
-    <header ref={ref} className="pr-header" data-scrolled={scrolled || undefined} data-layer={proshoreOnly ? "proshore" : "client"}>
+    <header ref={ref} className="pr-header" data-hidden={hidden || undefined} data-scrolled={scrolled || undefined} data-layer={proshoreOnly ? "proshore" : "client"}>
       <a href={homeHref} className="pr-header__brand" aria-label={t("header.home", { product })}>
         <ProshoreIcon height={28} /><span className="pr-header__word"><ProshoreWordmark height={14} /></span>
         {!launcher && <span className="pr-eyebrow pr-header__product">{product}</span>}

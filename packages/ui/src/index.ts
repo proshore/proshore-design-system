@@ -23,6 +23,7 @@ export type { Client, Workspace, HeaderUser, ThemePreference } from "./component
 export { SignInScreen, GoogleSignInButton, GoogleMark } from "./components/SignIn";
 export { AppShell, ShellNav } from "./shell/AppShell";
 export type { ShellApp, ShellNavItem } from "./shell/AppShell";
+export type { AutoHide } from "./shell/useAutoHide";
 export { AppIcon, AppTitle, SherpaGuide } from "./shell/AppIcons";
 export type { AppGlyph } from "./shell/AppIcons";
 export { CommandPalette, useCommandShortcut } from "./shell/CommandPalette";

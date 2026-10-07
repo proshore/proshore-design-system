@@ -21,6 +21,12 @@ npx proshore-ui-init     # adds the Claude skill and a CLAUDE.md section, so Cla
 ```
 More in [`packages/ui/README.pack.md`](packages/ui/README.pack.md). In CI of a consuming project, use a token with `read:packages` in the `NPM_TOKEN`-style secret for `.npmrc` (never commit it).
 
+## App shell
+`AppShell` is the frame of every Sherpa app: app rail (bottom bar on phones), top bar, page, and a dock column.
+- **Top bar:** hides while scrolling down and returns on scrolling up, on focus and while a menu from it is open (`autoHide`: `"scroll"` default, `"phone"`, `"off"`; same on `AppHeader`). Sticky elements in the page use `top: var(--pr-sticky-top, 0px)`; it is `0px` while the bar is hidden.
+- **Eyebrow:** `PageHeader` omits a text eyebrow that repeats the active `ShellNav` item; `keepEyebrow` shows it.
+- **Docked panel:** `<SlideOver dock …>` rendered inside the shell (for example in `overlays`) docks beside the page at 1440px or wider (non-modal, 440px) and is a modal slide-over elsewhere.
+
 ## Claude Design (optional)
 Besides the package, the design system can be mirrored as a **Design System artifact in Claude Design**: a read-only reference page on claude.ai with the colours (light and dark), type, spacing, radius, logos and a few static component previews. It is meant for designers and for people who work in Claude Design, who **do not need access to this repository**: they only need access to the artifact on claude.ai.
 

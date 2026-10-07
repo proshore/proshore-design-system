@@ -243,3 +243,102 @@ test("table toolbar stays right under the top bar while the table scrolls", asyn
   const tb = await page.locator(".dt-filterbar").first().evaluate((e) => e.getBoundingClientRect().top);
   expect(Math.abs(tb - bar)).toBeLessThanOrEqual(2);
 });
+
+// ---- Shell space: auto-hiding top bar, eyebrow rule, docked panel (App shell page) ----
+const stickyTop = (page: Page) => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--pr-sticky-top").trim());
+
+test("shell: the top bar hides on scroll down, returns on scroll up and on focus, and the sticky offset follows", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await open(page, "/shell", "light");
+  const bar = page.locator(".pr-bar");
+  await expect(bar).not.toHaveAttribute("data-hidden", "true");
+  const shown = await stickyTop(page);
+  expect(parseInt(shown)).toBeGreaterThan(40);
+  await page.mouse.move(640, 400);
+  await page.mouse.wheel(0, 600);
+  await expect(bar).toHaveAttribute("data-hidden", "true");
+  await expect.poll(() => stickyTop(page)).toBe("0px");
+  expect(await bar.evaluate((e) => e.getBoundingClientRect().bottom)).toBeLessThanOrEqual(0);
+  await page.mouse.wheel(0, -120);
+  await expect(bar).not.toHaveAttribute("data-hidden", "true");
+  await expect.poll(() => stickyTop(page)).toBe(shown);
+  await page.mouse.wheel(0, 600);
+  await expect(bar).toHaveAttribute("data-hidden", "true");
+  await page.locator(".pr-bar__tabs a").first().focus(); // keyboard users reach the hidden bar: focus shows it
+  await expect(bar).not.toHaveAttribute("data-hidden", "true");
+  await page.mouse.wheel(0, 600);
+  await page.locator(".pr-bar__tabs a").first().blur();
+  await page.mouse.wheel(0, 200);
+  await expect(bar).toHaveAttribute("data-hidden", "true");
+  await page.keyboard.press("Home"); // reaching the top shows it
+  await expect(bar).not.toHaveAttribute("data-hidden", "true");
+});
+
+test("shell: the hidden bar is moved, not removed (still in the accessibility tree)", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await open(page, "/shell", "light");
+  await page.mouse.move(640, 400);
+  await page.mouse.wheel(0, 600);
+  await expect(page.locator(".pr-bar")).toHaveAttribute("data-hidden", "true");
+  await expect(page.getByRole("banner")).toHaveCount(1);
+  await expect(page.getByRole("navigation", { name: "Engagement" })).toBeAttached();
+  expect(await page.locator(".pr-bar").evaluate((e) => getComputedStyle(e).display)).not.toBe("none");
+});
+
+test("shell: the bar slides (180ms) unless reduced motion is on", async ({ page }) => {
+  await open(page, "/shell", "light");
+  expect(await page.locator(".pr-bar").evaluate((e) => parseFloat(getComputedStyle(e).transitionDuration))).toBeLessThan(0.001);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  expect(await page.locator(".pr-bar").evaluate((e) => parseFloat(getComputedStyle(e).transitionDuration))).toBeCloseTo(0.18, 2);
+});
+
+test("shell: a docked SlideOver sits beside the page at 1600px wide, with no overlay", async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await open(page, "/shell", "light");
+  const main = page.locator("main");
+  const before = (await main.boundingBox())!.width;
+  await page.getByRole("button", { name: "Open docked panel" }).click();
+  const panel = page.getByRole("dialog", { name: "Docked detail panel" });
+  await expect(panel).toBeVisible();
+  await expect(panel).not.toHaveAttribute("aria-modal", /.+/);
+  await expect(page.locator(".so-overlay")).toHaveCount(0);
+  await expect(panel.getByRole("heading", { name: "Docked detail panel" })).toBeFocused();
+  expect((await main.boundingBox())!.width).toBeLessThan(before - 400);
+  await page.getByRole("button", { name: "Open docked panel" }).click({ trial: true }); // the page stays interactive
+  await page.getByRole("button", { name: "Open docked panel" }).focus();
+  await page.getByRole("button", { name: "Ask Sherpa" }).click(); // the assistant is still a modal panel
+  await expect(page.locator(".so-overlay")).toHaveCount(1);
+  await page.keyboard.press("Escape");
+  await panel.getByRole("button", { name: "Close panel", exact: true }).first().click();
+  await expect(panel).toHaveCount(0);
+  expect(Math.abs((await main.boundingBox())!.width - before)).toBeLessThan(2);
+});
+
+test("shell: Esc closes the docked panel from inside and focus returns to the opener", async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await open(page, "/shell", "light");
+  const opener = page.getByRole("button", { name: "Open docked panel" });
+  await opener.click();
+  await expect(page.getByRole("dialog", { name: "Docked detail panel" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(opener).toBeFocused();
+});
+
+test("shell: at 1280px wide the same panel is modal", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await open(page, "/shell", "light");
+  await page.getByRole("button", { name: "Open docked panel" }).click();
+  await expect(page.getByRole("dialog", { name: "Docked detail panel" })).toBeVisible();
+  await expect(page.locator(".so-overlay")).toHaveCount(1);
+});
+
+for (const theme of themes) {
+  test(`shell: docked panel is accessible (${theme})`, async ({ page }) => {
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await open(page, "/shell", theme);
+    await page.getByRole("button", { name: "Open docked panel" }).click();
+    await expect(page.getByRole("dialog", { name: "Docked detail panel" })).toBeVisible();
+    expect(await violations(page)).toEqual([]);
+  });
+}

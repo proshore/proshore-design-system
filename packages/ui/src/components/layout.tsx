@@ -6,6 +6,7 @@ import { Children, isValidElement, useEffect, useId, useRef, useState, type CSSP
 import { useMessages } from "../i18n/I18nProvider";
 import { Eyebrow } from "./Bits";
 import { Breadcrumbs } from "../primitives/Breadcrumbs";
+import { useShell } from "../shell/ShellContext";
 
 /**
  * Layout primitives. Every screen is built from these so spacing and alignment come from ONE place.
@@ -62,10 +63,17 @@ function PageDescription({ children }: { children: ReactNode }) {
   );
 }
 
-/** Page title block. The mountain motif is off by default: turn it on (`motif`) only for key pages such as the dashboard or the home page. */
-export function PageHeader({ eyebrow, title, description, actions, meta, breadcrumbs, motif = false }: {
-  eyebrow?: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; meta?: ReactNode; breadcrumbs?: { label: string; href?: string }[]; motif?: boolean;
+/**
+ * Page title block. The mountain motif is off by default: turn it on (`motif`) only for key pages such as the dashboard or the home page.
+ * Inside an AppShell, a text eyebrow that repeats the active page link (for example "Findings" above the title on the Findings tab) is not shown,
+ * because the top bar already says it. `keepEyebrow` shows it anyway.
+ */
+export function PageHeader({ eyebrow, title, description, actions, meta, breadcrumbs, motif = false, keepEyebrow = false }: {
+  eyebrow?: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode; meta?: ReactNode; breadcrumbs?: { label: string; href?: string }[]; motif?: boolean; keepEyebrow?: boolean;
 }) {
+  const navLabel = useShell()?.navLabel;
+  const repeats = !keepEyebrow && typeof eyebrow === "string" && !!navLabel && eyebrow.trim().toLowerCase() === navLabel.trim().toLowerCase();
+  if (repeats) eyebrow = undefined;
   return (
     <header className="pr-hero" data-size="md">
       {motif && <Ridgeline className="pr-hero__ridge" />}

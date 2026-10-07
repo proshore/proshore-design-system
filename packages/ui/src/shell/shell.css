@@ -106,3 +106,25 @@ button.pr-assist__source:hover { border-color: var(--accent-8); }
   .pr-bar__tabs { order: 5; flex: 1 0 100%; margin: 0 -12px; padding: 0 12px; }
   .pr-bar__tabs a, .pr-bar__tabs .pr-navbtn { min-height: 40px; }
 }
+
+/* ---------- Auto-hiding top bar ---------- */
+/* Registered so the published sticky offset animates together with the bar: sticky toolbars and the dock glide up instead of jumping. */
+@property --pr-sticky-top { syntax: "<length>"; inherits: true; initial-value: 0px; }
+:root { transition: --pr-sticky-top 180ms ease; }
+.pr-bar, .pr-header { transition: transform 180ms ease; }
+.pr-bar[data-hidden] { transform: translateY(-100%); }
+.pr-header[data-hidden] { transform: translateY(-100%); }
+/* The floating AppHeader sits 10px below the top edge, so it needs a little more to leave the screen (its shadow too). */
+.app > .pr-header[data-hidden] { transform: translateY(calc(-100% - 40px)); }
+@media (prefers-reduced-motion: reduce) { :root { transition: none; } .pr-bar, .pr-header { transition: none; } }
+
+/* ---------- Frame: top bar over (page | dock) ---------- */
+.pr-shell__frame { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto 1fr; min-height: 100vh; }
+.pr-shell__frame > .pr-bar { grid-column: 1 / -1; grid-row: 1; }
+.pr-shell__frame > .app__main { grid-column: 1; grid-row: 2; }
+/* The dock holds a docked SlideOver (wide screens only). Empty = no column, so the page keeps its full width until a panel opens. */
+.pr-dock { grid-column: 2; grid-row: 2; align-self: start; position: sticky; top: var(--pr-sticky-top, 0px); z-index: 15; width: var(--pr-dock-w, 440px); height: calc(100dvh - var(--pr-sticky-top, 0px)); box-sizing: border-box; background: var(--pr-surface); color: var(--gray-12); border-left: 1px solid var(--pr-line); overflow: hidden; }
+.pr-dock:empty { display: none; }
+.pr-dock > .so { height: 100%; }
+.app > .pr-header { transition: transform 180ms ease, box-shadow .35s var(--ease-out), background-color .35s; }
+@media (prefers-reduced-motion: reduce) { .app > .pr-header { transition: none; } }

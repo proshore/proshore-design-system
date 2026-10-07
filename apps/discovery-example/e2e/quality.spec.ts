@@ -102,3 +102,76 @@ test("sign-in demo: sign out from the account menu, notice shown, sign in return
   await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
   await expect(page.getByRole("button", { name: /account menu/i })).toBeVisible();
 });
+
+// ---- Shell space: auto-hiding top bar, eyebrow rule, docked panel (Discovery) ----
+test("eyebrow is left out when it repeats the active tab, and shown otherwise", async ({ page }) => {
+  await open(page, "/landscape", "light"); // eyebrow "Landscape", active tab "Landscape"
+  await expect(page.locator(".pr-hero .pr-eyebrow")).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await open(page, "/evidence", "light"); // eyebrow "Evidence and coverage" differs from the tab "Evidence"
+  await expect(page.locator(".pr-hero .pr-eyebrow", { hasText: "Evidence and coverage" })).toBeVisible();
+});
+
+test("top bar hides on scroll down and returns on scroll up (Findings)", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await open(page, "/findings", "light");
+  const bar = page.locator(".pr-bar");
+  const sticky = () => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--pr-sticky-top").trim());
+  const shown = await sticky();
+  await page.mouse.move(640, 400);
+  await page.mouse.wheel(0, 600);
+  await expect(bar).toHaveAttribute("data-hidden", "true");
+  await expect.poll(sticky).toBe("0px");
+  await page.mouse.wheel(0, -120);
+  await expect(bar).not.toHaveAttribute("data-hidden", "true");
+  await expect.poll(sticky).toBe(shown);
+});
+
+test("phone: the top bar hides too, the bottom app bar stays", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page, "/findings", "light");
+  await page.mouse.move(195, 400);
+  await page.mouse.wheel(0, 600);
+  await expect(page.locator(".pr-bar")).toHaveAttribute("data-hidden", "true");
+  await expect(page.getByRole("complementary", { name: "Sherpa apps" })).toBeInViewport();
+});
+
+test("1600px: a finding docks beside the table (no overlay, table stays usable, main narrows)", async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await open(page, "/findings", "light");
+  const main = page.locator("main");
+  const before = (await main.boundingBox())!.width;
+  const row = page.locator(".dt-rowbtn").first();
+  await row.click();
+  const panel = page.getByRole("dialog");
+  await expect(panel).toBeVisible();
+  await expect(page.locator(".so-overlay")).toHaveCount(0);
+  await expect(panel.getByRole("heading", { level: 2 })).toBeFocused();
+  expect((await main.boundingBox())!.width).toBeLessThan(before - 400);
+  await page.locator(".dt-rowbtn").nth(2).click({ trial: true }); // the list is still usable: nothing covers it
+  expect(await violations(page)).toEqual([]);
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.locator(".dt-rowbtn").first()).toBeFocused();
+});
+
+test("1280px: a finding still opens as a modal panel; Ask Sherpa is modal at 1600px", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await open(page, "/findings", "light");
+  await page.locator(".dt-rowbtn").first().click();
+  await expect(page.locator(".so-overlay")).toHaveCount(1);
+  await page.keyboard.press("Escape");
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await page.getByRole("button", { name: "Ask Sherpa" }).click();
+  await expect(page.locator(".so-overlay")).toHaveCount(1);
+});
+
+for (const theme of themes) {
+  test(`docked finding panel is accessible (${theme})`, async ({ page }) => {
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await open(page, "/findings", theme);
+    await page.locator(".dt-rowbtn").first().click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    expect(await violations(page)).toEqual([]);
+  });
+}

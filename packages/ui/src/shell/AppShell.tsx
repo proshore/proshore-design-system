@@ -1,8 +1,10 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ProshoreIcon } from "../components/Brand";
 import { MagnifyingGlassIcon } from "../icons";
 import { AppIcon, type AppGlyph } from "./AppIcons";
 import { useMessages } from "../i18n/I18nProvider";
+import { ShellContext, useShell } from "./ShellContext";
+import { useAutoHide, type AutoHide } from "./useAutoHide";
 
 /** One app in the left bar. `status` is read to screen reader users with the name, for example "Concept" or "Live". */
 export type ShellApp = { id: string; name: string; href: string; glyph: AppGlyph; status?: string };
@@ -13,6 +15,11 @@ export type ShellNavItem = { href: string; label: string; current?: boolean; cou
  * `trailing` is for a menu after the links, such as ProshoreMenu.
  */
 export function ShellNav({ items, label, trailing }: { items: ShellNavItem[]; label: string; trailing?: ReactNode }) {
+  const shell = useShell();
+  const current = items.find((i) => i.current)?.label ?? "";
+  const setNavLabel = shell?.setNavLabel;
+  // Layout effect: PageHeader learns the current tab before the first paint, so a repeated eyebrow never flashes.
+  useLayoutEffect(() => { setNavLabel?.(current); return () => setNavLabel?.(""); }, [setNavLabel, current]);
   return (
     <nav className="pr-bar__tabs" aria-label={label}>
       {items.map((i) => (
@@ -35,24 +42,32 @@ export function ShellNav({ items, label, trailing }: { items: ShellNavItem[]; la
  * </AppShell>
  */
 export function AppShell({
-  apps, currentApp, appName, homeHref = "#/", appsLabel, client, nav, actions, onSearch, searchLabel, theme, user, proshoreOnly = false, overlays, children,
+  apps, currentApp, appName, homeHref = "#/", appsLabel, client, nav, actions, onSearch, searchLabel, theme, user, proshoreOnly = false, autoHide = "scroll", overlays, children,
 }: {
   apps: ShellApp[]; currentApp: string; appName: string; homeHref?: string; appsLabel?: string;
   client?: ReactNode; nav?: ReactNode; actions?: ReactNode;
   /** Opens the command palette. The search button shows only when provided. */ onSearch?: () => void; searchLabel?: string;
   theme?: ReactNode; user: ReactNode;
   /** Marks the page as Proshore-only with an accent line on the top bar. */ proshoreOnly?: boolean;
+  /** The top bar slides away while scrolling down and returns on scrolling up, on focus, or when a menu from it is open. "phone": only on phones. "off": always visible. */ autoHide?: AutoHide;
   overlays?: ReactNode; children: ReactNode;
 }) {
   const { t } = useMessages();
   const barRef = useRef<HTMLElement>(null);
+  const hidden = useAutoHide(barRef, autoHide);
+  const [navLabel, setNavLabel] = useState("");
+  const [dockSlot, setDockSlot] = useState<HTMLElement | null>(null);
+  const [docked, setDocked] = useState(false);
+  const ctx = useMemo(() => ({ navLabel, setNavLabel, dockSlot, docked, setDocked }), [navLabel, dockSlot, docked]);
   // Publish the height of the sticky top bar, so sticky toolbars in the page (table filters) stop right under it.
+  // While the bar is hidden they pin to the top edge (0px); the registered custom property animates with the bar.
   useEffect(() => {
     const el = barRef.current; if (!el) return;
-    const measure = () => document.documentElement.style.setProperty("--pr-sticky-top", `${Math.round(el.getBoundingClientRect().height)}px`);
+    const measure = () => document.documentElement.style.setProperty("--pr-sticky-top", hidden ? "0px" : `${Math.round(el.getBoundingClientRect().height)}px`);
     measure(); const ro = new ResizeObserver(measure); ro.observe(el); return () => ro.disconnect();
-  }, []);
+  }, [hidden]);
   return (
+    <ShellContext.Provider value={ctx}>
     <div className="app pr-shell">
       <a className="skip" href="#main">{t("shell.skipToContent")}</a>
       <aside className="pr-rail" aria-label={appsLabel ?? t("shell.apps")}>
@@ -70,7 +85,8 @@ export function AppShell({
         <span className="pr-bar__grow" />
         <div className="pr-rail__foot">{theme}{user}</div>
       </aside>
-      <header ref={barRef} className="pr-bar" data-proshore={proshoreOnly || undefined}>
+      <div className="pr-shell__frame" data-docked={docked || undefined}>
+      <header ref={barRef} className="pr-bar" data-proshore={proshoreOnly || undefined} data-hidden={hidden || undefined}>
         <div className="pr-bar__row">
           <span className="pr-bar__appname">{appName}</span>
           {client && (<><span className="pr-bar__sep" aria-hidden>/</span>{client}</>)}
@@ -82,7 +98,10 @@ export function AppShell({
         </div>
       </header>
       <main id="main" tabIndex={-1} className="app__main">{children}</main>
+      <div ref={setDockSlot} className="pr-dock" data-docked={docked || undefined} />
+      </div>
       {overlays}
     </div>
+    </ShellContext.Provider>
   );
 }
