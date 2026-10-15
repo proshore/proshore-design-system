@@ -2,6 +2,9 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
+## 0.8.0
+- **`UserMenu` takes `items?: { href, label }[]`.** Links shown above the Appearance section (for example an admin-only "Global settings"). Same menu roles, arrow-key and focus behaviour as the other items; nothing is rendered when absent, so existing menus are unchanged.
+
 ## 0.7.0
 - **One intro per page, no double headings.** The rule is in the Claude skill and enforced by a test (no heading repeats the one right above it; a page with a single section has no section title). Cleaned the Discovery example (Landscape, Evidence, Setup, Overview) and the gallery (Forms, Overlays, Layout, Charts). `EvidenceTrail` takes `heading={false}` when a titled section already names it (example app).
 - `Panel` and `ChartCard` take `headingLevel` (2 or 3, default 3): use 2 when the page has no titled section above them, so the heading order stays correct.

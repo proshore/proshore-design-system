@@ -71,6 +71,21 @@ for (const theme of themes) {
   });
 }
 
+test("account menu: items render above Appearance, are keyboard reachable, and are absent by default", async ({ page }) => {
+  await open(page, "/shell", "light");
+  await page.getByRole("button", { name: /account menu/i }).click();
+  const link = page.getByRole("menuitem", { name: "Global settings" });
+  await expect(link).toHaveAttribute("href", "#/shell");
+  const y = async (l: ReturnType<Page["locator"]>) => (await l.boundingBox())!.y;
+  expect(await y(link)).toBeLessThan(await y(page.getByText("Appearance", { exact: true })));
+  await page.keyboard.press("ArrowDown"); // from the open menu, focus reaches the link before Appearance
+  await expect(link).toBeFocused();
+  await page.keyboard.press("Escape");
+  await open(page, "/overlays", "light"); // no items passed here: unchanged
+  await page.getByRole("button", { name: /account menu/i }).click();
+  await expect(page.getByRole("menuitem", { name: "Global settings" })).toHaveCount(0);
+});
+
 test("kanban: a card moves with the keyboard-accessible select", async ({ page }) => {
   await open(page, "/dialogs", "light");
   await page.getByRole("button", { name: /move review access list/i }).click();
