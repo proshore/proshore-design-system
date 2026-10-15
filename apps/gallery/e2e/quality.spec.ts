@@ -80,7 +80,8 @@ test("account menu: items render above Appearance, are keyboard reachable, and a
   expect(await y(link)).toBeLessThan(await y(page.getByText("Appearance", { exact: true })));
   await page.keyboard.press("ArrowDown"); // from the open menu, focus reaches the link before Appearance
   await expect(link).toBeFocused();
-  await page.keyboard.press("Escape");
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("menu")).toHaveCount(0);
   await open(page, "/overlays", "light"); // no items passed here: unchanged
   await page.getByRole("button", { name: /account menu/i }).click();
   await expect(page.getByRole("menuitem", { name: "Global settings" })).toHaveCount(0);
