@@ -97,8 +97,13 @@ const themeIcon = { system: <DesktopIcon aria-hidden />, light: <SunIcon aria-hi
  * UserMenu: avatar button. Menu shows who you are (name, email, role, organisation), appearance, and, for
  * demos only, a "view as" switch. Staff get the Proshore mark on the avatar.
  */
-export function UserMenu({ user, theme, onTheme, language, personas, onPersona, onSwitchAccount, onSignOut }: {
-  user: HeaderUser; theme: ThemePreference; onTheme: (t: ThemePreference) => void; personas?: HeaderUser[]; onPersona?: (id: string) => void;
+export function UserMenu({ user, items, theme, onTheme, language, personas, onPersona, onSwitchAccount, onSignOut }: {
+  user: HeaderUser;
+  /** Links shown below the identity block and above Appearance (for example admin-only "Global settings"). Nothing is rendered when absent or empty. Each `href` must be unique (it is the item key).
+   * @example
+   * items={[{ href: "#/settings", label: "Global settings" }]} */
+  items?: { href: string; label: string }[];
+  theme: ThemePreference; onTheme: (t: ThemePreference) => void; personas?: HeaderUser[]; onPersona?: (id: string) => void;
   /** Language switch. Shown only when provided; the app owns the state and passes the chosen locale to I18nProvider. */
   language?: { value: string; options: { id: string; label: string }[]; onChange: (id: string) => void };
   /** Opens the account chooser again (for example Google's). Shown only when provided. */ onSwitchAccount?: () => void;
@@ -119,6 +124,12 @@ export function UserMenu({ user, theme, onTheme, language, personas, onPersona, 
             </Header>
           </MenuSection>
           <Separator className="pr-menu__sep" />
+          {items && items.length > 0 && (<>
+            <MenuSection aria-label={t("header.accountLinks")}>
+              {items.map((i) => (<MenuItem key={i.href} id={i.href} href={i.href} className="pr-menu__item" textValue={i.label}><span className="pr-menu__check" aria-hidden /><span>{i.label}</span></MenuItem>))}
+            </MenuSection>
+            <Separator className="pr-menu__sep" />
+          </>)}
           <MenuSection selectionMode="single" selectedKeys={[theme]} onSelectionChange={(k) => { const v = [...(k as Set<string>)][0]; if (v) onTheme(v as ThemePreference); }} aria-label={t("header.appearance")}>
             <Header className="pr-menu__head">{t("header.appearance")}</Header>
             {(["system", "light", "dark"] as const).map((th) => (

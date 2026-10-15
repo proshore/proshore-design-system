@@ -45,7 +45,7 @@ export function ShellPage({ theme, onTheme, language }: { theme: ThemePreference
       nav={<ShellNav label="Engagement" items={[{ href: "#/shell", label: "Overview", current: true }, { href: "#/shell", label: "Findings", count: 12 }, { href: "#/shell", label: "Decision" }]} />}
       onSearch={() => setCmd(true)}
       actions={<Button aria-label="Ask Sherpa" onClick={() => setAsk(true)}><SherpaGuide size={20} /> <span className="pr-ask__label">Ask Sherpa</span></Button>}
-      user={<UserMenu user={user} theme={theme} onTheme={onTheme} language={language} />}
+      user={<UserMenu items={[{ href: "#/shell", label: "Global settings" }]} user={user} theme={theme} onTheme={onTheme} language={language} />}
       overlays={<>
         <CommandPalette open={cmd} onOpenChange={setCmd} commands={commands} />
         <AssistantPanel open={ask} onOpenChange={setAsk} title="Ask about this engagement" context="the overview" badge={<DemoTag>Demo answers</DemoTag>}
