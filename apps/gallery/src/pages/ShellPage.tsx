@@ -32,6 +32,7 @@ export function ShellPage({ theme, onTheme, language }: { theme: ThemePreference
   const [cmd, setCmd] = useState(false);
   const [ask, setAsk] = useState(false);
   const [detail, setDetail] = useState(false);
+  const [added, setAdded] = useState(0);
   const toggle = useCallback(() => setCmd((o) => !o), []);
   useCommandShortcut(toggle);
   const commands: Command[] = [
@@ -41,7 +42,7 @@ export function ShellPage({ theme, onTheme, language }: { theme: ThemePreference
   return (
     <AppShell
       apps={apps} currentApp="discovery" appName="Discovery" homeHref="#/foundations"
-      client={<WorkspaceSwitcher clients={clients} value={ws} onChange={setWs} />}
+      client={<WorkspaceSwitcher clients={clients} value={ws} onChange={setWs} action={{ label: "New engagement", onAction: () => setAdded((n) => n + 1) }} />}
       nav={<ShellNav label="Engagement" items={[{ href: "#/shell", label: "Overview", current: true }, { href: "#/shell", label: "Findings", count: 12 }, { href: "#/shell", label: "Decision" }]} />}
       onSearch={() => setCmd(true)}
       actions={<Button aria-label="Ask Sherpa" onClick={() => setAsk(true)}><SherpaGuide size={20} /> <span className="pr-ask__label">Ask Sherpa</span></Button>}
@@ -60,6 +61,7 @@ export function ShellPage({ theme, onTheme, language }: { theme: ThemePreference
         <PageHeader eyebrow="App shell" title="The frame around every Sherpa app" description="Left bar with the apps, top bar with client and engagement, search with Ctrl or Cmd+K, the assistant, account menu. On a phone the left bar becomes a bottom bar." actions={<a href="#/foundations">Back to the gallery</a>} />
         <Section title="What the product supplies"><Panel>
           <Stack gap={2}>
+            <Text size="2" role="status">{added > 0 ? `New engagement chosen ${added}x from the switcher.` : "The client switcher ends with an action (New engagement) below a separator."}</Text>
             <Text size="2">See a complete product built on the shell in `apps/discovery-example` (run `npm run dev:discovery`). The product supplies the list of apps, the current app, the clients and engagements, the page links, the commands for search, and the assistant's answers. The shell supplies layout, keyboard use, landmarks and the phone layout.</Text>
           </Stack>
         </Panel></Section>

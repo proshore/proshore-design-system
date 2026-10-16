@@ -87,6 +87,20 @@ test("account menu: items render above Appearance, are keyboard reachable, and a
   await expect(page.getByRole("menuitem", { name: "Global settings" })).toHaveCount(0);
 });
 
+test("workspace switcher: action sits last below a separator, is keyboard reachable, never selected", async ({ page }) => {
+  await open(page, "/shell", "light");
+  await page.getByRole("button", { name: /^workspace:/i }).click();
+  const action = page.getByRole("menuitem", { name: "New engagement" });
+  const y = async (l: ReturnType<Page["locator"]>) => (await l.boundingBox())!.y;
+  expect(await y(action)).toBeGreaterThan(await y(page.getByRole("menuitem").first()));
+  await expect(action).not.toContainText("(current)");
+  await page.keyboard.press("End");
+  await expect(action).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("menu")).toHaveCount(0);
+  await expect(page.getByRole("status")).toContainText("chosen 1x");
+});
+
 test("kanban: a card moves with the keyboard-accessible select", async ({ page }) => {
   await open(page, "/dialogs", "light");
   await page.getByRole("button", { name: /move review access list/i }).click();
