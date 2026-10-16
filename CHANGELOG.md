@@ -2,6 +2,9 @@
 
 All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a minor version may contain breaking changes and says so here.
 
+## 0.9.0
+- **`WorkspaceSwitcher` takes `action?: { label: string; onAction: () => void }`.** An action item shown last in the menu below a separator (for example "New workspace"). It is a plain menu item: keyboard reachable in the same menu, never shows a selected state, named by its label, and does not call `onChange`. Nothing is rendered when absent, so existing switchers are unchanged.
+
 ## 0.8.0
 - **`UserMenu` takes `items?: { href, label }[]`.** Links shown above the Appearance section (for example an admin-only "Global settings"). Same menu roles, arrow-key and focus behaviour as the other items; nothing is rendered when absent, so existing menus are unchanged.
 

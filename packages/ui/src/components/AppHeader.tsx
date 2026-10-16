@@ -60,7 +60,13 @@ export function AppHeader({ product, homeHref = "#/", launcher, client, nav, pro
 }
 
 /** Client chip and switcher: client logo and name, with the engagement name; menu groups engagements per client. */
-export function WorkspaceSwitcher({ clients, value, onChange }: { clients: Client[]; value: Workspace; onChange: (w: Workspace) => void }) {
+export function WorkspaceSwitcher({ clients, value, onChange, action }: {
+  clients: Client[]; value: Workspace; onChange: (w: Workspace) => void;
+  /** An action shown last in the menu, below a separator (for example creating a workspace). It never shows a selected state and does not call `onChange`. Nothing is rendered when absent.
+   * @example
+   * action={{ label: "New workspace", onAction: () => setOpen(true) }} */
+  action?: { label: string; onAction: () => void };
+}) {
   const { t } = useMessages();
   const client = clients.find((c) => c.id === value.clientId) ?? clients[0];
   const engagement = client.engagements.find((e) => e.id === value.engagementId) ?? client.engagements[0];
@@ -72,7 +78,7 @@ export function WorkspaceSwitcher({ clients, value, onChange }: { clients: Clien
         <ChevronDownIcon aria-hidden />
       </Button>
       <Popover className="pr-popover" placement="bottom start">
-        <Menu className="pr-menu" aria-label={t("header.switchWorkspace")} onAction={(k) => { const [c, e] = String(k).split("/"); onChange({ clientId: c, engagementId: e }); }}>
+        <Menu className="pr-menu" aria-label={t("header.switchWorkspace")} onAction={(k) => { if (k === ACTION_KEY) return; const [c, e] = String(k).split("/"); onChange({ clientId: c, engagementId: e }); }}>
           {clients.map((c, i) => (
             <MenuSection key={c.id}>
               {i > 0 && <Separator className="pr-menu__sep" />}
@@ -85,12 +91,19 @@ export function WorkspaceSwitcher({ clients, value, onChange }: { clients: Clien
               })}
             </MenuSection>
           ))}
+          {action && (<>
+            <Separator className="pr-menu__sep" />
+            <MenuSection>
+              <MenuItem id={ACTION_KEY} className="pr-menu__item" textValue={action.label} onAction={action.onAction}><span className="pr-menu__check" aria-hidden /><span>{action.label}</span></MenuItem>
+            </MenuSection>
+          </>)}
         </Menu>
       </Popover>
     </MenuTrigger>
   );
 }
 
+const ACTION_KEY = "action"; // no "/" so it cannot clash with a "client/engagement" key
 const themeIcon = { system: <DesktopIcon aria-hidden />, light: <SunIcon aria-hidden />, dark: <MoonIcon aria-hidden /> };
 
 /**
