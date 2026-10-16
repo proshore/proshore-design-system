@@ -469,3 +469,45 @@ test("headings: no heading repeats the one above it, and a lone section has no t
   }
   expect(problems).toEqual([]);
 });
+
+test("popover: controlled open closes from a menu item, Escape and outside click, and reports onOpenChange", async ({ page }) => {
+  await open(page, "/overlays", "light");
+  const state = page.getByTestId("popover-state");
+  const trigger = page.getByRole("button", { name: "Row actions", exact: true });
+  await expect(state).toHaveText("closed");
+  await trigger.click();
+  await expect(page.getByRole("dialog", { name: "Row actions" })).toBeVisible();
+  await expect(state).toHaveText("open");
+  await page.getByRole("button", { name: "Archive" }).click();
+  await expect(page.getByRole("dialog", { name: "Row actions" })).toHaveCount(0);
+  await expect(state).toHaveText("closed");
+  await page.getByRole("button", { name: "Open row actions from outside" }).click();
+  await expect(page.getByRole("dialog", { name: "Row actions" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "Row actions" })).toHaveCount(0);
+  await expect(state).toHaveText("closed");
+  await trigger.click();
+  await expect(state).toHaveText("open");
+  await page.mouse.click(5, 5);
+  await expect(page.getByRole("dialog", { name: "Row actions" })).toHaveCount(0);
+  await expect(state).toHaveText("closed");
+});
+
+test("popover: without open props it stays uncontrolled", async ({ page }) => {
+  await open(page, "/overlays", "light");
+  await page.getByRole("button", { name: "Quick filters" }).click();
+  await expect(page.getByRole("dialog", { name: "Quick filters" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "Quick filters" })).toHaveCount(0);
+});
+
+for (const theme of themes) {
+  test(`button tone="danger" renders the danger class for every variant and is accessible (${theme})`, async ({ page }) => {
+    await open(page, "/actions", theme);
+    for (const name of ["Delete solid", "Delete outline", "Delete ghost"]) {
+      await expect(page.getByRole("button", { name })).toHaveClass(/pr-btn--danger/);
+    }
+    await expect(page.getByRole("button", { name: "Save draft" })).not.toHaveClass(/pr-btn--danger/);
+    expect(await violations(page)).toEqual([]);
+  });
+}

@@ -16,6 +16,10 @@ export function ActionsPage() {
           <Text size="1" color="gray">Solid · Outline · Soft · Ghost · Disabled. Publishing is disabled until coverage is reviewed.</Text>
         </Stack>
       </Demo>
+      <Demo compare={compare} title="Danger" use="For actions that delete or cut off access. Use tone=&quot;danger&quot;; it works with every variant."
+        dos={["Name the consequence in the label: “Delete project”."]} donts={["Do not use danger for ordinary actions: it loses meaning."]}>
+        <Cluster gap={3}><Button tone="danger">Delete solid</Button><Button tone="danger" variant="outline">Delete outline</Button><Button tone="danger" variant="ghost">Delete ghost</Button></Cluster>
+      </Demo>
       <Demo compare={compare} title="Sizes" use="Size 2 is the default. Size 1 for dense toolbars and cards, size 3 for hero actions."
         dos={["Keep one size within a group of buttons."]} donts={["Do not mix sizes to show importance: use the variant."]}>
         <Cluster gap={3}><Button size="1">Small</Button><Button size="2">Medium</Button><Button size="3">Large</Button></Cluster>

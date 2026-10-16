@@ -50,7 +50,7 @@ export function ConfirmDialog({ open, onOpenChange, title, description, confirmL
     <ModalDialog open={open} onOpenChange={onOpenChange} title={title} description={description} alert={tone === "danger"}
       footer={<>
         <Button variant="outline" onClick={() => onOpenChange(false)}>{cancelLabel ?? t("dialog.cancel")}</Button>
-        <Button className={tone === "danger" ? "pr-btn--danger" : undefined} disabled={busy} onClick={onConfirm}>{busy ? t("dialog.working") : confirmLabel ?? t("dialog.confirm")}</Button>
+        <Button tone={tone} disabled={busy} onClick={onConfirm}>{busy ? t("dialog.working") : confirmLabel ?? t("dialog.confirm")}</Button>
       </>} />
   );
 }
