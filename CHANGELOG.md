@@ -4,6 +4,9 @@ All notable changes to `@proshore/ui`. Versions follow semver; while 0.x, a mino
 
 ## 0.9.0
 - **`WorkspaceSwitcher` takes `action?: { label: string; onAction: () => void }`.** An action item shown last in the menu below a separator (for example "New workspace"). It is a plain menu item: keyboard reachable in the same menu, never shows a selected state, named by its label, and does not call `onChange`. Nothing is rendered when absent, so existing switchers are unchanged.
+- **`PopoverPanel` can be controlled: optional `open` and `onOpenChange`** (same pattern as `ModalDialog`). Use it to close the panel after choosing an item. Without them it is uncontrolled as before.
+- **`Button` takes `tone?: "default" | "danger"`.** `tone="danger"` adds the existing red styles (all variants, light and dark); `ConfirmDialog` now uses it instead of the raw `pr-btn--danger` class, which keeps working.
+- Gallery demos on Overlays and Actions; tests for controlled/uncontrolled popover and the danger tone.
 
 ## 0.8.0
 - **`UserMenu` takes `items?: { href, label }[]`.** Links shown above the Appearance section (for example an admin-only "Global settings"). Same menu roles, arrow-key and focus behaviour as the other items; nothing is rendered when absent, so existing menus are unchanged.
